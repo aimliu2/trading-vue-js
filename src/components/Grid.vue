@@ -1,6 +1,5 @@
 <script>
 // Sets up all layers/overlays for the grid with 'grid_id'
-// upgrade to Vue3 syntax pending
 
 import Grid from './js/grid.js'
 import Canvas from '../mixins/canvas.js'

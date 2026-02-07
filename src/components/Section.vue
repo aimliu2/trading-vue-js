@@ -31,10 +31,10 @@
 </template>
 
 <script>
+
 import Grid from './Grid.vue'
 import Sidebar from './Sidebar.vue'
 import ChartLegend from './Legend.vue'
-
 import Shaders from '../mixins/shaders.js'
 
 export default {
