@@ -23,7 +23,7 @@
             :map="ws" :width="width" :height="height"
             :tv="this" :dc="data">
         </widgets>
-        <chart :key="cdata.reset"
+        <chart :key="reset"
             ref="chart"
             v-bind="chart_props"
             v-bind:tv_id="id"
@@ -34,9 +34,9 @@
         </chart>
         <transition name="tvjs-drift">
             <the-tip 
-            v-if="cdata.tip"
-            :data="cdata.tip" 
-            @remove-me="cdata.tip = null"
+            v-if="tip"
+            :data="tip" 
+            @remove-me="tip.value = null"
             />
         </transition>
     </div>
@@ -45,17 +45,13 @@
 <script setup lang="ts">
 
 import Const from './stuff/constants.js'
-
 import Chart from './components/Chart.vue'
 import Toolbar from './components/Toolbar.vue'
 import Widgets from './components/Widgets.vue'
 import TheTip from './components/TheTip.vue'
+import XControl from './mixins/xcontrol.js'
 
-import XControl from './mixins/xcontrol.js' // must be upgraded too :(
-
-import { withDefaults, defineProps, reactive, computed } from 'vue';
-// composition api data
-const cdata = reactive({ reset:0, tip:null })
+import { withDefaults, defineProps, computed } from 'vue';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface Props {
@@ -146,54 +142,17 @@ const chart_props = computed(() => {
         toolbar: props.toolbar,
         ib: props.indexBased || index_based.value || false,
         colors: Object.assign({}, props.colors ||
-            colorpack.value), // from mixin
+            colorpack.value),
         skin: skin_proto.value,
         timezone: props.timezone
     }
-    parse_colors(chart_props.colors) // from methods
+
+    parse_colors(chart_props.colors)
     return chart_props
 });
 
-const chart_config = computed(() => {
-    return Object.assign({},
-        Const.ChartConfig,
-        props.chartConfig,
-    )
-});
 
-const decubed = computed(() => {
-    let data = props.data
-    if (data.data !== undefined) {
-        // DataCube detected
-        data.init_tvjs(cdata) // from datacube, dc_core
-        return data.data
-    } else {
-        return data
-    }
-});
 
-const index_based = computed(()=>{
-    const base = props.data
-        if (base.chart) {
-            return base.chart.indexBased
-        }
-        else if (base.data) {
-            return base.data.chart.indexBased
-        }
-        return false
-})
-
-const mod_ovs = computed(() => {
-    let arr = []
-    for (var x of props.extensions) {
-        arr.push(...Object.values(x.overlays))
-    }
-    return arr
-})
-
-const font_comp = computed(() => { // from mixin
-    return skin_proto && skin_proto.font ? skin_proto.font : props.font
-})
 
 // composition api : life-cycle hooks
 // resize event listener, fire from client browser
@@ -202,19 +161,7 @@ const font_comp = computed(() => { // from mixin
 // helper funtion methods
 // TODO: reset extensions?
 
-// this method could be simplified by assign colors prop directly
-const parse_colors = (colors) => {
-    for (var k in props) {
-        // search for color props i.e. colorTitle
-        if (k.indexOf('color') === 0 && k !== 'colors') {
-            let k2 = k.replace('color', '')
-            k2 = k2[0].toLowerCase() + k2.slice(1) // colorTitle => title
-            if (colors[k2]) continue
-            colors[k2] = props[k]
-        }
-    }
-},
-
+// props from App.vue
 
 
 export default {
@@ -223,6 +170,67 @@ export default {
         Chart, Toolbar, Widgets, TheTip
     },
     mixins: [ XControl ],
+    computed: {
+        // Copy a subset of TradingVue props
+        chart_props() {
+            let offset = this.$props.toolbar ? this.chart_config.TOOLBAR : 0
+            let chart_props = {
+                title_txt: this.$props.titleTxt,
+                overlays: this.$props.overlays.concat(this.mod_ovs),
+                data: this.decubed,
+                width: this.$props.width - offset,
+                height: this.$props.height,
+                font: this.font_comp,
+                buttons: this.$props.legendButtons,
+                toolbar: this.$props.toolbar,
+                ib: this.$props.indexBased || this.index_based || false,
+                colors: Object.assign({}, this.$props.colors ||
+                    this.colorpack),
+                skin: this.skin_proto,
+                timezone: this.$props.timezone
+            }
+
+            this.parse_colors(chart_props.colors)
+            return chart_props
+        },
+        chart_config() {
+            return Object.assign({},
+                Const.ChartConfig,
+                this.$props.chartConfig,
+            )
+        },
+        decubed() {
+            let data = this.$props.data
+            if (data.data !== undefined) {
+                // DataCube detected
+                data.init_tvjs(this)
+                return data.data
+            } else {
+                return data
+            }
+        },
+        index_based() {
+            const base = this.$props.data
+            if (base.chart) {
+                return base.chart.indexBased
+            }
+            else if (base.data) {
+                return base.data.chart.indexBased
+            }
+            return false
+        },
+        mod_ovs() {
+            let arr = []
+            for (var x of this.$props.extensions) {
+                arr.push(...Object.values(x.overlays))
+            }
+            return arr
+        },
+        font_comp() {
+            return this.skin_proto && this.skin_proto.font ?
+                this.skin_proto.font : this.font
+        }
+    },
     beforeDestroy() {
         this.custom_event({ event: 'before-destroy' })
         this.ctrl_destroy()
@@ -316,6 +324,16 @@ export default {
                 let pf = this.chart_props.ib ? '_ms' : ''
                 let tf = this.$refs.chart['interval' + pf]
                 dc.range_changed(r, tf)
+            }
+        },
+        parse_colors(colors) {
+            for (var k in this.$props) {
+                if (k.indexOf('color') === 0 && k !== 'colors') {
+                    let k2 = k.replace('color', '')
+                    k2 = k2[0].toLowerCase() + k2.slice(1)
+                    if (colors[k2]) continue
+                    colors[k2] = this.$props[k]
+                }
             }
         },
         mousedown() {

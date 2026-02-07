@@ -1,15 +1,34 @@
 <template>
-    <img class="t-vue-lbtn" :src="base64"
-        :id="uuid" :style="{
+    <img 
+        :id="uuid" 
+        class="t-vue-lbtn" 
+        :src="base64"
+        :style="{
             width: config.L_BTN_SIZE + 'px',
             height: config.L_BTN_SIZE + 'px',
             margin: config.L_BTN_MARGIN
         }"
-        @click="onclick">
+        @click="onclick"
+    >
 </template>
 <script>
 
 import Icons from '../stuff/icons.json'
+import emitter from '../stuff/eventBus.js'
+// import { reactive, computed } from 'vue'
+
+// define props and methods
+
+// helper funtion methods
+// const legendImgClick = () => {
+//     emitter.emit('legend-button-click', {
+//         button: this.$props.id,
+//         type: this.data_type,
+//         dataIndex: this.data_index,
+//         grid: this.$props.grid_id,
+//         overlay: this.$props.ov_id,
+//     })
+// }
 
 export default {
     name: 'LegendButton',
