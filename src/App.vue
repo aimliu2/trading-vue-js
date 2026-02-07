@@ -1,47 +1,46 @@
 <template>
-<trading-vue :data="chart" :width="this.width" :height="this.height"
-        :color-back="colors.colorBack"
-        :color-grid="colors.colorGrid"
-        :color-text="colors.colorText">
-</trading-vue>
+<trading-vue 
+    :data="chart" 
+    :width="width" 
+    :height="height"
+    :color-back="colors.colorBack"
+    :color-grid="colors.colorGrid"
+    :color-text="colors.colorText"
+    />
 </template>
 
-<script>
+<script setup>
 import TradingVue from './TradingVue.vue'
 import Data from '../data/data.json'
 import DataCube from '../src/helpers/datacube.js'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-export default {
-    name: 'app',
-    components: {
-        TradingVue
-    },
-    methods: {
-        onResize() {
-            this.width = window.innerWidth
-            this.height = window.innerHeight
-        }
-    },
-    mounted() {
-        window.addEventListener('resize', this.onResize)
-        window.dc = this.chart
-    },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.onResize)
-    },
-    data() {
-        return {
-            chart: new DataCube(Data),
-            width: window.innerWidth,
-            height: window.innerHeight,
-            colors: {
-                colorBack: '#fff',
-                colorGrid: '#eee',
-                colorText: '#333',
-            }
-        };
-    }
-};
+// composition api : props down events up
+// mutable state accessing .value
+const width = ref(window.innerWidth)
+const height = ref(window.innerHeight)
+const chart = ref(new DataCube(Data)) // case 1 data from json file
+const colors = ref({
+    colorBack: '#fff',
+    colorGrid: '#eee',
+    colorText: '#333',
+})
+
+// composition api : life-cycle hooks
+// resize event listener, fire from client browser
+onMounted(() => 
+    window.addEventListener('resize', () => onResize())
+)
+onUnmounted(() => 
+    window.removeEventListener('resize',  () => onResize())
+)
+
+// helper funtion methods
+const onResize = () => {
+    width.value = window.innerWidth
+    height.value = window.innerHeight
+}
+
 </script>
 
 <style>
