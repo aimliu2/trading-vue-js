@@ -1,51 +1,34 @@
 <template>
-<div>
-    <div 
-    id="test-title" 
-    :style="{'background': (state.night ? null : '#fff')}"
-    >
-        <h1>{{ state.current_test.icon }} {{ state.current_test.name }}</h1>
-        <p>{{ state.current_test.description }} [{{ state.test_index+1 }}/{{ state.len }}]
-            <span 
-            v-if="state.current_test.early" 
-            class="early-test">
-                ⚠️ <label>Experimental Feature</label>
+    <div>
+        <div id="test-title" :style="{'background': (night ? null : '#fff')}">
+            <h1>{{current_test.icon}} {{current_test.name}}</h1>
+            <p>{{current_test.description}} [{{test_index+1}}/{{len}}]
+                <span v-if="current_test.early" class="early-test">
+                    ⚠️ <label>EARLY TEST</label>
+                </span>
+            </p>
+            <span class="night-mode">
+                <input type="checkbox" v-model="night">
+                <label>NM</label>
             </span>
-        </p>
-        <span class="night-mode">
-            <input 
-            v-model="state.night" 
-            type="checkbox">
-            <label>NM</label>
-        </span>
-        <a 
-            href="#" 
-            class="test-btn prev-test"
-            @click="prev_test"
-            >
-            Prev test
-        </a>
-        <a 
-            href="#" 
-            class="test-btn next-test"
-            @click="next_test"
-            >
-            Next test
-        </a>
+            <a href="#" class="test-btn prev-test"
+                v-on:click="prev_test">
+                Prev test
+            </a>
+            <a href="#" class="test-btn next-test"
+                v-on:click="next_test">
+                Next test
+            </a>
+        </div>
+        <div id="test-container">
+            <component v-bind:is="current_test"
+                :night="night">
+            </component>
+        </div>
     </div>
-    <div id="test-container">
-        <!-- dynamic juggling components -->
-        <component 
-            :is="state.current_test"
-            :night="state.night"
-        />
-    </div>
-</div>
 </template>
 
-<script setup>
-
-import {reactive, onMounted, watch} from 'vue'
+<script>
 
 import Simple from './tests/Simple.vue'
 import Stocks from './tests/Stocks.vue'
@@ -64,9 +47,7 @@ import Scripts from './tests/Scripts.vue'
 import Extensions from './tests/Extensions.vue'
 import Datasets from './tests/Datasets.vue'
 
-// component objects
-// Memory leak !? :(
-const testCases = {
+const TESTS = {
     Simple, 
     Stocks, 
     Timeframes, 
@@ -85,63 +66,52 @@ const testCases = {
     Datasets
 }
 
-// declare reactive state on this components
-const state = reactive({
-  test_index: 0, // number, test case index
-  current_test: null, // Components, including props
-  len: Object.values(testCases).length, // number, total cases
-  night:localStorage.getItem('tvjstest:nm') === 'true' // Boolean, night mode
-});
+export default {
+    name: 'app',
+    components: TESTS,
+    mounted() {
+        let index = parseInt(location.hash.slice(1))
+        index = (index === index) ? index - 1 : 0
+        let list = Object.values(TESTS)
+        if (!list[index]) index = 0
+        this.current_test = list[index]
+        this.test_index = index
+    },
+    data() {
+        return {
+            len: Object.values(TESTS).length,
+            test_index: 0,
+            current_test: '',
+            night: localStorage.getItem('tvjstest:nm') === 'true'
+        }
+    },
+    methods: {
+        prev_test() {
+            let list = Object.values(TESTS)
 
+            if (--this.test_index < 0) {
+                this.test_index = list.length - 1
+            }
+            this.current_test = list[this.test_index]
+        },
+        next_test() {
+            let list = Object.values(TESTS)
 
-// composition api: life-cycle hooks
-onMounted(() => {
-    let index = parseInt(location.hash.slice(1)) // i.e. #12 -> 12
-    index = (index === index) ? index - 1 : 0 // huh !?
-    let list = Object.values(testCases)
-    if (!list[index]) index = 0
-    state.current_test = list[index]
-    state.test_index = index
-})
-
-
-// composition api: methods
-const next_test = () => {
-    let list = Object.values(testCases)
-    if (++state.test_index >= list.length) { // positive overflow
-        state.test_index = 0
+            if (++this.test_index >= list.length) {
+                this.test_index = 0
+            }
+            this.current_test = list[this.test_index]
+        }
+    },
+    watch: {
+        test_index(v) {
+            setTimeout(() => location.hash = `${v+1}`)
+        },
+        night(v) {
+            localStorage.setItem('tvjstest:nm', v)
+        }
     }
-    state.current_test = list[state.test_index]
-}
-
-const prev_test = () => {
-    let list = Object.values(testCases)
-    if (--state.test_index < 0) { // negative overflow
-        state.test_index = list.length - 1
-    }
-    state.current_test = list[state.test_index]
-}
-
-// composition api: Watch 
-// 2 reactives: test_index, night
-// test_index, use to navigate cases, routing
-// Bug : refreshing the page, got previous test case result
-watch(
-  () => state.test_index, // number, test case index
-  (nv) => {
-    setTimeout(() => location.hash = `${nv}`) //let browser render contents before changing the hash
-    console.log('Navigate to case: ', ++nv);
-  }
-);
-
-// night, use ot toggle night mode
-watch(
-  () => state.night, // Boolean, night mode
-  (nv) => {
-    localStorage.setItem('tvjstest:nm', nv)
-    // console.log('Night shift from', ov, 'to', nv);
-  }
-);
+};
 </script>
 
 <style>

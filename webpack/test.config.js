@@ -2,6 +2,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WWPlugin = require('./ww_plugin.js')
 const webpack = require('webpack')
+const path = require('path')
 
 global.port = '8080'
 
@@ -42,6 +43,7 @@ module.exports = {
         })
     ],
     devServer: {
+        contentBase: [path.join(__dirname, '../data'), path.join(__dirname, '../assets')], // served at root i.e. locahost/data.json
         host: '0.0.0.0',
         proxy: {
             '/api/v1/**': {

@@ -38,11 +38,15 @@
 <script>
 
 import Const from './stuff/constants.js'
+
 import Chart from './components/Chart.vue'
 import Toolbar from './components/Toolbar.vue'
 import Widgets from './components/Widgets.vue'
 import TheTip from './components/TheTip.vue'
+
 import XControl from './mixins/xcontrol.js'
+// mixins: [ XControl ], no extension, temporary ditch (assign controllers=[])
+// ditch toolbar and widget
 
 export default {
     name: 'TradingVue',
@@ -247,7 +251,10 @@ export default {
         }
     },
     data() {
-        return { reset: 0, tip: null }
+        return { 
+            reset: 0, 
+            tip: 'this is tip',
+        }
     },
     beforeDestroy() {
         this.custom_event({ event: 'before-destroy' })
@@ -318,12 +325,14 @@ export default {
                 this.$emit(d.event)
             }
             let data = this.$props.data
+            // from mixin
             let ctrl = this.controllers.length !== 0
-            if (ctrl) this.pre_dc(d)
+            // if (ctrl) this.pre_dc(d)
             if (data.tv) {
                 // If the data object is DataCube
                 data.on_custom_event(d.event, d.args)
             }
+            // from mixin
             if (ctrl) this.post_dc(d)
         },
         range_changed(r) {

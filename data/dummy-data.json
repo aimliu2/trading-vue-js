@@ -1,4 +1,5 @@
 {
+    "_comment": "Test data for dev config",
     "ohlcv": [
         [
             1543572000000,

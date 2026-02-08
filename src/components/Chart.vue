@@ -29,14 +29,15 @@ import Context from '../stuff/context.js'
 import Layout from './js/layout.js'
 import Utils from '../stuff/utils.js'
 import CursorUpdater from './js/updater.js'
-import GridSection from './Section.vue'
-import Botbar from './Botbar.vue'
-import Keyboard from './Keyboard.vue'
-import Shaders from '../mixins/shaders.js'
-import DataTrack from '../mixins/datatrack.js'
 import TI from './js/ti_mapping.js'
 import Const from '../stuff/constants.js'
 
+import GridSection from './Section.vue'
+import Botbar from './Botbar.vue'
+import Keyboard from './Keyboard.vue'
+
+import Shaders from '../mixins/shaders.js'
+import DataTrack from '../mixins/datatrack.js'
 
 export default {
     name: 'Chart',

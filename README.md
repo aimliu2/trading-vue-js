@@ -1,5 +1,8 @@
 # To-do
 
+### By components edit, bottom up ms
+- [ ] crosshair.vue
+
 ### figure how test mechanic works, how did it inject test menu navigator !?
 webpack : entry point in `test.config.js` and  `dev.config.js`
 - [ ] use vite to serve app instead of webpack

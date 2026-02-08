@@ -4,6 +4,7 @@
 import Grid from './js/grid.js'
 import Canvas from '../mixins/canvas.js'
 import UxList from '../mixins/uxlist.js'
+
 import Crosshair from './Crosshair.vue'
 import KeyboardListener from './KeyboardListener.vue'
 import UxLayer from './UxLayer.vue'

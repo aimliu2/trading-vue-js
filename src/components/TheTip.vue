@@ -4,6 +4,7 @@
         :style="style">
     </div>
 </template>
+
 <script>
 export default {
     name: 'TheTip',

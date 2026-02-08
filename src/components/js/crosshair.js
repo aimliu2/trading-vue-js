@@ -1,4 +1,10 @@
-
+// crosshair constructor
+/**
+ * @properties
+ * required : cursor
+ * other props from components
+ * 
+ */
 
 export default class Crosshair {
 

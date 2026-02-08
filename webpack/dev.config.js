@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WWPlugin = require('./ww_plugin.js')
 const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
+const path = require('path')
 
 global.port = '8080'
 
@@ -42,7 +43,8 @@ module.exports = (env, options) => ({
             MOB_DEBUG: JSON.stringify(process.env.MOB_DEBUG)
         })
     ],
-    devServer: {
+    devServer: { // webpack 3 has no 'static' options
+        contentBase: [path.join(__dirname, '../data'), path.join(__dirname, '../assets')], // served at root i.e. locahost/data.json
         host: '0.0.0.0',
         onListening: function(server) {
             const port = server.listeningApp.address().port
