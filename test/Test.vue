@@ -2,21 +2,26 @@
 <div>
     <div 
     id="test-title" 
-    :style="{'background': (state.night ? null : '#fff')}"
+    :style="{'background': (state.isNight ? null : '#fff')}"
     >
-        <h1>{{ state.current_test.icon }} {{ state.current_test.name }}</h1>
-        <p>{{ state.current_test.description }} [{{ state.test_index+1 }}/{{ state.len }}]
+        <h3>{{ state.icon }} {{ state.name }}</h3>
+        <p>
+            {{ state.description }} [{{ state.test_index+1 }}/{{ state.len }}]
             <span 
             v-if="state.current_test.early" 
-            class="early-test">
-                ⚠️ <label>Experimental Feature</label>
+            class="early-test"
+            >
+                ⚠️ <label>Experimental</label>
             </span>
         </p>
         <span class="night-mode">
-            <input 
-            v-model="state.night" 
-            type="checkbox">
-            <label>NM</label>
+            <label>
+                <input 
+                v-model="state.isNight" 
+                type="checkbox" 
+                >
+                Night Mode
+            </label>
         </span>
         <a 
             href="#" 
@@ -37,60 +42,63 @@
         <!-- dynamic juggling components -->
         <component 
             :is="state.current_test"
-            :night="state.night"
+            :night="state.isNight"
         />
     </div>
 </div>
 </template>
 
 <script setup>
-
-import {reactive, onMounted, watch} from 'vue'
+import {reactive, onMounted, onUnmounted, watch} from 'vue'
+import emitter from '../src/helpers/eventbus.js'
 
 import Simple from './tests/Simple.vue'
-import Stocks from './tests/Stocks.vue'
-import Timeframes from './tests/Timeframes.vue'
-import Multichart from './tests/Multichart.vue'
-import LegendButtons from './tests/LegendButtons.vue'
-import ChartTypes from './tests/ChartTypes.vue'
-import DataHelper from './tests/DataHelper.vue'
-import Toolbar from './tests/Toolbar.vue'
-import GridSettings from './tests/GridSettings.vue'
-import Interfaces from './tests/Interfaces.vue'
-import IndexBased from './tests/IndexBased.vue'
-import Performance from './tests/Performance.vue'
-import Renko from './tests/Renko.vue'
-import Scripts from './tests/Scripts.vue'
-import Extensions from './tests/Extensions.vue'
-import Datasets from './tests/Datasets.vue'
+// import Stocks from './tests/Stocks.vue'
+// import Timeframes from './tests/Timeframes.vue'
+// import Multichart from './tests/Multichart.vue'
+// import LegendButtons from './tests/LegendButtons.vue'
+// import ChartTypes from './tests/ChartTypes.vue'
+// import DataHelper from './tests/DataHelper.vue'
+// import Toolbar from './tests/Toolbar.vue'
+// import GridSettings from './tests/GridSettings.vue'
+// import Interfaces from './tests/Interfaces.vue'
+// import IndexBased from './tests/IndexBased.vue'
+// import Performance from './tests/Performance.vue'
+// import Renko from './tests/Renko.vue'
+// import Scripts from './tests/Scripts.vue'
+// import Extensions from './tests/Extensions.vue'
+// import Datasets from './tests/Datasets.vue'
 
 // component objects
 // Memory leak !? :(
 const testCases = {
     Simple, 
-    Stocks, 
-    Timeframes, 
-    Multichart,
-    LegendButtons, 
-    ChartTypes, 
-    DataHelper, 
-    Toolbar,
-    GridSettings, 
-    Interfaces, 
-    IndexBased, 
-    Performance,
-    Renko, 
-    Scripts, 
-    Extensions, 
-    Datasets
+    // Stocks, 
+    // Timeframes, 
+    // Multichart,
+    // LegendButtons, 
+    // ChartTypes, 
+    // DataHelper, 
+    // Toolbar,
+    // GridSettings, 
+    // Interfaces, 
+    // IndexBased, 
+    // Performance,
+    // Renko, 
+    // Scripts, 
+    // Extensions, 
+    // Datasets
 }
 
 // declare reactive state on this components
 const state = reactive({
   test_index: 0, // number, test case index
-  current_test: null, // Components, including props
+  current_test: null, // Components, including its props
   len: Object.values(testCases).length, // number, total cases
-  night:localStorage.getItem('tvjstest:nm') === 'true' // Boolean, night mode
+  isNight: false, // start with day theme
+  icon:'',
+  name:'',
+  description:''
 });
 
 
@@ -102,6 +110,13 @@ onMounted(() => {
     if (!list[index]) index = 0
     state.current_test = list[index]
     state.test_index = index
+    // listen to mount evt - handle emit msg
+    emitter.on('testcase-mount', mountHandler);
+})
+
+onUnmounted(()=>{
+    // off all emitter on 'testcase-mount'
+    emitter.off('testcase-mount')
 })
 
 
@@ -122,9 +137,18 @@ const prev_test = () => {
     state.current_test = list[state.test_index]
 }
 
+/**
+ * update state variable (title), emitted from component when mounted
+ * @param payload = {name:string, description:string, icon:string}
+ * @return void
+ */
+const mountHandler = (payload) =>{
+    state.icon = payload.icon
+    state.name = payload.name
+    state.description = payload.description
+}
+
 // composition api: Watch 
-// 2 reactives: test_index, night
-// test_index, use to navigate cases, routing
 // Bug : refreshing the page, got previous test case result
 watch(
   () => state.test_index, // number, test case index
@@ -134,14 +158,6 @@ watch(
   }
 );
 
-// night, use ot toggle night mode
-watch(
-  () => state.night, // Boolean, night mode
-  (nv) => {
-    localStorage.setItem('tvjstest:nm', nv)
-    // console.log('Night shift from', ov, 'to', nv);
-  }
-);
 </script>
 
 <style>
@@ -170,14 +186,14 @@ body {
     top: 50px;
     width: 100%;
 }
-#test-title h1 {
+#test-title h3 {
     color: #c5c5c5;
     margin: 7px 0 0 10px;
     font-weight: 600;
     font-size: 1.75em;
 }
 @media only screen and (max-device-width: 480px) {
-    #test-title h1 {
+    #test-title h3 {
         font-size: 1.25em;
         margin-top: 14px
     }

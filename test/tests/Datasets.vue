@@ -41,16 +41,6 @@ import DataCube from '../../src/helpers/datacube.js'
 import DatasetCalc from './Scripts/DatasetCalc.vue'
 import Alps from './Extensions/Alps/index.js'
 
-// import {onMounted, onUnmounted} from 'vue'
-
-// // composiiton API: life-cycle hook
-// onMounted(() => {
-//     window.addEventListener('resize', this.onResize)
-//     this.onResize()
-//     window.dc = this.chart
-//     window.tv = this.$refs.tv
-// })
-
 export default {
     name: 'Datasets',
     description: 'Dataset testing app. Checks uploading, ops, updates, font',

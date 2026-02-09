@@ -1,15 +1,14 @@
+import { reactive, watchEffect } from 'vue';
+import DataCube from '../helpers/datacube.js'
+
 /**
- * Composable C2 - expose the state and/or actions. A stateful composable factory
+ * Composable C2 - expose the state and actions. A stateful composable factory
  * Served datacube from specific url path
  * path is a static file served by server, for now
  * 
  * @state {path:string,isLoading:boolean,chart:Datacube Object}
  * @returns state - initial = data
  */
-
-import { reactive, watchEffect } from 'vue';
-import DataCube from '../helpers/datacube.js'
-
 const errMsg = {
   'C200':'Fetch response error. Failed to fetch chart data',
   'C201':'Datacube built error. '
@@ -23,6 +22,11 @@ const dataCube = () => {
     chart: new DataCube() // init with empty data
   })
 
+  /**
+   * fetch json data from path then build datacube, default to dummy data folowing default state
+   * @param {string} path - URL path to static json file, for now
+   * @returns void
+   */
   const buildDataCube = async (path) =>{ // internal assign
     state.isLoading = true;
     let response = await fetch(path);
@@ -48,7 +52,10 @@ const dataCube = () => {
     await buildDataCube(state.path)
   })
 
-  return state
+  return {
+    state,
+    buildDataCube
+  }
 }
 
 export default dataCube

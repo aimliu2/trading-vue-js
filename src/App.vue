@@ -15,13 +15,24 @@
 
 <script setup>
 import TradingVue from './TradingVue.vue'
-// composable, got only state var
-import windowSize from './composables/winsize.js' // return state {width:number, height:number}
-import dataCubic from './composables/datacube-composer.js' // return state {path:string,isLoading:boolean,chart:Datacube Object}
+// composable, got state var and action
+import WindowSize from './composables/winsize.js' // return state {width:number, height:number} action onResize(ah, aw)
+import DataCubic from './composables/datacube-composer.js' // return state {path:string,isLoading:boolean,chart:Datacube Object}
+import {onMounted, onUnmounted } from 'vue';
 
-// import state variable from composable
-const winState = windowSize();
-const dataState = dataCubic();
+// import state variables, actions from composable
+const {state:winState, onResize} = WindowSize(); // @state {width:number, height:number}
+const {state:dataState} = DataCubic(); // get only state, @state {path:string,isLoading:boolean,chart:Datacube Object}
+
+  // composition API : life-cycle hook
+  onMounted(() => {
+    // init state - called onResize with 0 adjustment
+    onResize()
+    window.addEventListener('resize', () => onResize())
+  })
+  onUnmounted(() => {
+    window.removeEventListener('resize',  () => onResize())
+  })
 
 </script>
 

@@ -1,57 +1,70 @@
 <template>
-<trading-vue :data="chart" :width="this.width" :height="this.height"
-        :toolbar="true"
-        :color-back="colors.colorBack"
-        :color-grid="colors.colorGrid"
-        :color-text="colors.colorText">
-</trading-vue>
+<trading-vue 
+  v-bind="currentTheme"
+  :data="dataState.chart" 
+  :toolbar="true"
+  :width="winState.width" 
+  :height="winState.height"
+  />
 </template>
 
-<script>
+<script setup>
+// import Icon from './Datasets/ds.json'
 import TradingVue from '../../src/TradingVue.vue'
-import Data from '../data/data_btc.json'
-import DataCube from '../../src/helpers/datacube.js'
 
-export default {
-    name: 'Simple',
-    description: 'Should display everything okay',
-    props: ['night'],
-    components: {
-        TradingVue
-    },
-    methods: {
-        onResize(event) {
-            this.width = window.innerWidth
-            this.height = window.innerHeight - 50
-        }
-    },
-    mounted() {
-        window.addEventListener('resize', this.onResize)
-        this.onResize()
-        window.dc = this.chart
-    },
-    computed: {
-        colors() {
-            return this.$props.night ? {} : {
-                colorBack: '#fff',
-                colorGrid: '#eee',
-                colorText: '#333'
-            }
-        },
-    },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.onResize)
-    },
-    data() {
-        return {
-            chart: new DataCube(Data),
-            width: window.innerWidth,
-            height: window.innerHeight
-        }
-    }
+import emitter from '../../src/helpers/eventbus.js'
+import DataCubic from '../../src/composables/datacube-composer.js'
+import WindowSize from '../../src/composables/winsize.js'
+import { reactive, computed, onMounted, onUnmounted , defineProps} from 'vue';
+
+// props down from parent
+const props = defineProps({
+  night: Boolean, // use in computed
+})
+
+// internal constant
+// emit some constant back up to parent
+const emitMsg = {
+  name : 'Simple',
+  description :'Simple rendering chart data with BTCUSD, light theme',
+  icon : ''
 }
+const TESTPATH = './dummy-data.json'
+
+// import state variables, actions from composable
+const {state:winState, onResize} = WindowSize(); // @state {width:number, height:number}
+const {state:dataState, buildDataCube} = DataCubic(); //@state {path:string,isLoading:boolean,chart:Datacube Object}
+
+// constant variable
+// add adjustment since top bar cause bottom bar disappear
+const adjust = -50;
+
+// night theme was defined by default
+const dayTheme = reactive({
+    colorBack: '#fff',
+    colorGrid: '#eee',
+    colorText: '#333'
+})
+
+// composiiton API : computed
+const currentTheme = computed(() => {
+    return props.night ? {} : dayTheme
+})
+
+// composiiton API : life-cycle hook
+// mutated state on DOM, App.vue component
+onMounted(() => {
+  // init state
+  onResize(0, adjust);
+  buildDataCube(TESTPATH);
+  // get btc data instead of dummy data
+  // emitter evt if any
+  emitter.emit('testcase-mount', emitMsg); // once
+  window.addEventListener('resize', () => onResize(0, adjust))
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize',  () => onResize(0, adjust))
+})
+
 </script>
-
-<style>
-
-</style>
