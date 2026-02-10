@@ -1,17 +1,19 @@
 // crosshair constructor
+
 /**
- * @properties
- * required : cursor
- * other props from components
+ * @params {Object} Vue props object form defineProps({})
+ * @required : props.cursor 
+ * and other props from components
  * 
  */
 
+// TO-DO
+// optimization :  this class was extend from somewhere
 export default class Crosshair {
 
-    constructor(comp) {
-
-        this.comp = comp
-        this.$p = comp.$props
+    constructor(props) {
+        // this.comp = comp // directly inject props here
+        this.$p = props
         this.data = this.$p.sub
         this._visible = false
         this.locked = false
@@ -23,7 +25,8 @@ export default class Crosshair {
         // Update reference to the grid
         this.layout = this.$p.layout
 
-        const cursor = this.comp.$props.cursor
+        // const cursor = this.comp.$props.cursor
+        const cursor = this.$p.cursor
         if (!this.visible && cursor.mode === 'explore') return
 
         this.x = this.$p.cursor.x

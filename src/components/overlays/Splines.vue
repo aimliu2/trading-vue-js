@@ -1,5 +1,6 @@
 <script>
 // Channel renderer. (Keltner, Bollinger)
+// use in test case
 import Overlay from '../../mixins/overlay.js'
 
 export default {

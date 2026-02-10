@@ -1,8 +1,8 @@
-
-<!-- Waits for an event from Keyboard.vue
-     and converts it to a Vue.js event -->
-
 <script>
+// Do what !? - can reduce to just composable
+// or merge to grid
+// Waits for an event from Keyboard.vue
+// and converts it to a Vue.js event
 
 export default {
     name: 'KeyboardListener',

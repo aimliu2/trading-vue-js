@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",      // Output directory for compiled files
+    "noImplicitAny": true,    // Enable stricter type checking
+    "module": "es6",          // Specify module code generation (e.g., CommonJS or ES6)
+    "target": "es5",          // Specify ECMAScript target version
+    "jsx": "react",           // Support JSX in .tsx files
+    "allowJs": true,          // Allow JavaScript files to be included in compilation
+    "moduleResolution": "node", // Resolve modules using Node.js style (essential for Webpack)
+    "sourceMap": true         // Generate source map files for debugging
+  },
+  "include": [
+    "src/**/*"                // Include all files in the 'src' directory
+  ],
+  "exclude": [
+    "node_modules"            // Exclude node_modules
+  ]
+}

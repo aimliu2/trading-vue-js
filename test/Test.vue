@@ -8,7 +8,7 @@
         <p>
             {{ state.description }} [{{ state.test_index+1 }}/{{ state.len }}]
             <span 
-            v-if="state.current_test.early" 
+            v-if="state.isExperimental" 
             class="early-test"
             >
                 ⚠️ <label>Experimental</label>
@@ -49,7 +49,8 @@
 </template>
 
 <script setup>
-import {reactive, onMounted, onUnmounted, watch} from 'vue'
+import {reactive, onBeforeMount,onMounted, onUnmounted} from 'vue'
+import {int_clamp} from '../src/stuff/utils.ts'
 import emitter from '../src/helpers/eventbus.js'
 
 import Simple from './tests/Simple.vue'
@@ -59,7 +60,7 @@ import Simple from './tests/Simple.vue'
 // import LegendButtons from './tests/LegendButtons.vue'
 // import ChartTypes from './tests/ChartTypes.vue'
 // import DataHelper from './tests/DataHelper.vue'
-// import Toolbar from './tests/Toolbar.vue'
+import Toolbar from './tests/Toolbar.vue'
 // import GridSettings from './tests/GridSettings.vue'
 // import Interfaces from './tests/Interfaces.vue'
 // import IndexBased from './tests/IndexBased.vue'
@@ -69,9 +70,8 @@ import Simple from './tests/Simple.vue'
 // import Extensions from './tests/Extensions.vue'
 // import Datasets from './tests/Datasets.vue'
 
-// component objects
-// Memory leak !? :(
-const testCases = {
+// component Array<Object>
+const testCases = [
     Simple, 
     // Stocks, 
     // Timeframes, 
@@ -79,7 +79,7 @@ const testCases = {
     // LegendButtons, 
     // ChartTypes, 
     // DataHelper, 
-    // Toolbar,
+    Toolbar,
     // GridSettings, 
     // Interfaces, 
     // IndexBased, 
@@ -88,53 +88,38 @@ const testCases = {
     // Scripts, 
     // Extensions, 
     // Datasets
-}
+]
 
 // declare reactive state on this components
 const state = reactive({
   test_index: 0, // number, test case index
-  current_test: null, // Components, including its props
-  len: Object.values(testCases).length, // number, total cases
+  current_test: Simple, // Components, including its props
+  len: testCases.length, // number, total cases
   isNight: false, // start with day theme
   icon:'',
   name:'',
-  description:''
-});
+  description:'',
+  isExperimental:''
+}); // no actively watch or computed
 
-
-// composition api: life-cycle hooks
-onMounted(() => {
-    let index = parseInt(location.hash.slice(1)) // i.e. #12 -> 12
-    index = (index === index) ? index - 1 : 0 // huh !?
-    let list = Object.values(testCases)
-    if (!list[index]) index = 0
-    state.current_test = list[index]
-    state.test_index = index
-    // listen to mount evt - handle emit msg
-    emitter.on('testcase-mount', mountHandler);
-})
-
-onUnmounted(()=>{
-    // off all emitter on 'testcase-mount'
-    emitter.off('testcase-mount')
-})
 
 
 // composition api: methods
 const next_test = () => {
-    let list = Object.values(testCases)
-    if (++state.test_index >= list.length) { // positive overflow
+    if (++state.test_index >= state.len) { // positive overflow
         state.test_index = 0
     }
-    state.current_test = list[state.test_index]
+    state.current_test = testCases[state.test_index]
+    // location.hash = state.test_index + 1 // update URL params
 }
 
 const prev_test = () => {
     let list = Object.values(testCases)
     if (--state.test_index < 0) { // negative overflow
-        state.test_index = list.length - 1
+        state.test_index = state.len - 1
     }
-    state.current_test = list[state.test_index]
+    state.current_test = testCases[state.test_index]
+    // location.hash = state.test_index + 1 // update URL params
 }
 
 /**
@@ -146,17 +131,27 @@ const mountHandler = (payload) =>{
     state.icon = payload.icon
     state.name = payload.name
     state.description = payload.description
+    state.isExperimental = payload.early
 }
 
-// composition api: Watch 
-// Bug : refreshing the page, got previous test case result
-watch(
-  () => state.test_index, // number, test case index
-  (nv) => {
-    setTimeout(() => location.hash = `${nv}`) //let browser render contents before changing the hash
-    console.log('Navigate to case: ', ++nv);
-  }
-);
+// composition api: life-cycle hooks
+onBeforeMount(() => { // server side executed, no DOM
+    // event listener
+    emitter.on('testcase-mount', mountHandler);
+}),
+onMounted(() => { // client side executed, on browser
+    let hashId = parseInt(location.hash.slice(1));
+    hashId = hashId ? hashId : 0 // i.e. #12 -> 12, # -> 1
+    let idx = int_clamp(hashId, 1, state.len); // get clean integer clamped value between [1, len]
+    let arr_idx = (idx <= 1) ? 0 : idx - 1;
+    state.current_test = testCases[arr_idx]
+    state.test_index = arr_idx;
+    // location.hash = state.test_index + 1 // clean URL params
+}),
+onUnmounted(()=>{
+    // off all emitter on 'testcase-mount'
+    emitter.off('testcase-mount')
+})
 
 </script>
 

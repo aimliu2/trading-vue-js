@@ -5,21 +5,22 @@ import Grid from './js/grid.js'
 import Canvas from '../mixins/canvas.js'
 import UxList from '../mixins/uxlist.js'
 
-import Crosshair from './Crosshair.vue'
+import Crosshair from './Crosshair3.vue' // made V3
 import KeyboardListener from './KeyboardListener.vue'
 import UxLayer from './UxLayer.vue'
 
-import Spline from "./overlays/Spline.vue"
-import Splines from "./overlays/Splines.vue"
+import Spline from "./overlays/Spline.vue" // upgrading
+import Splines from "./overlays/Splines.vue" // upgrading
 import Range from "./overlays/Range.vue"
 import Trades from "./overlays/Trades.vue"
 import Channel from "./overlays/Channel.vue"
 import Segment from "./overlays/Segment.vue"
-import Candles from "./overlays/Candles.vue"
-import Volume from "./overlays/Volume.vue"
-import Splitters from "./overlays/Splitters.vue"
-import LineTool from "./overlays/LineTool.vue"
-import RangeTool from "./overlays/RangeTool.vue"
+import Candles from "./overlays/Candles_bak.vue" // upgrading
+import Volume from "./overlays/Volume.vue" // upgrading
+
+import Splitters from "./overlays/Splitters.vue" // maybe
+import LineTool from "./overlays/LineTool.vue" // upgrading
+import RangeTool from "./overlays/RangeTool.vue" // upgrading
 
 
 export default {
@@ -68,7 +69,7 @@ export default {
         this.$nextTick(() => this.redraw())
 
     },
-    render(h) {
+    render(h) { // render by function
         const id = this.$props.grid_id
         const layout = this.$props.layout.grids[id]
         return this.create_canvas(h, `grid-${id}`, {
@@ -271,7 +272,7 @@ export default {
                     this.renderer.propagate('keyup', event)
                 },
                 'keydown': event => {
-                    if (!this.is_active) return // TODO: is this neeeded?
+                    if (!this.is_active) return // TODO: is this needed? Good Question !
                     this.renderer.propagate('keydown', event)
                 },
                 'keypress': event => {

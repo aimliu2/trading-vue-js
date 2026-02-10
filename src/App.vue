@@ -6,7 +6,8 @@
 </div>
 <trading-vue 
     v-else-if="!dataState.isLoading"
-    :data="dataState.chart" 
+    :data="builtDataCube" 
+    :toolbar="true"
     :width="winState.width" 
     :height="winState.height"
     />
@@ -16,17 +17,19 @@
 <script setup>
 import TradingVue from './TradingVue.vue'
 // composable, got state var and action
-import WindowSize from './composables/winsize.js' // return state {width:number, height:number} action onResize(ah, aw)
-import DataCubic from './composables/datacube-composer.js' // return state {path:string,isLoading:boolean,chart:Datacube Object}
+import WindowSize from './composables/winsize.js' 
+import DataCubic from './composables/datacube-composer.js' 
 import {onMounted, onUnmounted } from 'vue';
 
 // import state variables, actions from composable
-const {state:winState, onResize} = WindowSize(); // @state {width:number, height:number}
-const {state:dataState} = DataCubic(); // get only state, @state {path:string,isLoading:boolean,chart:Datacube Object}
+// @state {width:number, height:number} @action onResize
+const {state:winState, onResize} = WindowSize(); 
+// @state {path:string,isLoading:boolean,json:json} @computed async buildDataCube
+const {state:dataState, builtDataCube} = DataCubic(); 
 
   // composition API : life-cycle hook
-  onMounted(() => {
-    // init state - called onResize with 0 adjustment
+  onMounted(async () => {
+    // init state
     onResize()
     window.addEventListener('resize', () => onResize())
   })

@@ -1,9 +1,12 @@
 
 // Price bar & price line (shader)
 
+/**
+ * 
+ */
 export default class Price {
-
-    constructor(comp) {
+    
+    constructor(comp) { // 'comp' is the value passed when creating an instance
         this.comp = comp
     }
 

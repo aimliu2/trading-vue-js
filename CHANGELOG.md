@@ -1,9 +1,14 @@
 # To-do
+- Cursor props must be deeply watch because of ???
+
+### Migrate each components to Vue3
+- [X] Grid.vue -> Crosshair.vue - **Cursor props must be deeply watch because of ???**
 
 ### By components edit start from 16 test cases
-- [x] upgraded `App.vue` `Test.vue` to Vue3
+- for some reason overlay are reactive inside datacube
+- [x] upgraded `App.vue` `Test.vue` to Vue3, reduce reactivity in composable
 - [x] upgraded `Simple.vue` to Vue3
-- [ ] upgraded 'Legend.vue' to display pair detail/ description
+- [ ] problem : Datacube was deeply reactive, can not fully re-render on even computed
 
 ### figure how test mechanic works, how did it inject test menu navigator !?
 webpack : entry point in `test.config.js` and  `dev.config.js`

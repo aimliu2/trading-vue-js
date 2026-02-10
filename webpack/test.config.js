@@ -10,6 +10,11 @@ module.exports = {
     entry: './test/index.js',
     module: {
         rules: [{
+                test: /\.ts$/, // Regex to test for .ts files
+                use: 'ts-loader', // Use ts-loader for these files
+                exclude: /node_modules/, // Exclude node_modules directory
+            },
+            {
                 test: /\.vue$/,
                 exclude: /node_modules/,
                 loader: 'vue-loader'
@@ -29,7 +34,7 @@ module.exports = {
             {
                 test: /script_ww\.js$/,
                 loader: 'worker-loader'
-            }
+            },
         ]
     },
     plugins: [

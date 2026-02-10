@@ -1,5 +1,22 @@
-import { reactive, watchEffect } from 'vue';
+import { reactive, onMounted, computed } from 'vue';
 import DataCube from '../helpers/datacube.js'
+
+// Note : Datacube use webworker and
+// Overlay is a reactive inside DataCube object, 
+// this set up need to be deep reactivity
+
+
+const errMsg = {
+  'C200':'Fetch response error. Failed to fetch chart data',
+  'C201':'Datacube built error. '
+}
+
+const initState = {
+  path: '/dummy-data.json',
+  isLoading:true, // true when loading or error, false when datacube successfully built
+  json: {},
+  debug:'bugging...'
+}
 
 /**
  * Composable C2 - expose the state and actions. A stateful composable factory
@@ -7,54 +24,44 @@ import DataCube from '../helpers/datacube.js'
  * path is a static file served by server, for now
  * 
  * @state {path:string,isLoading:boolean,chart:Datacube Object}
- * @returns state - initial = data
+ * @returns state, computed
  */
-const errMsg = {
-  'C200':'Fetch response error. Failed to fetch chart data',
-  'C201':'Datacube built error. '
-}
 
-const dataCube = () => {
+const dataCube = (payload=initState) => {
+
   // declare state variable
-  const state = reactive({
-    path: './dummy-data.json',
-    isLoading:true, // true when loading or error, false when datacube successfully built
-    chart: new DataCube() // init with empty data
-  })
+  const state = reactive(payload) // no watcher or compute actively monitored the entire object
 
   /**
-   * fetch json data from path then build datacube, default to dummy data folowing default state
-   * @param {string} path - URL path to static json file, for now
-   * @returns void
+   * computed - build data cube, default to dummy data
+   * error when rerender on dynamic component
+   * @param {} fetch json value from onServerPrefetch, then rebuild later
+   * @returns Datacube Object
    */
-  const buildDataCube = async (path) =>{ // internal assign
-    state.isLoading = true;
-    let response = await fetch(path);
-    if (!response.ok) {
-      console.error('C200: '.concat(errMsg['C200']))
-      return // exit return chart with init data
-    }
+  const builtDataCube = computed(() =>{ 
     try {
-      let json = await response.json();
-      state.chart = new DataCube(json);
+      return new DataCube(state.json); 
     } catch(err) {
       console.error('C201: '.concat(errMsg['C201'],' ',err))
-    } finally {
+      return new DataCube()
+    }
+  })
+
+  // life-cycle hook : fetch json value on client
+  // SSR have to use pinia !?
+  onMounted(async()=>{
+    state.debug = 'fetch on client'
+    let response = await fetch(state.path);
+    if (!response.ok) {console.error('C200: '.concat(errMsg['C200']))}
+    else { 
+      state.json = await response.json();
       state.isLoading = false;
     }
-  }
-
-  // executed on DOM
-
-  // monitor and update state variable
-  watchEffect(async () => {
-    // This callback runs immediately after mount and tracks only state var declared here : 'state.path'
-    await buildDataCube(state.path)
   })
 
   return {
     state,
-    buildDataCube
+    builtDataCube
   }
 }
 
