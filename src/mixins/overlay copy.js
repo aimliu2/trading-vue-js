@@ -1,22 +1,7 @@
-import { reactive, onUnmounted } from 'vue'
+
+// Usuful stuff for creating overlays. Include as mixin
+
 import Mouse from '../stuff/mouse.js'
-import emitter from '../../src/helpers/eventbus.js'
-
-/**
- * CXX - Composable Overlay
- * @return ???
- */
-
-const initState = { uxs_count: 0, last_ux_id: null }
-
-export const overlay = () =>{
-    const state = reactive(initState);
-
-    // life-cycle hook
-    return {
-        state
-    }
-}
 
 export default {
     props: [
@@ -143,5 +128,7 @@ export default {
             },
             deep: true
         }
-    }
+    },
+    data() { return { uxs_count: 0, last_ux_id: null } },
+    render(h) { return h() }
 }

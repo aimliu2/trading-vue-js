@@ -1,7 +1,7 @@
 <template></template>
 
 <script setup>
-import Crosshair from './js/crosshair3.js'
+import Crosshair from '@component-js/crosshair3.js'
 // import emitter from '../../src/helpers/eventbus.js'
 import {ref, watch} from 'vue'
 

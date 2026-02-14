@@ -1,5 +1,7 @@
-
-// DataCube event handlers
+/**
+ * DataCude Event handler
+ * base of dc_core
+ */
 
 import Utils from '../stuff/utils.js'
 import Icons from '../stuff/icons.json'
@@ -142,16 +144,21 @@ export default class DCEvents {
         }
     }
 
-    // Combine all tools and their mods
+    /**
+     * register_tools - Combine all tools and their mods
+     * @param {Tools} tools 
+     */
+    // WIP - instead of firing event from Grid.Vue to register tool (unreliable)
+    // why don't we build it in DataCube instead ?/ Since DataCube've already watched it anyway
     register_tools(tools) {
         let preset = {}
         for (var tool of this.data.tools || []) {
              preset[tool.type] = tool
-             delete tool.type
+             delete tool.type // what
         }
         this.tv.$set(this.data, 'tools', [])
         let list = [{
-            type: 'Cursor', icon: Icons['cursor.png']
+            type: 'Cursor', icon: Icons['cursor.png'] // why so redundant ?
         }]
         for (var tool of tools) {
             var proto = Object.assign({}, tool.info)
@@ -170,11 +177,15 @@ export default class DCEvents {
                 list.push(mp)
             }
         }
+        // force Vue2 to modify JSON data
+        // Notice : Datacube have 2 tools sections, tools(overlay) and tool(Cursor)
+        console.log(list)
         this.tv.$set(this.data, 'tools', list)
         this.tv.$set(this.data, 'tool', 'Cursor')
     }
 
     exec_script(args) {
+        // i.e. return ema(close, length)[0]
         if (args.length && this.sett.scripts) {
             let obj = this.get_overlay(args[0])
             if (!obj || obj.scripts === false) return
@@ -219,6 +230,7 @@ export default class DCEvents {
             if (obj.script && obj.script.output != null) {
                 args[0].output = obj.script.output
             }
+            // send to web-worker script_ww.js -> script_engine.js
             this.ww.just('exec-script', {
                 s: args[0], tf, range
             })
@@ -501,3 +513,23 @@ export default class DCEvents {
 
 
 }
+
+
+/* -------------------------------------------------------------------------- */
+/*                               jsDoc appendix                               */
+/* -------------------------------------------------------------------------- */
+/**
+ * @typedef {object} ToolInfos
+ * @property {string} group - group name
+ * @property {string} icon - icon svg
+ * @property {string} type - tool type, use overlay render ?
+ * @property {string} hint - This hint will be shown on hover, where ?
+ * @property {Array} data - Default data
+ * @property {object} settings - Default settings
+ * @property {object} mods - Tools variant
+ */
+/**
+ * @typedef {object} Tools
+ * @property {ToolInfos} info - The info of the tools
+ * @property {Array<string>} use_for - list of use for properties, should be unique one ?
+ */

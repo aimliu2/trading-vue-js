@@ -1,6 +1,6 @@
 <script>
 // Line drawing tool
-// TODO: make an angle-snap when "Shift" is pressed
+// TODO: make an 45deg-snap when "Shift" is pressed
 
 import Overlay from '../../mixins/overlay.js'
 import Tool from '../../mixins/tool.js'

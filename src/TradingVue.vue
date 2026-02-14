@@ -54,7 +54,8 @@ export default {
         Chart, Toolbar, Widgets, TheTip
     },
     mixins: [ XControl ],
-    props: {
+    // TO-DO : props drilling here, is there a better way ?
+    props: { 
         titleTxt: {
             type: String,
             default: 'TradingVue.js'
@@ -256,6 +257,8 @@ export default {
             tip: 'this is tip',
         }
     },
+    mounted() {
+    },
     beforeDestroy() {
         this.custom_event({ event: 'before-destroy' })
         this.ctrl_destroy()
@@ -318,7 +321,7 @@ export default {
                 event: 'legend-button-click', args: [event]
             })
         },
-        custom_event(d) {
+        custom_event(d) { // delegate to dc_events.js
             if ('args' in d) {
                 this.$emit(d.event, ...d.args)
             } else {

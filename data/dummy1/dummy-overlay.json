@@ -1,0 +1,69 @@
+[{
+    "name": "Trades",
+    "type": "Trades",
+    "data": [
+            1558382400000,
+            0,
+            7882.584554936587,
+            "+1.81%"
+    ],
+    "settings": {
+        "z-index": 5,
+        "legend": false
+    }
+},
+{
+    "name": "Trades",
+    "type": "Trades",
+    "data": [
+            1558436400000,
+            1,
+            7911.400845484249
+    ],
+    "settings": {
+        "z-index": 6,
+        "legend": false
+    }
+},
+{
+    "name": "Trades",
+    "type": "Trades",
+    "data": [
+            1558497600000,
+            1,
+            7942.136938649852
+    ],
+    "settings": {
+        "z-index": 7,
+        "legend": false
+    }
+},
+{
+    "name": "Trades",
+    "type": "Trades",
+    "data": [
+            1558504800000,
+            0,
+            7950.297898263696,
+            "+0.10%"
+        
+    ],
+    "settings": {
+        "z-index": 8,
+        "legend": false
+    }
+},
+{
+    "name": "Trades",
+    "type": "Trades",
+    "data": [
+            1558573200000,
+            1,
+            7671.821219412739,
+            "trade overlay"
+    ],
+    "settings": {
+        "z-index": 9,
+        "legend": false
+    }
+}]

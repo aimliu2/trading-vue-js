@@ -10,15 +10,21 @@
 </template>
 
 <script>
+import emitter from '@helpers/eventbus.js'
 import TradingVue from '../../src/TradingVue.vue'
 import DataCube from '../../src/helpers/datacube.js'
 import Data from '../data/data_ux.json'
 import SplineUx from './Interfaces/SplineUx.vue'
 
+const n =  'Interfaces';
+const d = 'Html interfaces: static & interactive';
+const i = '';
+const e = true;
+
 export default {
-    name: 'Interfaces',
-    description: 'Html interfaces: static & interactive]',
-    early: true,
+    name: n,
+    description: d,
+    early: e,
     props: ['night'],
     components: {
         TradingVue
@@ -34,6 +40,7 @@ export default {
         this.onResize()
         window.dc = this.chart
         window.tv = this.$refs.tv
+         emitter.emit('testcase-mount', this.emitMsg); // once
     },
     computed: {
         colors() {
@@ -43,6 +50,14 @@ export default {
                 colorText: '#333'
             }
         },
+        emitMsg() {
+            return {
+                name : n,
+                description :d,
+                icon : i,
+                early: false
+            }
+        }
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)

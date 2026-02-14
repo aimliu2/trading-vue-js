@@ -14,7 +14,11 @@
 </template>
 
 <script>
-
+/**
+ * Tools item list
+ * @component Vue-comp-ItemList
+ * @name ItemList_vue
+ */
 export default {
     name: 'ItemList',
     props: ['config', 'items', 'colors', 'dc'],

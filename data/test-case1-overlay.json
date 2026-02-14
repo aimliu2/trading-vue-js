@@ -1,4 +1,5 @@
 {
+    "_comment": "Test Overlay, indicator KC, Segment, Splitters\n off chart indicator DI + Splines 30/70, light theme" ,
     "ohlcv": [
         [
             1540915200000,
@@ -58717,7 +58718,7 @@
                 [1556031600000, "20/20 😎", 1, "#777", 0.7]
             ],
             "settings": {
-                "legend": false
+                "legend": true
             }
         }
     ],

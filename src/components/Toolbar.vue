@@ -27,6 +27,8 @@ export default {
     ],
     components: { ToolbarItem },
     mounted() {
+        // console.log("tool init")
+        // console.log(this.data.tools)
     },
     methods: {
         selected(tool) {
@@ -88,8 +90,7 @@ export default {
             handler(n) {
                 // For some reason Vue.js doesn't want to
                 // update 'tools' automatically when new item
-                // is pushed/removed. Yo, Vue, I herd you
-                // you want more dirty tricks?
+                // is pushed/removed.
                 if (n.tools) this.tool_count = n.tools.length
             },
             deep: true

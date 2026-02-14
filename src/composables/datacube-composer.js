@@ -19,8 +19,7 @@ const initState = {
 }
 
 /**
- * Composable C2 - expose the state and actions. A stateful composable factory
- * Served datacube from specific url path
+ * Composable C2 : Served datacube from specific url path (json file)
  * path is a static file served by server, for now
  * 
  * @state {path:string,isLoading:boolean,chart:Datacube Object}
@@ -34,11 +33,10 @@ const dataCube = (payload=initState) => {
 
   /**
    * computed - build data cube, default to dummy data
-   * error when rerender on dynamic component
-   * @param {} fetch json value from onServerPrefetch, then rebuild later
+   * @param {void} None - use internal state.json
    * @returns Datacube Object
    */
-  const builtDataCube = computed(() =>{ 
+  const builtDataCube = computed(() =>{ // cache
     try {
       return new DataCube(state.json); 
     } catch(err) {
@@ -66,3 +64,5 @@ const dataCube = (payload=initState) => {
 }
 
 export default dataCube
+
+

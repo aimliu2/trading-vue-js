@@ -9,19 +9,11 @@ import Crosshair from './Crosshair3.vue' // made V3
 import KeyboardListener from './KeyboardListener.vue'
 import UxLayer from './UxLayer.vue'
 
-import Spline from "./overlays/Spline.vue" // upgrading
-import Splines from "./overlays/Splines.vue" // upgrading
-import Range from "./overlays/Range.vue"
-import Trades from "./overlays/Trades.vue"
-import Channel from "./overlays/Channel.vue"
-import Segment from "./overlays/Segment.vue"
-import Candles from "./overlays/Candles_bak.vue" // upgrading
-import Volume from "./overlays/Volume.vue" // upgrading
+// import core overlays, tools, indicators
+import {CoreRegisteredOverlays, CoreRegisteredTools, CoreRegisteredIndicators} from  "@composables/overlays/overlay-registry-core"
 
-import Splitters from "./overlays/Splitters.vue" // maybe
-import LineTool from "./overlays/LineTool.vue" // upgrading
-import RangeTool from "./overlays/RangeTool.vue" // upgrading
-
+// extend overlays, tools, indicators, etc. later
+// import {ExRegisteredComponents} from  "@composables/overlay-registry-extra"
 
 export default {
     name: 'Grid',
@@ -33,30 +25,14 @@ export default {
     mixins: [Canvas, UxList],
     components: { Crosshair, KeyboardListener },
     created() {
-        // List of all possible overlays (builtin + custom)
-        this._list = [
-            Spline, Splines, Range, Trades, Channel, Segment,
-            Candles, Volume, Splitters, LineTool, RangeTool
-        ]
-        .concat(this.$props.overlays)
-        this._registry = {}
+        // also concat tool from this.$props.overlays
+        let tools_core = CoreRegisteredTools.map(({ use_for, info }) => ({ use_for:use_for[0], info })); 
 
-        // We need to know which components we will use.
-        // Custom overlay components overwrite built-ins:
-        var tools = []
-        this._list.forEach((x, i) => {
-            let use_for = x.methods.use_for()
-            if (x.methods.tool) tools.push({
-                use_for, info: x.methods.tool()
-            })
-            use_for.forEach(indicator => {
-                this._registry[indicator] = i
-            })
+        // fire event oncreated
+        this.$emit('custom-event', { // emit custom-event back to Ancestor 'TradingVue.vue'
+            event: 'register-tools', args: tools_core
         })
-        this.$emit('custom-event', {
-            event: 'register-tools', args: tools
-        })
-        this.$on('custom-event', e =>
+        this.$on('custom-event', e => // received event from on_ux_event 'TradingVue.vue'
             this.on_ux_event(e, 'grid'))
     },
     beforeDestroy () {
@@ -127,16 +103,31 @@ export default {
             this.remove_all_ux(layer)
         },
         get_overlays(h) {
-            // Distributes overlay data & settings according
-            // to this._registry; returns compo list
-            let comp_list = [], count = {}
+            // Distributes overlay data & settings according to Datacube input
+            let comp_list = [], count = {}, indy = null;
+            
+            for (var d of this.$props.data) { // upgrade to map later
+                // match d.type (i.e. 'KC') in this.$props.data and 
+                // [WIP] : upgrade later
+                // TODO : add render selection later
+                let overlays = CoreRegisteredOverlays
+                    .filter(item => item.use_for.includes(d.type))
+                    .map(item => item.component); // got Overlay Component i.e. [Spline]
 
-            for (var d of this.$props.data) {
-                let comp = this._list[this._registry[d.type]]
-                if (comp) {
-                    if(comp.methods.calc) {
-                        comp = this.inject_renderer(comp)
-                    }
+                // TODO : add render selection later
+                let tools = CoreRegisteredTools
+                    .filter(item => item.use_for.includes(d.type))
+                    .map(item => item.component); // got Tool Component i.e. [LineTool]
+
+                let indies = CoreRegisteredIndicators
+                    .filter(item => item.use_for.includes(d.type))
+                    .map(item => item.component); // got Indicator Component i.e. [SMA]
+
+                if(indies[0]) indy = this.inject_renderer(indies[0]); // d.type is indicator
+
+                // also concat overlay from this.$props.overlays
+                let comp = (overlays[0] || tools[0] || indy); // get only first component = Spline
+                if (comp) { 
                     comp_list.push({
                         cls: comp,
                         type: d.type,
@@ -149,6 +140,7 @@ export default {
                     count[d.type] = 0
                 }
             }
+
             return comp_list.map((x, i) => h(x.cls, {
                     on: this.layer_events,
                     attrs: Object.assign(this.common_props(), {
@@ -162,6 +154,7 @@ export default {
                         grid_id: this.$props.grid_id,
                         meta: this.$props.meta,
                         last: x.last
+                        // havn't seen __renderer__ here
                     })
                 })
             )
@@ -181,20 +174,19 @@ export default {
             let e_pass = this.on_ux_event(e, 'grid')
             if (e_pass) this.$emit('custom-event', e)
         },
-        // Replace the current comp with 'renderer'
+        // Replace the current component with 'renderer'
+        // exclusive to indicator those who had 'conf' and calc() method i.e. conf: { renderer: 'Spline' }
+        // what use to render SplineUX ?
         inject_renderer(comp) {
             let src = comp.methods.calc()
             if (!src.conf || !src.conf.renderer || comp.__renderer__) {
-                return comp
+                return comp // return component as-is if there is no conf
             }
-
-            // Search for an overlay with the target 'name'
-            let f = this._list.find(x => x.name === src.conf.renderer)
-            if (!f) return comp
-
-            comp.mixins.push(f)
-            comp.__renderer__ = src.conf.renderer
-
+            // Search for an overlay to render with the target 'name' i.e. use Spline to render SMA indicaotr
+            let f = CoreRegisteredOverlays.find(x => x.name === src.conf.renderer)
+            if (!f) return comp // return component as-is if there is no pre-defined overlay to render
+            comp.mixins.push(f) // huh ?, why push entire component into mixin ?
+            comp.__renderer__ = src.conf.renderer // why !? Vue renderer !?
             return comp
         }
     },
@@ -223,6 +215,20 @@ export default {
             deep: true
         },
         overlays: {
+            /**
+             * 
+             * @param ovs calc() {
+             *      return {
+             *         props: {
+             *              length: { def: 12, text: 'Length' }
+             *          },
+             *          conf: { renderer: 'Spline' },
+             *          update: `
+             *              return ema(close, length)[0]
+             *          `
+             *      }
+             *  }
+             */
             // Track changes in calc() functions
             handler: function(ovs) {
                 for (var ov of ovs) {
@@ -285,3 +291,9 @@ export default {
 }
 
 </script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>

@@ -12,12 +12,12 @@
 <script setup>
 // error tool bar icons disappear
 // import Icon from './Datasets/ds.json'
-import TradingVue from '../../src/TradingVue.vue'
+import TradingVue from '@src/TradingVue.vue'
 
-import emitter from '../../src/helpers/eventbus.js'
-import DataCubic from '../../src/composables/datacube-composer.js'
-import WindowSize from '../../src/composables/winsize.js'
-import { ref,reactive, computed, onMounted, onUnmounted , defineProps} from 'vue';
+import emitter from '@helpers/eventbus.js'
+import DataCubic from '@composables/datacube-composer.js'
+import WindowSize from '@composables/winsize.js'
+import { ref, reactive, computed, onBeforeMount, onMounted, onUnmounted} from 'vue';
 
 // props down from parent
 const props = defineProps({
@@ -27,13 +27,13 @@ const props = defineProps({
 // constant variable
 // add adjustment since top bar cause bottom bar disappear
 const adjust = -50;
-const TESTPATH = '/BTCUSD.json';
+const TESTPATH = '/test-case1-overlay.json';
 
 // internal constant
 // emit some constant back up to parent
 const emitMsg = {
-  name : 'Simple',
-  description :'Simple rendering chart data with BTCUSD, light theme',
+  name : 'Overlay',
+  description :'Test Overlay, indicator KC, Segment, Splitters\n off chart indicator DI + Splines 30/70, light theme',
   icon : '',
   early:false
 }
@@ -61,14 +61,19 @@ const currentTheme = computed(() => {
 
 // composiiton API : life-cycle hook
 // mutated state on DOM, App.vue component
+onBeforeMount(() => {
+  // update state
+  dataState.path = TESTPATH
+}),
 onMounted(async () => {
   // init state
   onResize(0, adjust);
-  // emitter evt if any
+  // emitter, dynamic components
+  window.dc = dataState.chart
+  window.tv = tvjs
   emitter.emit('testcase-mount', emitMsg); // once
   window.addEventListener('resize', () => onResize(0, adjust))
-})
-
+}),
 onUnmounted(() => {
   window.removeEventListener('resize',  () => onResize(0, adjust))
 })

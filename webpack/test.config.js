@@ -8,6 +8,19 @@ global.port = '8080'
 
 module.exports = {
     entry: './test/index.js',
+    resolve: {
+        alias: {
+        '@src': path.resolve(__dirname, '..', 'src'),
+        '@components': path.resolve(__dirname, '..', 'src', 'components'),
+        '@component-js': path.resolve(__dirname, '..', 'src', 'components', 'js'),
+        '@composables': path.resolve(__dirname, '..', 'src', 'composables'),
+        '@helpers': path.resolve(__dirname, '..', 'src', 'helpers'),
+        '@icons': path.resolve(__dirname, '..', 'src', 'icons'),
+        '@overlay-comps': path.resolve(__dirname, '..', 'src', 'components', 'overlays'),
+        '@stuff': path.resolve(__dirname, '..', 'src', 'stuff'),
+        '@tests': path.resolve(__dirname, '..', 'test', 'tests'),
+        },
+    },
     module: {
         rules: [{
                 test: /\.ts$/, // Regex to test for .ts files

@@ -14,9 +14,9 @@ export default class Crosshair {
     constructor(props) {
         // this.comp = comp // directly inject props here
         this.$p = props
-        this.data = this.$p.sub
+        // this.data = this.$p.sub // omitted !?
         this._visible = false
-        this.locked = false
+        // this.locked = false // ommited !?
         this.layout = this.$p.layout
 
     }

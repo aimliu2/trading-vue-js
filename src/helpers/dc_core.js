@@ -1,5 +1,24 @@
 
-// DataCube "private" methods
+/**
+ * DC_CORE Private methods - inherited by DataCube
+ * init_tvjs - Set TV instance (once). Called by TradingVue.Vue itself and pass it's whole component
+ * init_data - Set JSON structure. Called by TradingVue.Vue itself and pass it's whole component
+ * range_changed
+ * chunk_loaded
+ * update_ids
+ * update_candle
+ * update_tick
+ * update_overlays
+ * get_by_query
+ * chart_as_piv
+ * query_search
+ * merge_objects
+ * merge_ts
+ * ts_overlap
+ * combine
+ * fast_merge
+ * scroll_to
+ */
 
 import Utils from '../stuff/utils.js'
 import DCEvents from './dc_events.js'
@@ -7,15 +26,20 @@ import Dataset from './dataset.js'
 
 export default class DCCore extends DCEvents {
 
-    // Set TV instance (once). Called by TradingVue itself
+    /**
+     * init_tvjs - Set TV instance (once). Called by TradingVue itself
+     * @param {*} $root = whole TradingVue.Vue component, set by computed
+     * @return {void} Void - init internal object
+     */
     init_tvjs($root) {
         if (!this.tv) {
             this.tv = $root
-            this.init_data()
+            this.init_data() // Struct Data
             this.update_ids()
 
             // Listen to all setting changes
-            // TODO: works only with merge()
+            // TODO: works only with merge() 
+            // TODO: should offload watch to Vue, don't have to specify here in class
             this.tv.$watch(() => this.get_by_query('.settings'),
                 (n, p) => this.on_settings(n, p))
 
@@ -30,9 +54,14 @@ export default class DCCore extends DCEvents {
         }
     }
 
-    // Init Data Structure v1.1
+    /**
+     * Init Data Structure V1.1
+     * @param {object} $root = whole TradingVue.Vue component, set by computed
+     * @return {void} Void - just set internal JSON
+     */
     init_data($root) {
-
+        // Legacy format supported. if there was no "chart" key in JSON, use "ohlcv" instead.
+        // (required)
         if (!('chart' in this.data)) {
             this.tv.$set(this.data, 'chart', {
                 type: 'Candles',
@@ -40,26 +69,36 @@ export default class DCCore extends DCEvents {
             })
         }
 
-        if (!('onchart' in this.data)) {
-            this.tv.$set(this.data, 'onchart', [])
-        }
-
-        if (!('offchart' in this.data)) {
-            this.tv.$set(this.data, 'offchart', [])
-        }
-
+        // set settings key - settings section under "chart" key
         if (!this.data.chart.settings) {
             this.tv.$set(this.data.chart,'settings', {})
         }
 
-        // Remove ohlcv cuz we have Data v1.1^
-        delete this.data.ohlcv
+        // Clean up Legacy key (ohlcv) 
+        // since we have Data v1.1^
+        if(this.data.ohlcv) delete this.data.ohlcv
 
+        // set onchart key (required)- overlay onchart section
+        if (!('onchart' in this.data)) {
+            this.tv.$set(this.data, 'onchart', [])
+        }
+
+        // set offchart key (required)- overlay offchart section
+        if (!('offchart' in this.data)) {
+            this.tv.$set(this.data, 'offchart', [])
+        }
+
+        // set tools/tool key was done in dc_events
+        // since register_tools was an event fired form Vue component
+        // so expensive don't you think ?
+
+        // set datasets key - datasets section ???
         if (!('datasets' in this.data)) {
             this.tv.$set(this.data, 'datasets', [])
         }
 
         // Init dataset proxies
+        // what for ?
         for (var ds of this.data.datasets) {
             if (!this.dss) this.dss = {}
             this.dss[ds.id] = new Dataset(this, ds)
@@ -333,7 +372,7 @@ export default class DCCore extends DCEvents {
 
         // The only way to get Vue to update all stuff
         // reactively is to create a brand new object.
-        // TODO: Is there a simpler approach?
+        // TODO: Is there a simpler approach? - yes, by architecture
         Object.assign(new_obj, obj.v)
         Object.assign(new_obj, data)
         this.tv.$set(obj.p, obj.i, new_obj)

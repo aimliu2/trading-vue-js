@@ -107,8 +107,8 @@ export default {
         },
         // TODO: the event is not firing when the same
         // overlay type is added to the offchart[]
-        exec_script() {
-            if (this.calc) this.$emit('exec-script', {
+        exec_script() { // when overlay has calc methods i.e indicator EMA
+            if (this.calc) this.$emit('exec-script', { // --> send to dc_event and dc_core.js
                 grid_id: this.$props.grid_id,
                 layer_id: this.$props.id,
                 src: this.calc(),

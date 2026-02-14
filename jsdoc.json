@@ -1,0 +1,25 @@
+{
+  "docdash": {
+    "sort": true
+  },
+  "plugins": ["plugins/markdown"
+  ],
+  "source": {
+    "include": ["data", "jsdoc-home.md", "src"],
+    "includePattern": ".+\\.(js)$",
+    "excludePattern": ""
+  },
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "opts": {
+    "destination": "./docs/jsdoc",
+    "readme": "./jsdoc-home.md",
+    "encoding": "utf8",
+    "private": true,
+    "recurse": true,
+    "template": "./jsdoc-template",
+    "tutorials": "./docs/vuedocs"
+  }
+}

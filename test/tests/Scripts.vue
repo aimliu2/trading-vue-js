@@ -22,6 +22,7 @@ import Data from '../data/data_scripts.json'
 import DataCube from '../../src/helpers/datacube.js'
 import ScriptOverlay from './Scripts/ScriptOverlay.vue'
 import Codepane from './Scripts/Codepane.vue'
+import emitter from '@helpers/eventbus.js'
 
 const DEF_SRC =
 `// === Script calculation object ===
@@ -58,11 +59,16 @@ return {
 }
 `
 
+const n =  'Scripts';
+const i = '';
+const d = 'What does script supposed to do here !?';
+const e = true;
+
 export default {
-    name: 'Scripts',
-    icon: '',
-    description: 'Supposed to be precisely calculated',
-    early: true,
+    name: n,
+    icon: i,
+    description: d,
+    early: e,
     props: ['night'],
     components: {
         TradingVue, Codepane
@@ -84,6 +90,7 @@ export default {
         window.tv = this.$refs.tv
         window.ov = this.ov[0]
         window.test = this
+        emitter.emit('testcase-mount', this.emitMsg); // once
     },
     computed: {
         colors() {
@@ -93,6 +100,14 @@ export default {
                 colorText: '#333'
             }
         },
+        emitMsg() {
+            return {
+                name : n,
+                description :d,
+                icon : i,
+                early: e
+            }
+        }
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)

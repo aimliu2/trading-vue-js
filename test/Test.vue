@@ -5,7 +5,7 @@
     :style="{'background': (state.isNight ? null : '#fff')}"
     >
         <h3>{{ state.icon }} {{ state.name }}</h3>
-        <p>
+        <p> 
             {{ state.description }} [{{ state.test_index+1 }}/{{ state.len }}]
             <span 
             v-if="state.isExperimental" 
@@ -50,25 +50,25 @@
 
 <script setup>
 import {reactive, onBeforeMount,onMounted, onUnmounted} from 'vue'
-import {int_clamp} from '../src/stuff/utils.ts'
-import emitter from '../src/helpers/eventbus.js'
+import {int_clamp} from '@stuff/utils2.ts'
+import emitter from '@helpers/eventbus.js'
 
-import Simple from './tests/Simple.vue'
-// import Stocks from './tests/Stocks.vue'
-// import Timeframes from './tests/Timeframes.vue'
-// import Multichart from './tests/Multichart.vue'
-// import LegendButtons from './tests/LegendButtons.vue'
-// import ChartTypes from './tests/ChartTypes.vue'
-// import DataHelper from './tests/DataHelper.vue'
-import Toolbar from './tests/Toolbar.vue'
-// import GridSettings from './tests/GridSettings.vue'
-// import Interfaces from './tests/Interfaces.vue'
-// import IndexBased from './tests/IndexBased.vue'
-// import Performance from './tests/Performance.vue'
-// import Renko from './tests/Renko.vue'
-// import Scripts from './tests/Scripts.vue'
-// import Extensions from './tests/Extensions.vue'
-// import Datasets from './tests/Datasets.vue'
+import Simple from '@tests/Simple.vue'
+import Stocks from './tests/Stocks.vue'
+import Timeframes from './tests/Timeframes.vue'
+import Multichart from './tests/Multichart.vue'
+import LegendButtons from './tests/LegendButtons.vue'
+import ChartTypes from './tests/ChartTypes.vue'
+import DataHelper from './tests/DataHelper.vue'
+import Toolbar from '@tests/Toolbar.vue'
+import GridSettings from './tests/GridSettings.vue'
+import Interfaces from '@tests/Interfaces.vue'
+import IndexBased from './tests/IndexBased.vue'
+import Performance from './tests/Performance.vue'
+import Renko from './tests/Renko.vue'
+import Scripts from '@tests/Scripts.vue'
+import Extensions from './tests/Extensions.vue'
+import Datasets from './tests/Datasets.vue'
 
 // component Array<Object>
 const testCases = [
@@ -76,7 +76,7 @@ const testCases = [
     // Stocks, 
     // Timeframes, 
     // Multichart,
-    // LegendButtons, 
+    // LegendButtons, // test indicator, etc on legends
     // ChartTypes, 
     // DataHelper, 
     Toolbar,
@@ -85,7 +85,7 @@ const testCases = [
     // IndexBased, 
     // Performance,
     // Renko, 
-    // Scripts, 
+    Scripts, 
     // Extensions, 
     // Datasets
 ]
@@ -93,7 +93,7 @@ const testCases = [
 // declare reactive state on this components
 const state = reactive({
   test_index: 0, // number, test case index
-  current_test: Simple, // Components, including its props
+  current_test: null, // Components, including its props
   len: testCases.length, // number, total cases
   isNight: false, // start with day theme
   icon:'',
@@ -124,8 +124,8 @@ const prev_test = () => {
 
 /**
  * update state variable (title), emitted from component when mounted
- * @param payload = {name:string, description:string, icon:string}
- * @return void
+ * @param {EmitPayload} payload
+ * @return void - just update state var
  */
 const mountHandler = (payload) =>{
     state.icon = payload.icon
@@ -136,7 +136,7 @@ const mountHandler = (payload) =>{
 
 // composition api: life-cycle hooks
 onBeforeMount(() => { // server side executed, no DOM
-    // event listener
+    // event listener, dynamic component
     emitter.on('testcase-mount', mountHandler);
 }),
 onMounted(() => { // client side executed, on browser
@@ -149,9 +149,20 @@ onMounted(() => { // client side executed, on browser
     // location.hash = state.test_index + 1 // clean URL params
 }),
 onUnmounted(()=>{
-    // off all emitter on 'testcase-mount'
+    // off event listener, dynamic component
     emitter.off('testcase-mount')
 })
+
+/* -------------------------------------------------------------------------- */
+/*                               JsDoc Appendix                               */
+/* -------------------------------------------------------------------------- */
+/**
+ * @typedef EmitPayload
+ * @property {string} icon
+ * @property {string} name
+ * @property {string} description
+ * @property {boolean} early
+ */
 
 </script>
 

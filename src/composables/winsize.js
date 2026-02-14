@@ -1,9 +1,7 @@
 import { reactive } from 'vue';
 
 /**
- * Composable C1 - expose the state and actions. A stateful composable factory
- * Resize application to fit browser's window size
- * shallowReactive only track value at root level
+ * Composable C1 : Resize application to fit browser's window size
  * 
  * @state {width:number, height:number}
  * @action onResize - set state width, height to = browser's window width, height
