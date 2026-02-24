@@ -44,7 +44,9 @@ const onResize = (aw=0,ah=0) =>{
   stateKey.value += 1
 }
 
-const debouncedOnResize = debounce(onResize,200);
+// onResize with debounce, to prevent too many resize events
+// onResize does not have 'this' constructor.
+const debouncedOnResize = debounce(onResize,100);
 
 /**
  * @name internal-constant

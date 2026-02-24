@@ -7,15 +7,16 @@ import {nextTick} from 'vue'
 const { MINUTE15, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, MONTHMAP } = Const
 /**
  * @typedef BBprops
- * @prop {Object} font - font object props
+ * @prop {String} font - font object props
  * @prop {Object} colors - colors object props
  * @prop {Object} cursor - cursor object props
  * @prop {Object} layout - layout object props
- * @prop {Object} timezone - timezone object props
- * @prop {Object} interval - interval object props
+ * @prop {Number} timezone - timezone object props
+ * @prop {Number} interval - interval object props
  * @prop {Object} layout - layout object props
- * @prop {Object} range - range object props
- * @prop {Object} data - data object props
+ * @prop {Array} range - range object props
+ * @prop {Array} data - data object props
+ * @prop {String} tv_id - string id for this tv instance, used in measureText for caching
  */
 
 
@@ -38,10 +39,9 @@ export default class Botbar {
      * @param {BotbatPayload} payload 
      */
     constructor(canvas, payload) {
-
         this.canvas = canvas
-        this.ctx = canvas.getContext('2d')
-        this.$p = payload.bbprops
+        this.ctx = canvas.getContext('2d') // error
+        this.$p = payload.bbprops // undefined
         this.panheight = payload.panheight
         this.shader = payload.bot_shaders
 
@@ -55,30 +55,35 @@ export default class Botbar {
      * @desc set css and pixel of bottombar
      */
     setup() {
+        // sometimes canvas is not populated yet, check if canvas is null
+        if (!this.canvas) {
+            console.error('Canvas is not defined in Botbar setup!');
+            return;
+        }
         let cv = this.canvas
         let sett = this.$p.layout.botbar
         // direct mutate may conflict with VDOM
         cv.style.width = `${sett.width}px`
         cv.style.height = `${sett.height}px`
-        cv.style.style.backgroundColor = this.$p.colors.back
+        cv.style.backgroundColor = this.$p.colors.back
         let dpr = window.devicePixelRatio || 1; if (dpr < 1) dpr = 1 // TVJS Issue #63
         nextTick(()=>{ // Vue's nextTick will do ... on DOM after state-var update (DOM mutate)
             let rect = cv.getBoundingClientRect()
             // Pixel mutate
             cv.width = rect.width * dpr
             cv.height = rect.height * dpr
-            let ctx = canvas.getContext('2d', {
-            // TODO: test the boost:
+            //TODO: test the boost:
             //alpha: false,
             //desynchronized: true,
             //preserveDrawingBuffer: false
-            })
+            let ctx = this.ctx
+            // let ctx = canvas.getContext('2d', {})
             ctx.scale(dpr, dpr)
             // redraw()
             this.update()
             // Fallback fix for Brave browser https://github.com/brave/brave-browser/issues/1738
             if (!ctx.measureTextOrg) {ctx.measureTextOrg = ctx.measureText} // ctx.measureText originally got 0
-            ctx.measureText = text => measureText(ctx, text, this.$props.tv_id) // used by panel()
+            ctx.measureText = text => measureText(ctx, text, this.$p.tv_id) // used by panel()
         })
     }
 
@@ -87,6 +92,8 @@ export default class Botbar {
      * @desc redraw pixel function, solely rely on layout params to draw pixel
      */
     update() {
+        // Debugging: check if $p is defined and has the expected structure
+        // console.log(this.$p.layout)
 
         this.grid_0 = this.$p.layout.grids[0]
 

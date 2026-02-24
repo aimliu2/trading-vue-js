@@ -38,6 +38,7 @@ import ChartLegend from './Legend.vue' // next 8
 
 import Shaders from '../mixins/shaders.js'
 
+// self as 14
 export default {
     name: 'GridSection',
     props: ['common', 'grid_id'],

@@ -7,6 +7,7 @@
  * @function formatTwoDigits
  * @desc Formats a number to a two-digit string using a conditional check. presume input must be valid
  * @param {number} t - Hour or Min.
+ * @memberof times-js
  * @returns {string} The two-digit formatted string.
  */
 export const formatTwoDigits = (t) => {

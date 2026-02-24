@@ -1,8 +1,8 @@
 <script>
 // The bottom bar (yep, that thing with a bunch of dates)
 
-import Botbar from './js/botbar.js'
-import Canvas from '../mixins/canvas.js'
+import Botbar from '../js/botbar.js'
+import Canvas from '../../mixins/canvas.js'
 
 export default {
     name: 'Botbar',

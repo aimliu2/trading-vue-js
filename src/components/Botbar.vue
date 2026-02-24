@@ -1,11 +1,10 @@
 <template>
     <div class="trading-vue-botbar" :style="divStyle">
         <!-- props.rerender are already watched-->
-         canvas will be directly mutated, using uplift
         <canvas
             ref="botbarCanvas"
             :id="makeCanvasId"
-        ></canvas>
+        >This is canvas bottom bar</canvas>
     </div>
 </template>
 
@@ -15,11 +14,14 @@
 // @mouseout = "e => botbarPixel.value.mouseout(e)"
 // @mouseup = "e => botbarPixel.value.mouseup(e)"
 // @mousedown = "e => botbarPixel.value.mousedown(e)"
+// let start = performance.now();
+// let duration = performance.now() - start;
+// frameTime.value.push(duration);
+// console.log(`Update: ${duration.toFixed(2)}ms avg: ${(frameTime.value.reduce((a,b)=>a+b)/frameTime.value.length).toFixed(2)}ms`);
 
 import Botbar from '@composables/cBotbar.js' 
-import { debounce } from '@stuff/utilities';
+// import { debounce } from '@stuff/utilities'; // Not GPU expensive, no need to debounce, direct update is better for UX
 import { markRaw, shallowRef, ref, computed, onMounted, watch } from 'vue';
-import shaders from '../mixins/shaders';
 
 /**
  * @name props
@@ -27,18 +29,18 @@ import shaders from '../mixins/shaders';
 const props = defineProps({
     sub:Array, // data
     layout:Object, // layout
-    range:Object, // range
+    range:Array, // range
     interval:Number, // interval
     cursor:Object, // cursor
     colors:Object, // colors
-    font:Object, // font
+    font:String, // font 11px -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif
     width:Number, // width of canvas
     height:Number, // height of canvas
     rerender:Number, // should be number
     tv_id:String, // id of trading view instance
     config:Object, // config from parent, contains PANHEIGHT
     shaders:Array, // shaders from parent
-    timezone:String // timezone from parent
+    timezone:Number // timezone from parent
 })
 
 /**
@@ -49,7 +51,7 @@ const botbarCanvas = ref(); // HTMLcanvasElement
 const botbarPixel = shallowRef(null); // assign markRaw @onMounted
 const debounceSetup = shallowRef(null); // assign markraw Setup @onMounted
 const debounceUpdate = shallowRef(null); // assign markraw Update @onMounted
-
+const frameTime = ref([]) // for performance measurement
 
 /**
  * @function makeCanvasId
@@ -88,14 +90,16 @@ const divStyle = computed(() => {
             interval:props.interval,
             layout:props.layout,
             range:props.range,
-            data:props.sub
+            data:props.sub,
+            tv_id:props.tv_id // or botbar id ?
         }
     }
     // create raw object, direct DOM update
-    botbarPixel.value = markRaw(new Botbar(botbarCanvas, payload)) // mutate bottom bar with this class
-    botbarPixel.value.setup() // manually call set up
-    debounceSetup.value = debounce(botbarPixel.value.setup(),200); // put function into shallowref
-    debounceUpdate.value = debounce(botbarPixel.value.update(),200); // put function into shallowref
+    botbarPixel.value = markRaw(new Botbar(botbarCanvas.value||null, payload)) // mutate bottom bar with this class
+    botbarPixel.value.setup() // Canvas
+    // not GPU expensive, no need to debounce
+    // debounceSetup.value = debounce(() => botbarPixel.value.setup(),10); 
+    // debounceUpdate.value = debounce(() => botbarPixel.value.update(),10);
  })
 
 
@@ -103,12 +107,12 @@ const divStyle = computed(() => {
  * @name watch
  * @desc watch width and height of props then trigger redraw
  */
-watch([props.width, props.height, props.rerender], ([nw, nh, nr], [ow, oh, or]) => {
+watch([()=>props.width, ()=>props.height, ()=>props.rerender], ([nw, nh, nr], [ow, oh, or]) => {
   // mutate layout properties, then update chart
   props.layout.botbar.width = nw ? nw : ow
   props.layout.botbar.height = nh ? nh : oh
-  // use debounce, prevent rapid expensive compute
-  debounceSetup.value()
+  // debounceSetup.value()
+  botbarPixel.value.setup()
 });
 
 /**
@@ -116,8 +120,8 @@ watch([props.width, props.height, props.rerender], ([nw, nh, nr], [ow, oh, or]) 
  * @desc deep watch on range and cursor
  */
 watch([()=>props.range, ()=>props.cursor],([nr, nc], [or, oc]) => {
-    console.log('Range/Cursor changed');
-    debounceUpdate.value()
+    // debounceUpdate.value()
+    botbarPixel.value.update()
 },
   { deep: true } // Enable deep watching for all sources
 );

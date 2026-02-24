@@ -39,7 +39,7 @@
 
 import Const from './stuff/constants.js'
 
-// self as 15
+// self as 16
 import Chart from './components/Chart.vue' // next3
 import Toolbar from '@components/Toolbar.vue' // V3s
 import Widgets from '@components/Widgets.vue' // V3

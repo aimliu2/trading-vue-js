@@ -33,6 +33,8 @@ export const isFunction = (fn) => {
  * 
  * ```
  */
+// beware of context loss of 'this' when passing class method as callback i.e. using debounce
+// see https://stackoverflow.com/questions/16382165/why-do-i-lose-the-context-of-this-in-javascript
 export const debounce = (fn, wait, leading=false) => {
   if(!isFunction(fn)) {console.log(`not a function cannot be debounced ${typeof fn}`); return}
   else {

@@ -32,9 +32,9 @@ import CursorUpdater from './js/updater.js'
 import TI from './js/ti_mapping.js'
 import Const from '../stuff/constants.js'
 
-// self as 14
+// self as 15
 import GridSection from './Section.vue' // next 6
-import Botbar from './Botbar.vue' // next 5
+import Botbar from './Botbar.vue' // V3
 import Keyboard from './Keyboard.vue' // V3
 
 import Shaders from '../mixins/shaders.js'
