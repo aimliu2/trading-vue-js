@@ -1,7 +1,7 @@
 <template>
     <!-- Chart components combined together -->
     <div class="trading-vue-chart" :style="styles">
-        <keyboard ref="keyboard"></keyboard>
+        <keyboard ref="keyboardRef"></keyboard>
         <grid-section v-for="(grid, i) in this._layout.grids"
             :key="grid.id" ref="sec"
             v-bind:common="section_props(i)"
@@ -32,12 +32,17 @@ import CursorUpdater from './js/updater.js'
 import TI from './js/ti_mapping.js'
 import Const from '../stuff/constants.js'
 
-import GridSection from './Section.vue'
-import Botbar from './Botbar.vue'
-import Keyboard from './Keyboard.vue'
+// self as 14
+import GridSection from './Section.vue' // next 6
+import Botbar from './Botbar.vue' // next 5
+import Keyboard from './Keyboard.vue' // V3
 
 import Shaders from '../mixins/shaders.js'
 import DataTrack from '../mixins/datatrack.js'
+
+// vue3 
+import { ref } from 'vue';
+const keyboardRef = ref(null);
 
 export default {
     name: 'Chart',
@@ -237,12 +242,12 @@ export default {
             this.$emit('legend-button-click', event)
         },
         register_kb(event) {
-            if (!this.$refs.keyboard) return
-            this.$refs.keyboard.register(event)
+            if (!keyboardRef.value) return
+            keyboardRef.value.register(event)
         },
         remove_kb(event) {
-            if (!this.$refs.keyboard) return
-            this.$refs.keyboard.remove(event)
+            if (!keyboardRef.value) return
+            keyboardRef.value.remove(event)
         },
         update_last_values() {
             this.last_candle = this.ohlcv ?

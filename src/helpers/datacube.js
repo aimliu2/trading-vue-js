@@ -5,8 +5,8 @@ import AggTool from './agg_tool.js'
 
 
 /**
- * DataCube API - Main DataHelper class. A container for data,
- * which works as a proxy and CRUD interface
+ * @class Datacube
+ * @desc Datacube object builder.js
  */
 export default class DataCube extends DCCore {
 
@@ -37,7 +37,14 @@ export default class DataCube extends DCCore {
         //this.agg.update = this.agg_update.bind(this)
     }
 
-    // Add new overlay
+    /**
+     * @function add
+     * @desc add overlay? into datacube
+     * @memberof Datacube
+     * @param {string} side - overlay location. exclusive to 3 locations 'onchart', 'offchart', or 'datasets'
+     * @param {object} overlay - overlay data
+     * @returns {string} id - id of new overlay added
+     */
     add(side, overlay) {
 
         if (side !== 'onchart' && side !== 'offchart' &&

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>src/stuff/utils.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Datacube.html">Datacube</a></li><li><a href="DatasetWW.html">DatasetWW</a></li><li></li><li><a href="dc_core-js.html">dc_core-js</a><ul class='methods'><li data-type='method'><a href="dc_core-js.html#.init_data">init_data</a></li><li data-type='method'><a href="dc_core-js.html#.init_tvjs">init_tvjs</a></li><li data-type='method'><a href="dc_core-js.html#.update_ids">update_ids</a></li></ul></li><li><a href="dc_event-js.html">dc_event-js</a><ul class='methods'><li data-type='method'><a href="dc_event-js.html#.register_tools">register_tools</a></li></ul></li><li><a href="module.html#.exports">exports</a></li><li></li><li></li><li></li><li></li></ul><h3>Modules</h3><ul><li><a href="module-JSON-Aggregate.html">JSON-Aggregate</a></li><li><a href="module-JSON-Chart.html">JSON-Chart</a></li><li><a href="module-JSON-indy.html">JSON-indy</a></li><li><a href="module-JSON-tools.html">JSON-tools</a></li></ul><h3>Namespaces</h3><ul><li><a href="Utility-js.html">Utility-js</a><ul class='methods'><li data-type='method'><a href="Utility-js.html#.clamp()">clamp()</a></li><li data-type='method'><a href="Utility-js.html#.now()">now()</a></li></ul></li><li><a href="c3-overlay-registry-core-js.html">c3-overlay-registry-core-js</a></li><li><a href="cd1-data-aggregator-js.html">cd1-data-aggregator-js</a><ul class='methods'><li data-type='method'><a href="cd1-data-aggregator-js.html#.aggData">aggData</a></li><li data-type='method'><a href="cd1-data-aggregator-js.html#.cube">cube</a></li><li data-type='method'><a href="cd1-data-aggregator-js.html#.ready">ready</a></li></ul></li><li><a href="stuff-js.html">stuff-js</a></li></ul><h3>Vue</h3><ul><li><a href="tutorial-ItemList-vue.html">ItemList.vue</a></li><li><a href="tutorial-Toolbar-vue.html">Toolbar.vue</a></li><li><a href="tutorial-ToolbarItem-vue.html">ToolbarItem.vue</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Core-Indicator">Core-Indicator</a></li><li><a href="global.html#Core-Overlay">Core-Overlay</a></li><li><a href="global.html#Core-Tool">Core-Tool</a></li><li><a href="global.html#TB_ICON_HOLD">TB_ICON_HOLD</a></li><li><a href="global.html#abs">abs</a></li><li><a href="global.html#acos">acos</a></li><li><a href="global.html#add">add</a></li><li><a href="global.html#alma">alma</a></li><li><a href="global.html#asin">asin</a></li><li><a href="global.html#atan">atan</a></li><li><a href="global.html#atr">atr</a></li><li><a href="global.html#avg">avg</a></li><li><a href="global.html#bb">bb</a></li><li><a href="global.html#bbw">bbw</a></li><li><a href="global.html#bool">bool</a></li><li><a href="global.html#buffsize">buffsize</a></li><li><a href="global.html#cci">cci</a></li><li><a href="global.html#ceil">ceil</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#cmo">cmo</a></li><li><a href="global.html#cog">cog</a></li><li><a href="global.html#cos">cos</a></li><li><a href="global.html#cross">cross</a></li><li><a href="global.html#crossover">crossover</a></li><li><a href="global.html#crossunder">crossunder</a></li><li><a href="global.html#cum">cum</a></li><li><a href="global.html#dataCube">dataCube</a></li><li><a href="global.html#dayofmonth">dayofmonth</a></li><li><a href="global.html#dayofweek">dayofweek</a></li><li><a href="global.html#dev">dev</a></li><li><a href="global.html#div">div</a></li><li><a href="global.html#dmi">dmi</a></li><li><a href="global.html#ema">ema</a></li><li><a href="global.html#exp">exp</a></li><li><a href="global.html#falling">falling</a></li><li><a href="global.html#fixnan">fixnan</a></li><li><a href="global.html#floor">floor</a></li><li><a href="global.html#highest">highest</a></li><li><a href="global.html#highestbars">highestbars</a></li><li><a href="global.html#hma">hma</a></li><li><a href="global.html#hour">hour</a></li><li><a href="global.html#iff">iff</a></li><li><a href="global.html#initState">initState</a></li><li><a href="global.html#init_data">init_data</a></li><li><a href="global.html#init_tvjs">init_tvjs</a></li><li><a href="global.html#kc">kc</a></li><li><a href="global.html#kcw">kcw</a></li><li><a href="global.html#linreg">linreg</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#log10">log10</a></li><li><a href="global.html#lowest">lowest</a></li><li><a href="global.html#lowestbars">lowestbars</a></li><li><a href="global.html#macd">macd</a></li><li><a href="global.html#max">max</a></li><li><a href="global.html#mfi">mfi</a></li><li><a href="global.html#min">min</a></li><li><a href="global.html#minute">minute</a></li><li><a href="global.html#modify">modify</a></li><li><a href="global.html#mom">mom</a></li><li><a href="global.html#month">month</a></li><li><a href="global.html#mult">mult</a></li><li><a href="global.html#na">na</a></li><li><a href="global.html#neg">neg</a></li><li><a href="global.html#nf">nf</a></li><li><a href="global.html#now">now</a></li><li><a href="global.html#nz">nz</a></li><li><a href="global.html#offchart">offchart</a></li><li><a href="global.html#offset">offset</a></li><li><a href="global.html#onchart">onchart</a></li><li><a href="global.html#onclose">onclose</a></li><li><a href="global.html#pivothigh">pivothigh</a></li><li><a href="global.html#pivotlow">pivotlow</a></li><li><a href="global.html#pow">pow</a></li><li><a href="global.html#reactive-var">reactive-var</a></li><li><a href="global.html#register_tools">register_tools</a></li><li><a href="global.html#rising">rising</a></li><li><a href="global.html#rma">rma</a></li><li><a href="global.html#roc">roc</a></li><li><a href="global.html#round">round</a></li><li><a href="global.html#rsi">rsi</a></li><li><a href="global.html#sample">sample</a></li><li><a href="global.html#sar">sar</a></li><li><a href="global.html#second">second</a></li><li><a href="global.html#settings">settings</a></li><li><a href="global.html#sign">sign</a></li><li><a href="global.html#signal">signal</a></li><li><a href="global.html#signalif">signalif</a></li><li><a href="global.html#sin">sin</a></li><li><a href="global.html#since">since</a></li><li><a href="global.html#sma">sma</a></li><li><a href="global.html#sqrt">sqrt</a></li><li><a href="global.html#stdev">stdev</a></li><li><a href="global.html#stoch">stoch</a></li><li><a href="global.html#sub">sub</a></li><li><a href="global.html#sum">sum</a></li><li><a href="global.html#supertrend">supertrend</a></li><li><a href="global.html#swma">swma</a></li><li><a href="global.html#sym">sym</a></li><li><a href="global.html#tan">tan</a></li><li><a href="global.html#tr">tr</a></li><li><a href="global.html#ts">ts</a></li><li><a href="global.html#tsi">tsi</a></li><li><a href="global.html#tstf">tstf</a></li><li><a href="global.html#vwma">vwma</a></li><li><a href="global.html#weekofyear">weekofyear</a></li><li><a href="global.html#wma">wma</a></li><li><a href="global.html#wpr">wpr</a></li><li><a href="global.html#year">year</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/stuff/utils.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+import IndexedArray from 'arrayslicer'
+import Const from './constants.js'
+
+/**
+ * @namespace Utility-js
+ * @desc utility function export as default
+ */
+export default {
+    /**
+     * @function clamp()
+     * @memberof Utility-js
+     * @summary return number within [min,max] range.
+     * @param {number} num - input number
+     * @param {number} min - input min number
+     * @param {number} max - input max number
+     * @returns {number} clamp value
+     * 
+     * @example
+     * 
+     * let a = clamp(16, 4, 35); // a = 16
+     * let b = clamp(40, 4, 35); // a = 35
+     * let c = clamp(-9, 4, 35); // a = 4
+     */
+    clamp(num, min, max) {
+        return num &lt;= min ? min : num >= max ? max : num
+    },
+
+    add_zero(i) {
+        if (i &lt; 10) {
+            i = "0" + i;
+        }
+        return i
+    },
+
+    // Start of the day (zero millisecond)
+    day_start(t) {
+        let start = new Date(t)
+        return start.setUTCHours(0,0,0,0)
+    },
+
+    // Start of the month
+    month_start(t) {
+        let date = new Date(t)
+        return Date.UTC(
+            date.getFullYear(),
+            date.getMonth(), 1
+        )
+    },
+
+    // Start of the year
+    year_start(t) {
+        return Date.UTC(new Date(t).getFullYear())
+    },
+
+    get_year(t) {
+        if (!t) return undefined
+        return new Date(t).getUTCFullYear()
+    },
+
+    get_month(t) {
+        if (!t) return undefined
+        return new Date(t).getUTCMonth()
+    },
+
+    // Nearest in array
+    nearest_a(x, array) {
+        let dist = Infinity
+        let val = null
+        let index = -1
+        for (var i = 0; i &lt; array.length; i++) {
+            var xi = array[i]
+            if (Math.abs(xi - x) &lt; dist) {
+                dist = Math.abs(xi - x)
+                val = xi
+                index = i
+            }
+        }
+        return [index, val]
+    },
+
+    round(num, decimals = 8) {
+        return parseFloat(num.toFixed(decimals))
+    },
+
+    // Strip? No, it's ugly floats in js
+    strip(number) {
+        return parseFloat(
+            parseFloat(number).toPrecision(12)
+        )
+    },
+
+    get_day(t) {
+        return t ? new Date(t).getDate() : null
+    },
+
+    // Update array keeping the same reference
+    overwrite(arr, new_arr) {
+        arr.splice(0, arr.length, ...new_arr)
+    },
+
+    // Copy layout in reactive way
+    copy_layout(obj, new_obj) {
+        for (var k in obj) {
+            if (Array.isArray(obj[k])) {
+                // (some offchart indicators are added/removed)
+                // we need to update layout in a reactive way
+                if (obj[k].length !== new_obj[k].length) {
+                    this.overwrite(obj[k], new_obj[k])
+                    continue
+                }
+                for (var m in obj[k]) {
+                    Object.assign(obj[k][m], new_obj[k][m])
+                }
+            } else {
+                Object.assign(obj[k], new_obj[k])
+            }
+        }
+    },
+
+    // Detects candles interval
+    detect_interval(ohlcv) {
+        let len = Math.min(ohlcv.length - 1, 99)
+        let min = Infinity
+        ohlcv.slice(0, len).forEach((x, i) => {
+            let d = ohlcv[i+1][0] - x[0]
+            if (d === d &amp;&amp; d &lt; min) min = d
+        })
+        // This saves monthly chart from being awkward
+        if (min >= Const.MONTH &amp;&amp; min &lt;= Const.DAY * 30) {
+            return Const.DAY * 31
+        }
+        return min
+    },
+
+    // Gets numberic part of overlay id (e.g 'EMA_1' = > 1)
+    get_num_id(id) {
+        return parseInt(id.split('_').pop())
+    },
+
+    // Fast filter. Really fast, like 10X
+    fast_filter(arr, t1, t2) {
+        if (!arr.length) return [arr, undefined]
+        try {
+            let ia = new IndexedArray(arr, "0")
+            let res = ia.getRange(t1, t2)
+            let i0 = ia.valpos[t1].next
+            return [res, i0]
+        } catch(e) {
+            // Something wrong with fancy slice lib
+            // Fast fix: fallback to filter
+            return [arr.filter(x =>
+                x[0] >= t1 &amp;&amp; x[0] &lt;= t2
+            ), 0]
+        }
+    },
+
+    // Fast filter (index-based)
+    fast_filter_i(arr, t1, t2) {
+        if (!arr.length) return [arr, undefined]
+        let i1 =  Math.floor(t1)
+        if (i1 &lt; 0) i1 = 0
+        let i2 =  Math.floor(t2 + 1)
+        let res = arr.slice(i1, i2)
+        return [res, i1]
+    },
+
+    // Nearest indexes (left and right)
+    fast_nearest(arr, t1) {
+        let ia = new IndexedArray(arr, "0")
+        ia.fetch(t1)
+        return [ia.nextlow, ia.nexthigh]
+    },
+
+    /**
+     * @function now()
+     * @memberof Utility-js
+     * @summary return current timestamp
+     * @param {void} None
+     * @returns {number} timestamp
+     * @example
+     * 
+     * let k = now() // k = 1771064347739
+     * 
+     */
+    now() { return (new Date()).getTime() },
+
+    pause(delay) {
+        return new Promise((rs, rj) => setTimeout(rs, delay))
+    },
+
+    // Limit crazy wheel delta values
+    smart_wheel(delta) {
+        let abs = Math.abs(delta)
+        if (abs > 500) {
+            return (200 + Math.log(abs)) * Math.sign(delta)
+        }
+        return delta
+    },
+
+    // Parse the original mouse event to find deltaX
+    get_deltaX(event) {
+        return event.originalEvent.deltaX / 12
+    },
+
+    // Parse the original mouse event to find deltaY
+    get_deltaY(event) {
+        return event.originalEvent.deltaY / 12
+    },
+
+    // Apply opacity to a hex color
+    apply_opacity(c, op) {
+        if (c.length === 7) {
+            let n = Math.floor(op * 255)
+            n = this.clamp(n, 0, 255)
+            c += n.toString(16)
+        }
+        return c
+    },
+
+    // Parse timeframe or return value in ms
+    parse_tf(smth) {
+        if (typeof smth === 'string') {
+            return Const.map_unit[smth]
+        } else {
+            return smth
+        }
+    },
+
+    // Detect index shift between the main data sub
+    // and the overlay's sub (for IB-mode)
+    index_shift(sub, data) {
+
+        // Find the second timestamp (by value)
+        if (!data.length) return 0
+        let first = data[0][0]
+        let second
+
+        for (var i = 1; i &lt; data.length; i++) {
+            if (data[i][0] !== first) {
+                second = data[i][0]
+                break
+            }
+        }
+
+        for (var j = 0; j &lt; sub.length; j++) {
+            if (sub[j][0] === second) {
+                return j - i
+            }
+        }
+
+        return 0
+    },
+
+    // Fallback fix for Brave browser
+    // https://github.com/brave/brave-browser/issues/1738
+    measureText(ctx, text, tv_id) {
+        let m = ctx.measureTextOrg(text)
+        if (m.width === 0) {
+            const doc = document
+            const id = 'tvjs-measure-text'
+            let el = doc.getElementById(id)
+            if (!el) {
+                let base = doc.getElementById(tv_id)
+                el = doc.createElement("div")
+                el.id = id
+                el.style.position = 'absolute'
+                el.style.top = '-1000px'
+                base.appendChild(el)
+            }
+            if(ctx.font) el.style.font = ctx.font
+            el.innerText = text.replace(/ /g, '.');
+            return { width: el.offsetWidth }
+        } else {
+            return m
+        }
+    },
+
+    uuid(temp = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') {
+        return temp
+            .replace(/[xy]/g, c => {
+            var r = Math.random() * 16 | 0, v = c == 'x' ?
+                r :
+                (r &amp; 0x3 | 0x8)
+            return v.toString(16)
+        })
+    },
+
+    uuid2() {
+        return this.uuid('xxxxxxxxxxxx')
+    },
+
+    // Delayed warning, f = condition lambda fn
+    warn(f, text, delay = 0) {
+        setTimeout(() => {
+            if (f()) console.warn(text)
+        }, delay)
+    },
+
+    // Checks if script props updated
+    // (and not style settings or something else)
+    is_scr_props_upd(n, prev) {
+        let p = prev.find(x => x.v.$uuid === n.v.$uuid)
+        if (!p) return false
+
+        let props = n.p.settings.$props
+        if (!props) return false
+
+        return props.some(x => n.v[x] !== p.v[x])
+    },
+
+    // Checks if it's time to make a script update
+    // (based on execInterval in ms)
+    delayed_exec(v) {
+        if (!v.script || !v.script.execInterval)
+            return true
+        let t = this.now()
+        let dt = v.script.execInterval
+        if (!v.settings.$last_exec ||
+            t > v.settings.$last_exec + dt) {
+            v.settings.$last_exec = t
+            return true
+        }
+        return false
+    },
+
+    // Format names such 'RSI, $length', where
+    // length - is one of the settings
+    format_name(ov) {
+        if (!ov.name) return undefined
+
+        let name = ov.name
+
+        for (var k in ov.settings || {}) {
+            let val = ov.settings[k]
+            let reg = new RegExp(`\\$${k}`, 'g')
+            name = name.replace(reg, val)
+        }
+
+        return name
+    },
+
+    // Default cursor mode
+    xmode() {
+        return this.is_mobile ? 'explore' : 'default'
+    },
+
+    default_prevented(event) {
+        if (event.original) {
+            return event.original.defaultPrevented
+        }
+        return event.defaultPrevented
+    },
+
+    // WTF with modern web development
+    is_mobile: (w => 'onorientationchange' in w &amp;&amp;
+       (!!navigator.maxTouchPoints ||
+        !!navigator.msMaxTouchPoints ||
+        ('ontouchstart' in w ||
+        (w.DocumentTouch &amp;&amp;
+        document instanceof w.DocumentTouch))))
+        (typeof window !== 'undefined' ? window : {})
+
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Fri Feb 20 2026 20:58:51 GMT+0700 (Indochina Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

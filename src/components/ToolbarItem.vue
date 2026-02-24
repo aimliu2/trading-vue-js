@@ -17,100 +17,147 @@
             @mouseleave="expmouseleave">
             ᐳ
         </div>
-        <item-list :config="config" :items="data.items"
-            v-if="show_exp_list" :colors="colors" :dc="dc"
+        <item-list :config="props.config" :items="props.data.items"
+            v-if="show_exp_list" :colors="props.colors" :dc="props.dc"
             @close-list="close_list"
             @item-selected="emit_selected_sub"/>
     </div>
 </template>
 
-<script>
+<script setup>
+import {ref, computed, onMounted} from 'vue'
+import ItemList from '@components/ItemList.vue'
+import Utils from '@stuff/utils.js'
 
-import ItemList from './ItemList.vue'
-import Utils from '../stuff/utils.js'
+/**
+ * @constant state-var
+ */
+const exp_hover = ref(false)
+const show_exp_list = ref(false)
+const sub_item = ref(null)
+const click_start = ref(null) // timestamp
+const click_id = ref(null)
 
-export default {
-    name: 'ToolbarItem',
-    props: [
-        'data', 'selected', 'colors', 'tv_id', 'config', 'dc', 'subs'
-    ],
-    components: { ItemList },
-    mounted() {
-        if (this.data.group) {
-            let type = this.subs[this.data.group]
-            let item = this.data.items.find(x => x.type === type)
-            if (item) this.sub_item = item
-        }
-    },
-    methods: {
-        mousedown(e) {
-            this.click_start = Utils.now()
-            this.click_id = setTimeout(() => {
-                this.show_exp_list = true
-            }, this.config.TB_ICON_HOLD)
-        },
-        expmouseover() {
-            this.exp_hover = true
-        },
-        expmouseleave() {
-            this.exp_hover = false
-        },
-        expmousedown(e) {
-            if (this.show_exp_list) e.stopPropagation()
-        },
-        emit_selected(src) {
-            if (Utils.now() - this.click_start >
-                this.config.TB_ICON_HOLD) return
-            clearTimeout(this.click_id)
-            //if (Utils.is_mobile && src === 'click') return
-            // TODO: double firing
-            if (!this.data.group) {
-                this.$emit('item-selected', this.data)
-            } else {
-                let item = this.sub_item || this.data.items[0]
-                this.$emit('item-selected', item)
-            }
-        },
-        emit_selected_sub(item) {
-            this.$emit('item-selected', item)
-            this.sub_item = item
-        },
-        exp_click(e) {
-            if (!this.data.group) return
-            e.cancelBubble = true
-            this.show_exp_list = !this.show_exp_list
-        },
-        close_list() {
-            this.show_exp_list = false
-        }
-    },
-    computed: {
-        item_style() {
-            if (this.$props.data.type === 'System:Splitter') {
-                return this.splitter
-            }
-            let conf = this.$props.config
+/**
+ * @constant props
+ * @desc tv_id:String
+ */
+// is props tv_id:String needed
+const props = defineProps({
+    config:Object,
+    data:Object,
+    dc:Object,
+    colors:Object,
+    selected:Boolean,
+    subs:Object
+})
+
+/**
+ * emitter
+ * @constant emit
+ */
+const emit = defineEmits(['item-selected']);
+
+// methods
+/**
+ * @function mousedown
+ * @desc seperate click and click-hold activity
+ */
+const mousedown = (e) => {
+    click_start.value = Utils.now();
+    // event fired multiple times if not set timeout ?
+    click_id.value = setTimeout(() => {show_exp_list.value = true}, props.config.TB_ICON_HOLD) // 420ms
+}
+/**
+ * @function mouseover
+ * @desc hover
+ */
+const expmouseover = () => {exp_hover.value = true}
+/**
+ * @function mouseleave
+ * @desc mouse leave
+ */
+const expmouseleave = () => {exp_hover.value = false}
+/**
+ * @function mousedown
+ * @desc mouse click
+ */
+const expmousedown = (e) => {if (show_exp_list.value) e.stopPropagation()}
+/**
+ * @function emit_selected
+ */
+const emit_selected = (src) => {
+    if (Utils.now() - click_start.value > props.config.TB_ICON_HOLD) return
+    clearTimeout(click_id.value)
+    //if (Utils.is_mobile && src === 'click') return
+    // TODO: double firing
+    if (!props.data.group) {
+        emit('item-selected', props.data)
+    } else {
+        let item = sub_item.value || props.data.items[0]
+        emit('item-selected', item)
+    }
+}
+/**
+ * @function emit_selected_sub
+ * @desc chain-emitted event from the child
+ */
+const emit_selected_sub = (item) => {
+    emit('item-selected', item)
+    sub_item.value = item
+}
+/**
+ * @function exp_click
+ * @desc expand button clicked
+ */
+const exp_click = (e) => {
+    if (!props.data.group) return
+    e.cancelBubble = true
+    show_exp_list.value = !show_exp_list.value
+}
+/**
+ * @function close_list
+ * @desc close expansion panel
+ */
+const close_list = () => {
+    show_exp_list.value = false
+}
+
+// computed
+/**
+ * @function item_style
+ * @desc
+ */
+const item_style = computed(()=> {
+            // if (props.data.type === 'System:Splitter') {
+            //     return this.splitter // splitter spcific css, which is ?
+            // }
+            let conf = props.config
             let im = conf.TB_ITEM_M
             let m = (conf.TOOLBAR - conf.TB_ICON) * 0.5 - im
             let s = conf.TB_ICON + im * 2
-            let b = this.exp_hover ? 0 : 3
+            let b = exp_hover.value ? 0 : 3
             return {
                 'width': `${s}px`,
                 'height': `${s}px`,
                 'margin': `8px ${m}px 0px ${m}px`,
                 'border-radius': `3px ${b}px ${b}px 3px`
             }
-        },
-        icon_style() {
-            if (this.$props.data.type === 'System:Splitter') {
+        }
+)
+/**
+ * @function icon_style
+ * @desc
+ */
+const icon_style = computed(() => {
+            if (props.data.type === 'System:Splitter') {
                 return {}
             }
-            let conf = this.$props.config
+            let conf = props.config
             let br = conf.TB_ICON_BRI
             let sz = conf.TB_ICON
             let im = conf.TB_ITEM_M
-            let ic = this.sub_item ?
-                this.sub_item.icon : this.$props.data.icon
+            let ic = sub_item.value ? sub_item.value : props.data.icon
             return {
                 'background-image': `url(${ic})`,
                 'width': `${sz}px`,
@@ -118,22 +165,32 @@ export default {
                 'margin': `${im}px`,
                 'filter': `brightness(${br})`
             }
-        },
-        exp_style() {
-            let conf = this.$props.config
+        }
+)
+/**
+ * @function exp_style
+ * @desc
+ */
+const exp_style = computed(() => {
+            let conf = props.config
             let im = conf.TB_ITEM_M
             let s = conf.TB_ICON * 0.5 + im
             let p = (conf.TOOLBAR - s * 2) / 4
             return {
                 padding: `${s}px ${p}px`,
-                transform: this.show_exp_list ?
+                transform: show_exp_list.value ?
                     `scale(-0.6, 1)` :
                     `scaleX(0.6)`
             }
-        },
-        splitter() {
-            let conf = this.$props.config
-            let colors = this.$props.colors
+        }
+)
+/**
+ * @function splitter
+ * @desc
+ */
+const splitter = computed(() => {
+            let conf = props.config
+            let colors = props.colors
             let c = colors.grid
             let im = conf.TB_ITEM_M
             let m = (conf.TOOLBAR - conf.TB_ICON) * 0.5 - im
@@ -145,22 +202,29 @@ export default {
                 'background-color': c
             }
         }
-    },
-    data() {
-        return {
-            exp_hover: false,
-            show_exp_list: false,
-            sub_item: null
-        }
-    }
-}
+)
 
+// life-cycle hook
+/**
+ * @name onmount
+ */
+onMounted(()=>{
+if (props.data.group) {
+    let type = props.subs[props.data.group]
+    let item = props.data.items.find(x => x.type === type)
+    if (item) sub_item.value = item
+}
+})
+
+// export default {name: 'ToolbarItem'}
 </script>
 
 <style>
 
+/**
 .trading-vue-tbitem {
 }
+ */
 
 .trading-vue-tbitem:hover {
     background-color: #76878319;

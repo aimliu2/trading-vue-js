@@ -1,72 +1,100 @@
 
 <template>
-    <div class="trading-vue-toolbar" :style="styles"
-        :key="tool_count">
-        <toolbar-item v-for="(tool, i) in groups"
+    <div class="trading-vue-toolbar" :style="styles" :key="state.tool_count">
+        <toolbar-item v-for="(tool, i) in toolGroups"
             v-if="tool.icon && !tool.hidden"
             @item-selected="selected"
             :key="i"
             :data="tool"
-            :subs="sub_map"
-            :dc="data"
-            :config="config"
-            :colors="colors"
+            :subs="state.sub_map"
+            :dc="props.data"
+            :config="props.config"
+            :colors="props.colors"
             :selected="is_selected(tool)">
         </toolbar-item>
     </div>
 </template>
 
-<script>
+<script setup>
+import ToolbarItem from '@components/ToolbarItem.vue'
+import {reactive, onMounted, computed} from 'vue'
 
-import ToolbarItem from './ToolbarItem.vue'
+/**
+ * @constant state-var
+ */
+// see if tools count change and have to force re-render
+const initState = { tool_count: 0, sub_map: {} }; 
+const state = reactive(initState);
 
-export default {
-    name: 'Toolbar',
-    props: [
-        'data', 'height', 'colors', 'tv_id', 'config'
-    ],
-    components: { ToolbarItem },
-    mounted() {
-        // console.log("tool init")
-        // console.log(this.data.tools)
-    },
-    methods: {
-        selected(tool) {
-            this.$emit('custom-event', {
+/**
+ * @constant props
+ */
+const props = defineProps({
+    data:Object, // tool data from datacube
+    height:Number, 
+    colors:Object, 
+    tv_id:String, // what for ? --> draw on multi screen tf
+    config:Object
+})
+
+/**
+ * @event custom-event
+ */
+const emit = defineEmits(['custom-event'])
+
+// methods
+/**
+ * @function selected
+ * @event custom-event#tool-selected
+ */
+const selected = (tool) => {
+            emit('custom-event', {
                 event:'tool-selected', args: [tool.type]
             })
             if (tool.group) {
                 // TODO: emit the sub map to DC (save)
-                this.sub_map[tool.group] = tool.type
+                state.sub_map[tool.group] = tool.type
             }
-        },
-        is_selected(tool) {
+        }
+
+/**
+ * @function is_selected
+ */
+const is_selected = (tool) => {
             if (tool.group) {
                 return !!tool.items.find(
-                    x => x.type === this.data.tool)
+                    x => x.type === props.data.tool)
             }
-            return tool.type === this.data.tool
+            return tool.type === props.data.tool
         }
-    },
-    computed: {
-        styles() {
-            let colors = this.$props.colors
-            let b = this.$props.config.TB_BORDER
-            let w = this.$props.config.TOOLBAR - b
-            let c = colors.grid
-            let cb = colors.tbBack || colors.back
-            let brd = colors.tbBorder || colors.scale
-            let st = this.$props.config.TB_B_STYLE
+
+//computed
+/**
+ * @function styles
+ * @desc add style to tool bar group
+ */
+const styles = computed(() => {
+            let b = props.config.TB_BORDER
+            let w = props.config.TOOLBAR - b
+            let c = props.colors.grid
+            let cb = props.colors.tbBack || props.colors.back
+            let brd = props.colors.tbBorder || props.colors.scale
+            let st = props.config.TB_B_STYLE
             return {
                 'width': `${w}px`,
-                'height': `${this.$props.height-3}px`,
+                'height': `${props.height-3}px`,
                 'background-color': cb,
                 'border-right': `${b}px ${st} ${brd}`
             }
-        },
-        groups() {
+        })
+
+/**
+ * @function toolGroups
+ * @desc create tool group for tool bar
+ */       
+const toolGroups = computed(() => {
             let arr = []
-            for (var tool of this.data.tools || []) {
+            for (let tool of props.data.tools || []) {
                 if (!tool.group) {
                     arr.push(tool)
                     continue
@@ -83,22 +111,17 @@ export default {
                 }
             }
             return arr
-        }
-    },
-    watch: {
-        data: {
-            handler(n) {
-                // For some reason Vue.js doesn't want to
-                // update 'tools' automatically when new item
-                // is pushed/removed.
-                if (n.tools) this.tool_count = n.tools.length
-            },
-            deep: true
-        }
-    },
-    data() { return { tool_count: 0, sub_map: {} } }
-}
+        })
 
+// life-cycle hook
+/**
+ * @name onMounted
+ */
+// onMounted(()=>{
+    // console.log("tool init")
+    // console.log(props.data) // got injected from grid.vue emitted event
+    // see if (n.tools) state.tool_count = n.tools.length is needed
+// })
 </script>
 
 <style>

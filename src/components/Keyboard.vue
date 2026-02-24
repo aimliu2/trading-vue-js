@@ -1,61 +1,97 @@
+<template>
+<!-- Listens to native keyboard events,propagates to all KeyboardListeners -->
+</template>
 
-<!-- Listens to native keyboard events,
-     propagates to all KeyboardListeners -->
+<script setup>
+import { ref, onMounted } from 'vue';
+import UseCleanup from '@composables/cUseCleanup.js'
 
-<script>
+/**
+ * @name constant
+ */
+const { addCleanup } = UseCleanup()
 
-export default {
-    name: 'Keyboard',
-    created: function () {
-        window.addEventListener('keydown', this.keydown)
-        window.addEventListener('keyup', this.keyup)
-        window.addEventListener('keypress', this.keypress)
-        this._listeners = {}
-    },
-    beforeDestroy: function () {
-        window.removeEventListener('keydown', this.keydown)
-        window.removeEventListener('keyup', this.keyup)
-        window.removeEventListener('keypress', this.keypress)
-    },
-    render(h) { return h() },
-    methods: {
-        keydown (event) {
-            for (var id in this._listeners) {
-                let l = this._listeners[id]
-                if (l && l.keydown) {
-                    l.keydown(event)
-                } else {
-                    console.warn(`No 'keydown' listener for ${id}`)
-                }
-            }
-        },
-        keyup (event) {
-            for (var id in this._listeners) {
-                let l = this._listeners[id]
-                if (l && l.keyup) {
-                    l.keyup(event)
-                } else {
-                    console.warn(`No 'keyup' listener for ${id}`)
-                }
-            }
-        },
-        keypress (event) {
-            for (var id in this._listeners) {
-                let l = this._listeners[id]
-                if (l && l.keypress) {
-                    l.keypress(event)
-                } else {
-                    console.warn(`No 'keypress' listener for ${id}`)
-                }
-            }
-        },
-        register(listener) {
-            this._listeners[listener.id] = listener
-        },
-        remove(listener) {
-            delete this._listeners[listener.id]
-        },
+/**
+ * @name state-var
+ */
+const _listeners = ref();
+
+/**
+ * @name methods
+ * @function register
+ * @desc add event listener to keyboard state var on 'this chart'
+ */
+const register = (listener) => {
+    _listeners.value[listener.id] = listener
+    console.log(`registered ${listener.id}`)
+}
+
+/**
+ * @function remove
+ * @desc remove event listener to keyboard state var on 'this chart'
+ */
+const remove = (listener) => {delete _listeners.value[listener.id]}
+
+/**
+ * @function keydown
+ * @desc send keydown from window to component ?
+ */
+const keydown = (event) => {
+    for (let id in _listeners.value) {
+        let l = _listeners.value[id]
+        if (l && l.keydown) {
+            l.keydown(event)
+        } else {
+            console.warn(`No 'keydown' listener for ${id}`)
+        }
     }
 }
+
+/**
+ * @function keyup
+ * @desc send keyup from window to component ?
+ */
+const keyup =  (event) => {
+    for (var id in _listeners.value) {
+        let l = _listeners.value[id]
+        if (l && l.keyup) {
+            l.keyup(event)
+        } else {
+            console.warn(`No 'keyup' listener for ${id}`)
+        }
+    }
+}
+
+/**
+ * @function keyup
+ * @desc send keyup from window to component ?
+ */
+const keypress  = (event) => {
+    for (var id in _listeners.value) {
+        let l = _listeners.value[id]
+        if (l && l.keypress) {
+            l.keypress(event)
+        } else {
+            console.warn(`No 'keypress' listener for ${id}`)
+        }
+    }
+}
+
+/**
+ * @name life-cycle hook
+ */
+onMounted(()=>{
+    window.addEventListener('keydown', keydown)
+    window.addEventListener('keyup', keyup)
+    window.addEventListener('keypress', keypress)
+    _listeners.value = {}
+
+    // cleanup
+    addCleanup(()=>window.removeEventListener('keydown', keydown))
+    addCleanup(()=>window.removeEventListener('keyup', keyup))
+    addCleanup(()=>window.removeEventListener('keypress', keypress))
+})
+
+// export default {name: 'Keyboard',}
 
 </script>

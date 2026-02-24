@@ -2,6 +2,7 @@
 import IndexedArray from 'arrayslicer'
 import Const from './constants.js'
 
+
 export default {
 
     clamp(num, min, max) {
@@ -154,6 +155,17 @@ export default {
         return [ia.nextlow, ia.nexthigh]
     },
 
+    /**
+     * @function now()
+     * @memberof Utility-js
+     * @summary return current timestamp
+     * @param {void} None
+     * @returns {number} timestamp
+     * @example
+     * 
+     * let k = now() // k = 1771064347739
+     * 
+     */
     now() { return (new Date()).getTime() },
 
     pause(delay) {

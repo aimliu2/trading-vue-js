@@ -1,18 +1,32 @@
 # To-do
 - Cursor props must be deeply watch because of ???
-- import computed don't have to unwrapped
-    - computed is read-only, immutable
+- import computed don't have to unwrapped. computed is also read-only, immutable
+- overlay in [Grid.vue](/src/components/Grid.vue#created()) was drawn on [UxLayer](/src/components/UxLayer.vue)
+---
+
+
+
+
+
+
+### create price API
+- [] fetch from static path with `.tvjs` format
+
+
+
+
+
+### revert to register component
+- [x] uncommented register event from [Grid.vue](/src/components/Grid.vue#created())
+- [x] remove tools from data-aggregator in [data-aggregator](src/composables/data/data-aggregator.js)
+- [x] omitted setup in [dc_core](/src/helpers/dc_core.js)
+- [x] test on test --> see if it works
+- [x] remove console from [dc_events](/src/helpers/dc_events.js#register_tools())
 
 ### Test toolbar case
-- [ ] upgrade jsDoc syntax (and docdash custom template)
-- [ ] upgrade [ItemList.vue](/src/components/ItemList.vue) to Vue3
-- [ ] upgrade [ToolbarItem.vue](/src/components/ToolbarItem.vue) to Vue3
-- [ ] upgrade [Toolbar.vue](/src/components/Toolbar.vue) to Vue3
-- [ ] [dc_core](/src/helpers/dc_core.js) set neither "tools nor "tool"
-    - Tools were registered as a custom event fired from [Grid.vue](/src/components/Grid.vue), built in [dc_events](/src/helpers/dc_events.js#register_tools())
-    - Upgraded : raw Tools scheme were fetched from profile-api, built, then aggregate into Datacube
-- [ ] Fixed problem : For some reason Vue.js doesn't want to update 'tools' automatically when new item is pushed/removed.
-    - [ ] handle case where tool from profile-api was dynamically added or remove
+- [x] upgrade jsDoc syntax (and docdash custom template)
+- [x] upgrade [ItemList.vue](/src/components/ItemList.vue) to Vue3
+- [x] upgrade [ToolbarItem.vue](/src/components/ToolbarItem.vue) to Vue3
 
 ### Migrate each components to Vue3
 - [>] change [Grid.vue](/src/components/Grid.vue) logic - decoupling parent-child methods -> [Overlay-registry](/src/composables/overlay-registry-core.js)

@@ -178,6 +178,7 @@ export default class Botbar {
 
     }
 
+    // apply mouse move event
     mousemove() { }
     mouseout() { }
     mouseup() { }

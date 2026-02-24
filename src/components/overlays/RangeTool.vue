@@ -19,7 +19,7 @@ export default {
                 // Descriptor for the tool
                 group: 'Measurements', icon: Icons['price_range.png'],
                 type: 'Price',
-                hint: 'Price Range',
+                hint: 'This is RangeTool hint',
                 data: [],     // Default data
                 settings: {}, // Default settings
                 mods: {

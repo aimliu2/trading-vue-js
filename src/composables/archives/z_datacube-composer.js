@@ -1,5 +1,5 @@
 import { reactive, onMounted, computed } from 'vue';
-import DataCube from '../helpers/datacube.js'
+import DataCube from '../../helpers/datacube.js'
 
 // Note : Datacube use webworker and
 // Overlay is a reactive inside DataCube object, 

@@ -11,7 +11,7 @@
         <toolbar v-if="toolbar"
             ref="toolbar"
             v-on:custom-event="custom_event"
-            v-bind="chart_props"
+            v-bind="tool_props"
             v-bind:config="chart_config">
         </toolbar>
         <widgets v-if="controllers.length"
@@ -29,7 +29,7 @@
             v-on:legend-button-click="legend_button">
         </chart>
         <transition name="tvjs-drift">
-            <the-tip :data="tip" v-if="tip"
+            <the-tip :data="tip" v-if="false"
                 @remove-me="tip = null"/>
         </transition>
     </div>
@@ -39,10 +39,11 @@
 
 import Const from './stuff/constants.js'
 
-import Chart from './components/Chart.vue'
-import Toolbar from './components/Toolbar.vue'
-import Widgets from './components/Widgets.vue'
-import TheTip from './components/TheTip.vue'
+// self as 15
+import Chart from './components/Chart.vue' // next3
+import Toolbar from '@components/Toolbar.vue' // V3s
+import Widgets from '@components/Widgets.vue' // V3
+
 
 import XControl from './mixins/xcontrol.js'
 // mixins: [ XControl ], no extension, temporary ditch (assign controllers=[])
@@ -51,7 +52,7 @@ import XControl from './mixins/xcontrol.js'
 export default {
     name: 'TradingVue',
     components: {
-        Chart, Toolbar, Widgets, TheTip
+        Chart, Toolbar, Widgets
     },
     mixins: [ XControl ],
     // TO-DO : props drilling here, is there a better way ?
@@ -190,6 +191,15 @@ export default {
         }
     },
     computed: {
+        tool_props() {
+            let tool_props = {
+                data: this.decubed,
+                height: this.$props.height,
+                colors: Object.assign({}, this.$props.colors ||
+                    this.colorpack),
+            }
+            return tool_props
+        },
         // Copy a subset of TradingVue props
         chart_props() {
             let offset = this.$props.toolbar ?
@@ -254,10 +264,13 @@ export default {
     data() {
         return { 
             reset: 0, 
-            tip: 'this is tip',
+            // tipText: 'this is tip text passed from TradingVue.Vue',
+            // tip:''
         }
     },
     mounted() {
+        // onMounted
+
     },
     beforeDestroy() {
         this.custom_event({ event: 'before-destroy' })
@@ -313,19 +326,19 @@ export default {
             }
             return cursor
         },
-        showTheTip(text, color = "orange") {
-            this.tip = { text, color }
-        },
+        // showTheTip(text, color = "orange") {
+        //     this.tip = { text, color }
+        // },
         legend_button(event) {
             this.custom_event({
                 event: 'legend-button-click', args: [event]
             })
         },
-        custom_event(d) { // delegate to dc_events.js
+        custom_event(d) { 
             if ('args' in d) {
                 this.$emit(d.event, ...d.args)
             } else {
-                this.$emit(d.event)
+                this.$emit(d.event) 
             }
             let data = this.$props.data
             // from mixin
@@ -333,6 +346,7 @@ export default {
             // if (ctrl) this.pre_dc(d)
             if (data.tv) {
                 // If the data object is DataCube
+                // pass emit event into datacube (dc_event.js)
                 data.on_custom_event(d.event, d.args)
             }
             // from mixin

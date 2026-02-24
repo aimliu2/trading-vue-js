@@ -1,14 +1,24 @@
-// used in dev.config.js
+
+/**
+ * @namespace tvjs
+ * @description The main entry point for the TVJS application. This file initializes the Vue application and mounts it to the DOM.
+ */
 // Vue 3
+// import App from './App.vue';
 // import { createApp } from 'vue';
-// Import the root component (usually App.vue in a Single-File Component setup)
-import App from './App.vue';
-import Vue from 'vue' // Vue 2
-// Create the application instance, passing the root component as an argument
 // const app = createApp(App);
+// app.mount('#app'); // Mount the app to an element with the id of 'app'
 
+// Vue 2
+import Vue from 'vue';
+import App from './App.vue';
+new Vue({render: h => h(App)}).$mount('#app'); // Vue2
 
-// MOB_DEBUG=true npm run test - Enables mobile debugging
+// function debug(...argv) {
+//     fetch('/debug?argv=' + JSON.stringify(argv))
+// }
+
+// MOB_DEBUG=true npm run dev - Enables mobile debugging
 // (sending console output to the webpack terminal)
 // if (MOB_DEBUG) {
 //     console.log = debug
@@ -16,8 +26,5 @@ import Vue from 'vue' // Vue 2
 //     console.warn = debug
 // }
 
-new Vue({render: h => h(App)}).$mount('#app');
+// new Vue({render: h => h(App)}).$mount('#app'); // Vue2
 
-// function debug(...argv) {
-//     fetch('/debug?argv=' + JSON.stringify(argv))
-// }

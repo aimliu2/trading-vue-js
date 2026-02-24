@@ -1,33 +1,17 @@
 
-/**
- * DC_CORE Private methods - inherited by DataCube
- * init_tvjs - Set TV instance (once). Called by TradingVue.Vue itself and pass it's whole component
- * init_data - Set JSON structure. Called by TradingVue.Vue itself and pass it's whole component
- * range_changed
- * chunk_loaded
- * update_ids
- * update_candle
- * update_tick
- * update_overlays
- * get_by_query
- * chart_as_piv
- * query_search
- * merge_objects
- * merge_ts
- * ts_overlap
- * combine
- * fast_merge
- * scroll_to
- */
-
 import Utils from '../stuff/utils.js'
 import DCEvents from './dc_events.js'
 import Dataset from './dataset.js'
 
+/**
+ * @class dc_core-js
+ * @desc Datacube core
+ */
 export default class DCCore extends DCEvents {
 
     /**
      * init_tvjs - Set TV instance (once). Called by TradingVue itself
+     * @memberof dc_core-js
      * @param {*} $root = whole TradingVue.Vue component, set by computed
      * @return {void} Void - init internal object
      */
@@ -37,9 +21,9 @@ export default class DCCore extends DCEvents {
             this.init_data() // Struct Data
             this.update_ids()
 
-            // Listen to all setting changes
             // TODO: works only with merge() 
             // TODO: should offload watch to Vue, don't have to specify here in class
+            // Listen to all setting changes
             this.tv.$watch(() => this.get_by_query('.settings'),
                 (n, p) => this.on_settings(n, p))
 
@@ -56,10 +40,13 @@ export default class DCCore extends DCEvents {
 
     /**
      * Init Data Structure V1.1
+     * @memberof dc_core-js
      * @param {object} $root = whole TradingVue.Vue component, set by computed
      * @return {void} Void - just set internal JSON
      */
     init_data($root) {
+        // console.log('dc_core')
+        // console.log(this.data)
         // Legacy format supported. if there was no "chart" key in JSON, use "ohlcv" instead.
         // (required)
         if (!('chart' in this.data)) {
@@ -71,12 +58,12 @@ export default class DCCore extends DCEvents {
 
         // set settings key - settings section under "chart" key
         if (!this.data.chart.settings) {
-            this.tv.$set(this.data.chart,'settings', {})
+            this.tv.$set(this.data.chart, 'settings', {})
         }
 
         // Clean up Legacy key (ohlcv) 
         // since we have Data v1.1^
-        if(this.data.ohlcv) delete this.data.ohlcv
+        if (this.data.ohlcv) delete this.data.ohlcv
 
         // set onchart key (required)- overlay onchart section
         if (!('onchart' in this.data)) {
@@ -88,9 +75,15 @@ export default class DCCore extends DCEvents {
             this.tv.$set(this.data, 'offchart', [])
         }
 
-        // set tools/tool key was done in dc_events
-        // since register_tools was an event fired form Vue component
-        // so expensive don't you think ?
+        // set tools/tool key 
+        // set datasets key - datasets section ???
+        // if (!('tools' in this.data)) {
+        //     this.tv.$set(this.data, 'tools', [])
+        // }
+
+        // if (!('tool' in this.data)) {
+        //     this.tv.$set(this.data, 'tool', 'Cursor')
+        // }
 
         // set datasets key - datasets section ???
         if (!('datasets' in this.data)) {
@@ -108,7 +101,7 @@ export default class DCCore extends DCEvents {
 
     // Range change callback (called by TradingVue)
     // TODO: improve (reliablity + chunk with limited size)
-    async range_changed(range, tf, check=false) {
+    async range_changed(range, tf, check = false) {
 
         if (!this.loader) return
         if (!this.loading) {
@@ -154,7 +147,11 @@ export default class DCCore extends DCEvents {
 
     }
 
-    // Update ids for all overlays
+    /**
+     * @function update_ids
+     * @desc Update ids for all overlays
+     * @memberof dc_core-js
+     */
     update_ids() {
         this.data.chart.id = `chart.${this.data.chart.type}`
         var count = {}
@@ -387,10 +384,10 @@ export default class DCCore extends DCEvents {
         if (!data.length) return obj.v
 
         let r1 = [obj.v[0][0], obj.v[obj.v.length - 1][0]]
-        let r2 = [data[0][0],  data[data.length - 1][0]]
+        let r2 = [data[0][0], data[data.length - 1][0]]
 
         // Overlap
-        let o = [Math.max(r1[0],r2[0]), Math.min(r1[1],r2[1])]
+        let o = [Math.max(r1[0], r2[0]), Math.min(r1[1], r2[1])]
 
         if (o[1] >= o[0]) {
 
@@ -476,7 +473,7 @@ export default class DCCore extends DCEvents {
 
             return Object.assign(dst, o)
 
-        // The overlap is on the right
+            // The overlap is on the right
         } else if (last(src) > last(dst)) {
 
             // Psh(...) is faster but can overflow the stack
@@ -487,7 +484,7 @@ export default class DCCore extends DCEvents {
                 return dst.concat(o, src)
             }
 
-        // The overlap is on the left
+            // The overlap is on the left
         } else if (src[0][0] < dst[0][0]) {
 
             // Push(...) is faster but can overflow the stack
@@ -498,7 +495,7 @@ export default class DCCore extends DCEvents {
                 return src.concat(o, dst)
             }
 
-        } else {  return []  }
+        } else { return [] }
 
     }
 

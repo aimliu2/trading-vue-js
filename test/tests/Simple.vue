@@ -3,7 +3,7 @@
   v-bind="currentTheme"
   ref="tvjs"
   :toolbar="true"
-  :data="builtDataCube" 
+  :data="chart" 
   :width="winState.width" 
   :height="winState.height"
   />
@@ -15,9 +15,11 @@
 import TradingVue from '@src/TradingVue.vue'
 
 import emitter from '@helpers/eventbus.js'
-import DataCubic from '@composables/datacube-composer.js'
+// import DataCubic from '@composables/datacube-composer.js'
 import WindowSize from '@composables/winsize.js'
 import { ref, reactive, computed, onBeforeMount, onMounted, onUnmounted} from 'vue';
+import DataCube from '@helpers/datacube.js'
+import Data from '@data/test-case1-overlay.json'
 
 // props down from parent
 const props = defineProps({
@@ -42,9 +44,10 @@ const emitMsg = {
 // @state {width:number, height:number} @action onResize
 const {state:winState, onResize} = WindowSize(); 
 // @state {path:string,isLoading:boolean,chart:Datacube Object} @computed builtDataCube
-const {state:dataState, builtDataCube} = DataCubic();
+// const {state:dataState, builtDataCube} = DataCubic();
 
-const tvjs = ref(null);
+const tvjs = ref();
+const chart = ref(new DataCube(Data))
 
 // night theme was defined by default
 const dayTheme = reactive({
@@ -61,15 +64,15 @@ const currentTheme = computed(() => {
 
 // composiiton API : life-cycle hook
 // mutated state on DOM, App.vue component
-onBeforeMount(() => {
-  // update state
-  dataState.path = TESTPATH
-}),
+// onBeforeMount(() => {
+//   // update state
+//   dataState.path = TESTPATH
+// }),
 onMounted(async () => {
   // init state
   onResize(0, adjust);
   // emitter, dynamic components
-  window.dc = dataState.chart
+  window.dc = chart.value
   window.tv = tvjs
   emitter.emit('testcase-mount', emitMsg); // once
   window.addEventListener('resize', () => onResize(0, adjust))

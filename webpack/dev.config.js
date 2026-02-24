@@ -12,6 +12,7 @@ module.exports = (env, options) => ({
     resolve: {
         alias: {
         '@src': path.resolve(__dirname, '..', 'src'),
+        '@data': path.resolve(__dirname, '..', 'data'),
         '@components': path.resolve(__dirname, '..', 'src', 'components'),
         '@component-js': path.resolve(__dirname, '..', 'src', 'components', 'js'),
         '@composables': path.resolve(__dirname, '..', 'src', 'composables'),

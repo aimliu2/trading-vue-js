@@ -2,6 +2,10 @@
 
 import Utils from '../stuff/utils.js'
 
+/** 
+ * @class AggTool
+ * @desc OHLC tick aggregator  
+ */
 export default class AggTool {
 
     constructor(dc, int = 100) {

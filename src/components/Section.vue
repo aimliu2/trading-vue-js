@@ -32,9 +32,9 @@
 
 <script>
 
-import Grid from './Grid.vue'
-import Sidebar from './Sidebar.vue'
-import ChartLegend from './Legend.vue'
+import Grid from './Grid.vue' // next 9/13
+import Sidebar from './Sidebar.vue' // next 7
+import ChartLegend from './Legend.vue' // next 8
 
 import Shaders from '../mixins/shaders.js'
 

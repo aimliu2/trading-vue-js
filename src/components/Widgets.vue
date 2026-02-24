@@ -14,17 +14,32 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Widgets',
-    props: ['width', 'height', 'map', 'tv', 'dc'],
-    methods: {
-        initw(id) {
-            return this.$props.map[id].cls
-        }
-    }
+<script setup>
+
+/**
+ * @name props
+ */
+const props = defineProps({
+    width:Number,
+    height:Number,
+    map:Object,
+    tv:Object,
+    dc:Object
+})
+
+/**
+ * @name methods
+ * @function initw
+ * @return {object} class of this widget ?
+ */
+
+const initw = (id) => {
+    return props.map[id].cls
 }
+
+// export default {name: 'Widgets'}
 </script>
+
 <style>
 .tvjs-widgets {
     position: absolute;

@@ -5,9 +5,9 @@ import Grid from './js/grid.js'
 import Canvas from '../mixins/canvas.js'
 import UxList from '../mixins/uxlist.js'
 
-import Crosshair from './Crosshair3.vue' // made V3
-import KeyboardListener from './KeyboardListener.vue'
-import UxLayer from './UxLayer.vue'
+import Crosshair from './Crosshair.vue' // made V3
+import KeyboardListener from './KeyboardListener.vue' // next 10
+import UxLayer from './UxLayer.vue' // next 11
 
 // import core overlays, tools, indicators
 import {CoreRegisteredOverlays, CoreRegisteredTools, CoreRegisteredIndicators} from  "@composables/overlays/overlay-registry-core"
@@ -29,7 +29,7 @@ export default {
         let tools_core = CoreRegisteredTools.map(({ use_for, info }) => ({ use_for:use_for[0], info })); 
 
         // fire event oncreated
-        this.$emit('custom-event', { // emit custom-event back to Ancestor 'TradingVue.vue'
+        this.$emit('custom-event', { // emit components back to Ancestor 'TradingVue.vue'
             event: 'register-tools', args: tools_core
         })
         this.$on('custom-event', e => // received event from on_ux_event 'TradingVue.vue'
@@ -106,21 +106,25 @@ export default {
             // Distributes overlay data & settings according to Datacube input
             let comp_list = [], count = {}, indy = null;
             
-            for (var d of this.$props.data) { // upgrade to map later
+            for (var d of this.$props.data) { 
+                // TODO : upgrade to map later
                 // match d.type (i.e. 'KC') in this.$props.data and 
                 // [WIP] : upgrade later
                 // TODO : add render selection later
+
+                // use base type i.e. Linetool:Extend does not know what to use_for
+                let base_type = d.type.split(':')[0]
                 let overlays = CoreRegisteredOverlays
-                    .filter(item => item.use_for.includes(d.type))
+                    .filter(item => item.use_for.includes(base_type))
                     .map(item => item.component); // got Overlay Component i.e. [Spline]
 
-                // TODO : add render selection later
+                // TODO : add render settings later
                 let tools = CoreRegisteredTools
-                    .filter(item => item.use_for.includes(d.type))
+                    .filter(item => item.use_for.includes(base_type))
                     .map(item => item.component); // got Tool Component i.e. [LineTool]
 
                 let indies = CoreRegisteredIndicators
-                    .filter(item => item.use_for.includes(d.type))
+                    .filter(item => item.use_for.includes(base_type))
                     .map(item => item.component); // got Indicator Component i.e. [SMA]
 
                 if(indies[0]) indy = this.inject_renderer(indies[0]); // d.type is indicator

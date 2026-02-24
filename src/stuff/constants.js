@@ -1,4 +1,6 @@
-
+/**
+ * @namespace stuff-js
+ */
 const SECOND = 1000
 const MINUTE = SECOND * 60
 const MINUTE3 = MINUTE * 3
@@ -38,6 +40,10 @@ const ChartConfig = {
     TB_ICON: 25,     // Toolbar icon size px
     TB_ITEM_M: 6,    // Toolbar item margin px
     TB_ICON_BRI: 1,  // Toolbar icon brightness
+    /**
+     * @constant TB_ICON_HOLD
+     * @summary time delay when click to expand toolbar, prevent double firing
+     */
     TB_ICON_HOLD: 420, // ms, wait to expand
     TB_BORDER: 1,    // Toolbar border px
     TB_B_STYLE: 'dotted', // Toolbar border style

@@ -1,4 +1,13 @@
-// core overlays --> move to composables since there guys did not have render properties by themselves
+/**
+ * @namespace c3-overlay-registry-core-js
+ * @desc Composable C3 : for Dynamic Overlay Plot(s) and Tool(s). Define and assign each overlays on chart
+ * @desc Core component will be registered here
+ */
+
+/**
+ * @name Core-Overlay
+ * @summary fundamental element on chart i.e. lines. 
+ */
 import Spline from "@overlay-comps/Spline_bak.vue"
 import Splines from "@overlay-comps/Splines.vue"
 import Range from "@overlay-comps/Range.vue"
@@ -9,18 +18,65 @@ import Candles from "@overlay-comps/Candles_bak.vue" // upgrading
 import Volume from "@overlay-comps/Volume.vue" // upgrading
 import Splitters from "@overlay-comps/Splitters.vue" 
 
-// core tools - an extend class/ composable form core overlays
+/**
+ * @name Core-Tool
+ * @summary fundamental tool annotated on chart i.e. line tool
+ */
 import LineTool from "@overlay-comps/LineTool.vue" // upgrading
 import RangeTool from "@overlay-comps/RangeTool.vue" // upgrading
 
-// indicators - an extend class/ composable form core overlays
+/**
+ * @name Core-Indicator
+ * @summary fundamental indicator pre-built on chart i.e. SMA
+ */
 import SMA from "@composables/overlays/indicators/SMA/SMA.vue"
 
 /**
- * Composable C3 : for Dynamic Overlay Plot(s) and Tool(s)
- * This composable return Overlay Component following chart type i.e. 'EMA' will return 'Spline'
- * Core component will be registered here
+ * @typedef {Object} CoreRegisteredOverlays
+ * @desc This composable return Overlay Component following chart type i.e. 'EMA' will return 'Spline'. use_for properties must be unique.
+ * @memberof c3-overlay-registry-core-js
+ * @property {Object} component - Vue component
+ * @property {Array<String>} use_for - component's target plot when specify in Datacube
+ * @property {string} name - component's nickname
  */
+export const CoreRegisteredOverlays = [
+  { component: Spline, use_for: ['Spline', 'EMA', 'SMA'], name:'Spline' },
+  { component: Splines, use_for: ['Splines', 'DMI'], name:'Splines' },
+  { component: Range, use_for: ['Range', 'RSI'], name:'Range' },
+  { component: Trades, use_for: ['Trades'], name:'Trades' },
+  { component: Channel, use_for: ['Channel', 'KC', 'BB'], name:'Channel' },
+  { component: Segment, use_for: ['Segment'], name:'Segment' },
+  { component: Candles, use_for: ['Candles'], name:'Candles' },
+  { component: Volume, use_for: ['Volume'], name:'Volume' },
+  { component: Splitters, use_for: ['Splitters'], name:'Splitters' }
+]
+
+/**
+ * @typedef {CoreRegisteredOverlays} CoreRegisteredTools
+ * @desc This composable return Tool Components. Extended from [CoreRegisteredOverlays]{@link c3-overlay-registry-core-js.CoreRegisteredOverlays}
+ * @memberof c3-overlay-registry-core-js
+ * @extends CoreRegisteredOverlays
+ * @prop {Object} info -  Tool's overlay information
+ */
+export const CoreRegisteredTools = [
+  { component: LineTool, use_for: ['LineTool'], name:'LineTool', info:LineTool.methods.tool() },
+  { component: RangeTool, use_for: ['RangeTool'], name:'RangeTool', info:RangeTool.methods.tool() }
+]
+
+/**
+ * @typedef {CoreRegisteredOverlays} CoreRegisteredIndicators
+ * @extends CoreRegisteredOverlays
+ * @desc This composable return Indicator Components. Extended from [CoreRegisteredOverlays]{@link c3-overlay-registry-core-js.CoreRegisteredOverlays}
+ * @memberof c3-overlay-registry-core-js
+ * @prop {renderer:string} conf -  Indicator's configuraiton
+ */
+export const CoreRegisteredIndicators = [
+  { component: SMA, use_for: ['SMA-calc'], name:'SMA', conf:{renderer:'Spline'} } // shouldn't have use_for ?
+]
+
+// is there a use case where we plot data with tool
+// or plot tool with renderer !?
+// [improvement] indicator's not suppose to look for use_for properties
 
 /**
  * Issue 1
@@ -34,36 +90,6 @@ import SMA from "@composables/overlays/indicators/SMA/SMA.vue"
  * Solution I1 - Set Datacube ground rule 
  * use_for should be unique
  */
-
-export const CoreRegisteredOverlays = [
-  { component: Spline, use_for: ['Spline', 'EMA', 'SMA'], name:'Spline' },
-  { component: Splines, use_for: ['Splines', 'DMI'], name:'Splines' },
-  { component: Range, use_for: ['Range', 'RSI'], name:'Range' },
-  { component: Trades, use_for: ['Trades'], name:'Trades' },
-  { component: Channel, use_for: ['Channel', 'KC', 'BB'], name:'Channel' },
-  { component: Segment, use_for: ['Segment'], name:'Segment' },
-  { component: Candles, use_for: ['Candles'], name:'Candles' },
-  { component: Volume, use_for: ['Volume'], name:'Volume' },
-  { component: Splitters, use_for: ['Splitters'], name:'Splitters' }
-]
-
-// is there a use case where we plot data with tool
-// or plot tool with renderer !?
-// [improvement] indicator's not suppose to look for use_for properties
-
-
-// intransition from Vue2 (comp.methods.tool()) -> Vue3
-
-export const CoreRegisteredTools = [
-  { component: LineTool, use_for: ['LineTool'], name:'LineTool', info:LineTool.methods.tool() },
-  { component: RangeTool, use_for: ['RangeTool'], name:'RangeTool', info:RangeTool.methods.tool() }
-]
-
-
-export const CoreRegisteredIndicators = [
-  { component: SMA, use_for: ['SMA-calc'], name:'SMA', conf:{renderer:'Spline'} } // shouldn't have use_for ?
-]
-
 
 /**
  * Issue 2

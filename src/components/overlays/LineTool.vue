@@ -22,7 +22,7 @@ export default {
                 // Descriptor for the tool
                 group: 'Lines', icon: Icons['segment.png'],
                 type: 'Segment',
-                hint: 'This hint will be shown on hover',
+                hint: 'This is LineTool Hint',
                 data: [],     // Default data
                 settings: {}, // Default settings
                 // Modifications

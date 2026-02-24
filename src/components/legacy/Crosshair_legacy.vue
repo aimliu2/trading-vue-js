@@ -1,6 +1,6 @@
 <script>
 
-import Crosshair from './js/crosshair3.js'
+import Crosshair from '../js/crosshair3.js'
 // import Utils from '../stuff/utils.js'
 
 export default {

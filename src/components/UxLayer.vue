@@ -16,7 +16,7 @@
 
 <script>
 
-import UxWrapper from './UxWrapper.vue'
+import UxWrapper from './UxWrapper.vue' // next 12
 
 export default {
     name: 'UxLayer',

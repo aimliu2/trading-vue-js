@@ -1,5 +1,20 @@
 {
+  Keyboard-vue :{
+    "title": "Keyboard.vue"
+  },
+  "TheTip-vue": {
+    "title": "TheTip.vue"
+  },
+  "ToolbarItem-vue": {
+    "title": "ToolbarItem.vue"
+  },
   "ItemList-vue": {
-    "title": "Comp-ItemList.vue"
+    "title": "ItemList.vue"
+  },
+  "Toolbar-vue": {
+    "title": "Toolbar.vue"
+  },
+  "Widget-vue":{
+    "title": "Widget.vue"
   }
 }
