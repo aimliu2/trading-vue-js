@@ -3,6 +3,20 @@
  * @desc handle everything related to time
  */
 
+
+/**
+ * @function now()
+ * @memberof times-js
+ * @summary return current timestamp
+ * @param {void} None
+ * @returns {number} timestamp
+ * @example
+ * 
+ * let k = now() // k = 1771064347739
+ * 
+ */
+export const nowTimestamp = () => { return (new Date()).getTime() }
+
 /**
  * @function formatTwoDigits
  * @desc Formats a number to a two-digit string using a conditional check. presume input must be valid

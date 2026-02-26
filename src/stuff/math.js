@@ -1,6 +1,41 @@
 
 // Math/Geometry
 
+/**
+ * @class Math-js
+ * @desc Math related functions, including geometry and log scale related functions
+ */
+
+/**
+ * @function sym_log
+ * @param {Number} x - input number
+ * @returns {Number} - symmetric log value
+ */
+// TODO: log for small values
+export const sym_log = (x) => Math.sign(x) * Math.log(Math.abs(x) + 1)
+
+/**
+ * @function sym_exp
+ * @param {Number} x - input number
+ * @returns {Number} - symmetric exponential value
+ * @see {@link https://codepen.io/aimliu2/pen/OPRJeqj}
+ */
+export const sym_exp = (x) => Math.sign(x) * (Math.exp(Math.abs(x)) - 1)
+
+/**
+ * @funciton log_mid
+ * @param {Array} r - range array [hi, lo]
+ * @param {Number} h - height in pixels
+ * @returns {Number} - middle value on log scale
+ */
+export const log_mid = (r, h) => {
+    let log_hi = sym_log(r[0])
+    let log_lo = sym_log(r[1])
+    let px = h / 2
+    let gx = log_hi -  px * (log_hi - log_lo) / h
+    return sym_exp(gx)
+}
+
 export default {
 
     // Distance from point to line
@@ -80,7 +115,7 @@ export default {
         return Math.sign(x) * Math.log(Math.abs(x) + 1)
     },
 
-    // Symmetrical exp
+    // Symmetrical exponential
     exp(x) {
         return Math.sign(x) * (Math.exp(Math.abs(x)) - 1)
     },

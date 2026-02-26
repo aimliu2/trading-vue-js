@@ -1,7 +1,14 @@
 # Direction
-- not direct competing with tradingview
+- not direct competing with tradingview& pinescript
 - make it visualize layer between human-bot
-    - semi-bot poly mkt
+    - visualize layer
+    - bot(app) layer
+    - data processed layer
+- Optimized touch for desktop
+    - optimized mouse/wheel event.
+    - optimized some osx trackpad event
+    - see [touch event](./20260224-update.md#osx-trackpad-vs-mouse-vs-mobile-event)
+
 ```md
 ### Top Volume Sections on Polymarket
 - Politics (Highest Volume): Markets regarding elections, government actions, and geopolitical events (e.g., U.S. presidential or Federal Reserve decisions) attract the most capital over long periods.

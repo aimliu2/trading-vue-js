@@ -115,6 +115,7 @@ export default {
                 Const.IB_TF_WARN, Const.SECOND
             )
         },
+        // should there be x_transform ?
         set_ytransform(s) {
             let obj = this.y_transforms[s.grid_id] || {}
             Object.assign(obj, s)

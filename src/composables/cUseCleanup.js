@@ -4,7 +4,8 @@ import {isFunction} from '@stuff/utilities.js'
 /**
  * @module useCleanup
  * @desc - composable: auto activate these function when unmount. prevent memory leak
- * @returns {fn} addCleanup
+ * @summary - window.addEventListener or document.body.addEventListener, setInterval, setTimeout, etc. that need to be cleaned up on unmount
+ * @returns {Object} useCleanup
  * 
  * @example
  * 

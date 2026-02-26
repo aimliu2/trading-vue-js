@@ -10,7 +10,6 @@ const { MINUTE15, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, MONTHMAP } = Const
  * @prop {String} font - font object props
  * @prop {Object} colors - colors object props
  * @prop {Object} cursor - cursor object props
- * @prop {Object} layout - layout object props
  * @prop {Number} timezone - timezone object props
  * @prop {Number} interval - interval object props
  * @prop {Object} layout - layout object props
@@ -29,7 +28,7 @@ const { MINUTE15, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR, MONTHMAP } = Const
 
 /**
  * @class Botbar
- * @desc mutate pixel on canvas
+ * @desc Bottom bar of the chart, responsible for drawing x-axis labels and cursor panel. It is a separate canvas layer on top of the main chart canvas, and it solely relies on layout params to draw pixel, so it won't cause any side effect to the main chart canvas. It also has its own shader system, which is used to draw things like extended crosshair, etc.
  */
 export default class Botbar {
     /**
@@ -90,6 +89,7 @@ export default class Botbar {
     /**
      * @method update
      * @desc redraw pixel function, solely rely on layout params to draw pixel
+     * @memberof Botbar
      */
     update() {
         // Debugging: check if $p is defined and has the expected structure
@@ -145,6 +145,7 @@ export default class Botbar {
     /**
      * @method apply_shaders
      * @desc apply shader, used in update()
+     * @memberof Botbar
      */
     apply_shaders() {
         let layout = this.$p.layout.grids[0]
@@ -162,6 +163,7 @@ export default class Botbar {
     /**
      * @method panel
      * @desc used in updated
+     * @memberof Botbar
      */
     panel() {
 
@@ -185,6 +187,7 @@ export default class Botbar {
     /**
      * @method format_date
      * @desc used in updated
+     * @memberof Botbar
      */
     format_date(p) {
         let t = p[1][0]
@@ -215,6 +218,7 @@ export default class Botbar {
     /**
      * @method format_cursor
      * @desc used in updated
+     * @memberof Botbar
      */
     format_cursor_x() {
 
@@ -275,18 +279,22 @@ export default class Botbar {
 
     /**
      * @method mousemove
+     * @memberof Botbar
      */
     mousemove() { }
     /**
      * @method mouseout
+     * @memberof Botbar
      */
     mouseout() { }
     /**
      * @method mouseup
+     * @memberof Botbar
      */
     mouseup() { }
     /**
      * @method mousedown
+     * @memberof Botbar
      */
     mousedown() { }
 

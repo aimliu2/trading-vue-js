@@ -3,10 +3,33 @@
  * @desc utilityies function exported by part. We don't need a chuck import but used 1 or 2 function
  */
 
+
+/**
+ * #function clamp
+ * @desc clamp a number between a lower and upper bound. If higher is not provided, it will only clamp the number to the lower bound.
+ * @memberof Utilities-js
+ * @param {Number} num 
+ * @param {Number} clamp 
+ * @param {Number} higher 
+ * @returns {Number} clamped number
+ * @example
+ * 
+ * ```js
+ * clamp(5, 1, 10) // returns 5
+ * clamp(-1, 0, 10) // returns 0
+ * clamp(11, 0, 10) // returns 10
+ * clamp(5, 3) // returns 3
+ * clamp(2, 3) // returns 3
+ * clamp(4, 3) // returns 4
+ * ```
+ */
+export const clamp = (num, clamp, higher) => higher ? Math.min(Math.max(num, clamp), higher) : Math.min(num, clamp)
+
 /**
  * @function isFunction
  * @desc check if the input was a function or not
  * @param {fn} fn - input funtion
+ * @memberof Utilities-js
  * @returns {boolean} ture if input was function
  * @example
  * 
@@ -23,6 +46,7 @@ export const isFunction = (fn) => {
  * @param {fn} func - input function
  * @param {number} wait - interger in ms i.e. 1000 = 1s
  * @param {boolean} leading - use leading debounce
+ * @memberof Utilities-js
  * @returns {fn} - debounced function
  * @desc Get one value during an interval of a rapid fired event. Works on Chrome 7.0++ Firefox 4.0++ IE 9.0++
  * @example
@@ -63,6 +87,7 @@ export const debounce = (fn, wait, leading=false) => {
  * @param {ctx} ctx - canvas ctx, have to pre-assigned ctx.measureTextOrg = ctx.measureText
  * @param {string} text - text
  * @param {string} tv_id - id of the canvas ?
+ * @memberof Utilities-js
  */
 export const measureText = (ctx, text, tv_id) => {
     let m = ctx.measureTextOrg(text)

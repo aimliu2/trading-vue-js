@@ -3,13 +3,13 @@
         <!-- props.rerender are already watched-->
         <canvas
             ref="botbarCanvas"
-            :id="makeCanvasId"
-        >This is canvas bottom bar</canvas>
+            :id="makeBotbarId"
+        >This is canvas bottom bar, show date-time</canvas>
     </div>
 </template>
 
 <script setup>
-// TODO : implement mouse event later
+// TODO : focus on desktop UX
 // @mousemove ="e => botbarPixel.value.mousemove(e)"
 // @mouseout = "e => botbarPixel.value.mouseout(e)"
 // @mouseup = "e => botbarPixel.value.mouseup(e)"
@@ -49,15 +49,16 @@ const props = defineProps({
  */
 const botbarCanvas = ref(); // HTMLcanvasElement
 const botbarPixel = shallowRef(null); // assign markRaw @onMounted
-const debounceSetup = shallowRef(null); // assign markraw Setup @onMounted
-const debounceUpdate = shallowRef(null); // assign markraw Update @onMounted
-const frameTime = ref([]) // for performance measurement
+// const debounceSetup = shallowRef(null); // assign markraw Setup @onMounted
+// const debounceUpdate = shallowRef(null); // assign markraw Update @onMounted
+// const frameTime = ref([]) // for performance measurement
 
 /**
- * @function makeCanvasId
+ * @name computed
+ * @function makeBotbarId
  * @return {object} id of bottom bar canvas
  */
-const makeCanvasId = computed(() => `${props.tv_id}-botbar-canvas`)
+const makeBotbarId = computed(() => `${props.tv_id}-botbar-canvas`)
 
 /**
  * @function divStyles
@@ -72,7 +73,7 @@ const divStyle = computed(() => {
   * @name life-cycle hook
   */
  onMounted(()=>{
-    // init setup
+    // init setup into layout, so that Chart.vue can access it when resizing and update the layout properties
     let sett = props.layout.botbar
     sett.width = props.width
     sett.height = props.height
@@ -85,7 +86,6 @@ const divStyle = computed(() => {
             font:props.font,
             colors:props.colors,
             cursor:props.cursor,
-            layout:props.layout,
             timezone:props.timezone,
             interval:props.interval,
             layout:props.layout,
