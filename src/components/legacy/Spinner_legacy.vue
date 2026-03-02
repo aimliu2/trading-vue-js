@@ -5,15 +5,11 @@
 </div>
 </template>
 
-<script setup>
-/**
- * @name props
- * @desc has only 1 props, colors, which is an object containing the color scheme of the app. It is used to set the color of the spinner.
- */
-const props = defineProps({
-    colors: Object
-})
-// export default {name: 'Spinner'}
+<script>
+export default {
+    name: 'Spinner',
+    props: ['colors']
+}
 </script>
 
 <style>

@@ -2,7 +2,7 @@
 
 <script setup>
 // TODO : upgrade watch and rerender to use draw method of Crosshair instead of creating new instance on every change
-import Crosshair from '@composables/cCrosshair.js'
+import Crosshair from '@component-js/crosshair.js'
 import {ref, watch, markRaw} from 'vue'
 
 /* -------------------------------------------------------------------------- */

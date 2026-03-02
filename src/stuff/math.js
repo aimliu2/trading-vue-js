@@ -10,8 +10,9 @@
  * @function sym_log
  * @param {Number} x - input number
  * @returns {Number} - symmetric log value
+ * @see {@link https://codepen.io/aimliu2/pen/azmzBBy}
  */
-// TODO: log for small values
+// TODO: log for small values i.e. shib coin
 export const sym_log = (x) => Math.sign(x) * Math.log(Math.abs(x) + 1)
 
 /**

@@ -58,15 +58,14 @@ export default class DataCube extends DCCore {
         return overlay.id
     }
 
-    // Get all objects matching the query
-    get(query) {
-        return this.get_by_query(query).map(x => x.v)
-    }
-
-    // Get first object matching the query
-    get_one(query) {
-        return this.get_by_query(query).map(x => x.v)[0]
-    }
+    /**
+     * @function get
+     * @param {*} query 
+     * @memberof Datacube
+     * @returns get data specified in query
+     */
+    get(query) {return this.get_by_query(query).map(x => x.v)}
+    get_one(query) {return this.get_by_query(query).map(x => x.v)[0]}
 
     // Set data (reactively)
     set(query, data) {
@@ -80,7 +79,8 @@ export default class DataCube extends DCCore {
                 obj.p.indexOf(obj.v)
 
             if (i !== -1) {
-                this.tv.$set(obj.p, i, data)
+                obj.p[i] = data
+                // this.tv.$set(obj.p, i, data)
             }
         }
 
@@ -124,7 +124,8 @@ export default class DataCube extends DCCore {
                 obj.i : obj.p.indexOf(obj.v)
 
             if (i !== -1) {
-                this.tv.$delete(obj.p, i)
+                obj.p[i] = null
+                // this.tv.$delete(obj.p, i)
             }
 
         }

@@ -12,14 +12,7 @@ import Utils from '../../stuff/utils.js'
 import math from '../../stuff/math.js'
 import log_scale from './log_scale.js'
 
-/**
- * @function Layout
- * @desc gather all reactive variable here then calculate them
- * @param {*} props 
- * @returns {Object} grid, botbar (sidebar and bottom bar value)
- */
-// not constructor, can not use `new` anymore
-const Layout = (props) => {
+function Layout(props) {
 
     let {
         chart,
@@ -34,16 +27,13 @@ const Layout = (props) => {
         y_transforms: y_ts
     } = props
 
-    // console.log('[Layout] A - destructured | chart:', chart, '| offsub:', offsub, '| $p:', $p)
     let mgrid = chart.grid || {}
-    // console.log('[Layout] B - mgrid ok:', mgrid)
 
     offsub = offsub.filter((x, i) => {
         // Skip offchart overlays with custom grid id,
         // because they will be mergred with the existing grids
         return !(x.grid && x.grid.id)
     })
-    // console.log('[Layout] C - offsub filtered:', offsub.length)
 
     // Splits space between main chart
     // and offchart indicator grids
@@ -122,27 +112,16 @@ const Layout = (props) => {
         }
     }
 
-    // DEBUG checkpoints — remove after fixing
-    // console.log('[Layout] step 1 - grid_hs')
+    // Main grid
     const hs = grid_hs()
-    // console.log('[Layout] step 2 - GridMaker main, hs:', hs)
     let specs = {
-        sub, 
-        interval, 
-        range, 
-        ctx, 
-        $p, 
-        layers_meta,
-        ti_map, 
-        height: hs[0], 
-        y_t: y_ts[0],
-        grid: mgrid, 
-        timezone: $p.timezone
+        sub, interval, range, ctx, $p, layers_meta,
+        ti_map, height: hs[0], y_t: y_ts[0],
+        grid: mgrid, timezone: $p.timezone
     }
     let gms = [new GridMaker(0, specs)]
 
     // Sub grids
-    // console.log('[Layout] step 3 - sub grids, offsub.length:', offsub.length)
     for (var [i, { data, grid }] of offsub.entries()) {
         specs.sub = data
         specs.height = hs[i + 1]
@@ -152,12 +131,10 @@ const Layout = (props) => {
     }
 
     // Max sidebar among all grinds
-    // console.log('[Layout] step 4 - sidebar')
     let sb = Math.max(...gms.map(x => x.get_sidebar()))
 
     let grids = [], offset = 0
 
-    // console.log('[Layout] step 5 - create grids')
     for (i = 0; i < gms.length; i++) {
         gms[i].set_sidebar(sb)
         grids.push(gms[i].create())
@@ -168,9 +145,7 @@ const Layout = (props) => {
 
     let self = grids[0]
 
-    // console.log('[Layout] step 6 - candles_n_vol, self:', self)
     candles_n_vol()
-    // console.log('[Layout] step 7 - returning')
 
     return {
         grids: grids,

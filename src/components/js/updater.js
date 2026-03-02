@@ -2,12 +2,32 @@
 // OHLCV and all other indicators
 
 import Utils from '../../stuff/utils.js'
+/**
+ * @typedef CursorPayload
+ * @prop {Object} grids 
+ * @prop {Object} cursor
+ * @prop {Number} interval
+ * @prop {Function} section - section function
+ */
 
+
+/**
+ * @class CursorUpdater
+ * @desc 
+ * @param {CursorPayload} payload
+ */
 class CursorUpdater {
 
-    constructor(comp) {
-        this.comp = comp, this.grids = comp._layout.grids,
-        this.cursor = comp.cursor
+    constructor(payload) {
+        // this.comp = comp
+
+
+        this.grids = payload._layout.grids // in updater — safe but subtle
+        this.cursor = payload.cursor
+        
+        this.interval = payload.interval
+        this.section = payload.section // a function
+        // this.main_section = payload.section(0)
     }
 
     sync(e) {
@@ -23,8 +43,8 @@ class CursorUpdater {
                     this.cursor.t = this.cursor_time(grid, e, c)
                     if (this.cursor.t) once = false
                 }
-                if(c.values) {
-                    this.comp.$set(this.cursor.values, grid.id, c.values)
+                if (c.values) {
+                    this.cursor.values[grid.id] = c.values
                 }
             }
             if (grid.id !== e.grid_id) continue
@@ -36,8 +56,10 @@ class CursorUpdater {
 
     overlay_data(grid, e) {
 
-        const s = grid.id === 0 ? 'main_section' : 'sub_section'
-        let data = this.comp[s].data
+        // let s = grid.id === 0 ? 'main_section' : 'sub_section'
+        // let data = this.comp[s].data
+
+        let data = this.section(grid.id).data
 
         // Split offchart data between offchart grids
         if (grid.id > 0) {
@@ -62,8 +84,7 @@ class CursorUpdater {
 
     // Nearest datapoints
     cursor_data(grid, e) {
-
-        const data = this.comp.main_section.sub
+        const data = this.section(0).sub // reactivly update
 
         let xs = data.map(x => grid.t2screen(x[0]) + 0.5)
         let i = Utils.nearest_a(e.x, xs)[0]
@@ -76,19 +97,19 @@ class CursorUpdater {
             values: Object.assign({
                 ohlcv: grid.id === 0 ? data[i] : undefined
             },
-            this.overlay_data(grid, e))
+                this.overlay_data(grid, e))
         }
     }
 
     // Get cursor t-position (extended)
     cursor_time(grid, mouse, candle) {
         let t = grid.screen2t(mouse.x)
-        let r = Math.abs((t - candle.t) / this.comp.interval)
+        let r = Math.abs((t - candle.t) / this.interval)
         let sign = Math.sign(t - candle.t)
         if (r >= 0.5) {
             // Outside the data range
             let n = Math.round(r)
-            return candle.t + n * this.comp.interval * sign
+            return candle.t + n * this.interval * sign
         }
         // Inside the data range
         return candle.t

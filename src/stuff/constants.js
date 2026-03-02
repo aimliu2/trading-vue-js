@@ -1,28 +1,37 @@
 /**
- * @namespace stuff-js
+ * @namespace constant-js
  */
-const SECOND = 1000
-const MINUTE = SECOND * 60
-const MINUTE3 = MINUTE * 3
-const MINUTE5 = MINUTE * 5
-const MINUTE15 = MINUTE * 15
-const MINUTE30 = MINUTE * 30
-const HOUR = MINUTE * 60
-const HOUR4 = HOUR * 4
-const HOUR12 = HOUR * 12
-const DAY = HOUR * 24
-const WEEK = DAY * 7
-const MONTH = WEEK * 4
-const YEAR = DAY * 365
 
-const MONTHMAP = [
+/**
+ * @constant {Number}
+ * @desc time constants in milliseconds
+ */
+export const SECOND = 1000
+export const MINUTE = SECOND * 60
+export const MINUTE3 = MINUTE * 3
+export const MINUTE5 = MINUTE * 5
+export const MINUTE15 = MINUTE * 15
+export const MINUTE30 = MINUTE * 30
+export const HOUR = MINUTE * 60
+export const HOUR4 = HOUR * 4
+export const HOUR12 = HOUR * 12
+export const DAY = HOUR * 24
+export const WEEK = DAY * 7
+export const MONTH = WEEK * 4
+export const YEAR = DAY * 365
+
+/**
+ * @constant {String[]}
+ * @desc month map to index
+ */
+export const MONTHMAP = [
     "Jan", "Feb", "Mar", "Apr",
-    "May", "Jun","Jul", "Aug",
-    "Sep", "Oct","Nov", "Dec"
+    "May", "Jun", "Jul", "Aug",
+    "Sep", "Oct", "Nov", "Dec"
 ]
 
 // Grid time steps
-const TIMESCALES = [
+export const TIMESCALES = [
     YEAR * 10, YEAR * 5, YEAR * 3, YEAR * 2, YEAR,
     MONTH * 6, MONTH * 4, MONTH * 3, MONTH * 2, MONTH,
     DAY * 15, DAY * 10, DAY * 7, DAY * 5, DAY * 3, DAY * 2, DAY,
@@ -31,9 +40,9 @@ const TIMESCALES = [
 ]
 
 // Grid $ steps
-const $SCALES = [0.05, 0.1, 0.2, 0.25, 0.5, 0.8, 1, 2, 5]
+export const $SCALES = [0.05, 0.1, 0.2, 0.25, 0.5, 0.8, 1, 2, 5]
 
-const ChartConfig = {
+export const ChartConfig = {
     SBMIN: 60,       // Minimal sidebar px
     SBMAX: Infinity, // Max sidebar, px
     TOOLBAR: 57,     // Toolbar width px
@@ -72,31 +81,31 @@ ChartConfig.FONT =
     Fira Sans,Droid Sans,Helvetica Neue,
     sans-serif`
 
-const IB_TF_WARN =
+export const IB_TF_WARN =
     `When using IB mode you should specify ` +
     `timeframe ('tf' filed in 'chart' object),` +
     `otherwise you can get an unexpected behaviour`
 
-const MAP_UNIT = {
-  "1s": SECOND,
-  "5s": SECOND * 5,
-  "10s": SECOND * 10,
-  "20s": SECOND * 20,
-  "30s": SECOND * 30,
-  "1m": MINUTE,
-  "3m": MINUTE3,
-  "5m": MINUTE5,
-  "15m": MINUTE15,
-  "30m": MINUTE30,
-  "1H": HOUR,
-  "2H": HOUR * 2,
-  "3H": HOUR * 3,
-  "4H": HOUR4,
-  "12H": HOUR12,
-  "1D": DAY,
-  "1W": WEEK,
-  "1M": MONTH,
-  "1Y": YEAR
+export const MAP_UNIT = {
+    "1s": SECOND,
+    "5s": SECOND * 5,
+    "10s": SECOND * 10,
+    "20s": SECOND * 20,
+    "30s": SECOND * 30,
+    "1m": MINUTE,
+    "3m": MINUTE3,
+    "5m": MINUTE5,
+    "15m": MINUTE15,
+    "30m": MINUTE30,
+    "1H": HOUR,
+    "2H": HOUR * 2,
+    "3H": HOUR * 3,
+    "4H": HOUR4,
+    "12H": HOUR12,
+    "1D": DAY,
+    "1W": WEEK,
+    "1M": MONTH,
+    "1Y": YEAR
 }
 
 export default {

@@ -16,26 +16,21 @@
 
 <script setup>
 
-/**
- * @name props
- */
+/* -------------------------------------------------------------------------- */
+/*                                  constants                                 */
+/* -------------------------------------------------------------------------- */
+/* ---------------------------------- props --------------------------------- */
 const props = defineProps({
     width:Number,
     height:Number,
     map:Object,
-    tv:Object,
+    tv:Object, // don't know what to pass, have to see widget constructor
     dc:Object
 })
-
-/**
- * @name methods
- * @function initw
- * @return {object} class of this widget ?
- */
-
-const initw = (id) => {
-    return props.map[id].cls
-}
+/* -------------------------------------------------------------------------- */
+/*                                   methods                                  */
+/* -------------------------------------------------------------------------- */
+const initw = (id) => props.map[id].cls // init widget
 
 // export default {name: 'Widgets'}
 </script>

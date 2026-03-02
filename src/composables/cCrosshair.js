@@ -1,28 +1,33 @@
-// crosshair constructor
+// TO-DO : optimization
 
 /**
- * @params {Object} Vue props object form defineProps({})
- * @required : props.cursor 
- * and other props from components
- * 
+ * @class Crosshair
+ * @desc A grid overlay-renderer that draws a crosshair at the cursor position.
+ *       The crosshair is only visible when the cursor is in 'explore' mode.
+ *       The horizontal line is only drawn when the cursor is on the same grid as the layout.
  */
-
-// TO-DO
-// optimization :  this class was extend from somewhere
 export default class Crosshair {
 
+    /**
+     * @constructor
+     * @param {*} props 
+     * @memberof Crosshair
+     */
     constructor(props) {
-        // this.comp = comp // directly inject props here
         this.$p = props
-        // this.data = this.$p.sub // omitted !?
         this._visible = false
-        // this.locked = false // ommited !?
         this.layout = this.$p.layout
 
     }
 
+    /**
+     * @method draw
+     * @param {Object} ctx - canvas context from HTMLCanvasElement.getContext('2d')
+     * @memberof Crosshair
+     * @desc Draws the crosshair on the canvas. The horizontal line is only drawn when the cursor is on the same grid as the layout.
+     */
     draw(ctx) {
-        // Update reference to the grid
+        // to update crosshair just call draw(ctx) again
         this.layout = this.$p.layout
 
         // const cursor = this.comp.$props.cursor
@@ -51,12 +56,22 @@ export default class Crosshair {
 
     }
 
+    /**
+     * @method hide
+     * @memberof Crosshair 
+     * @desc Hides the crosshair by setting visible to false and clearing the x and y coordinates.
+     */
     hide() {
         this.visible = false
         this.x = undefined
         this.y = undefined
     }
 
+    /**
+     * @method visible
+     * @memberof Crosshair
+     * @desc Getter and setter for the visible property. The visible property determines whether the crosshair is drawn on the canvas.
+     */
     get visible() {
         return this._visible
     }

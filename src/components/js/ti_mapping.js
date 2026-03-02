@@ -17,6 +17,10 @@ const MAX_ARR = Math.pow(2, 32)
 // * "data"     -> overlay data should come with candle index
 //                 (fastest, supports Renko)
 
+/**
+ * @class TI
+ * @desc TI map
+ */
 export default class TI {
 
     constructor() {
@@ -26,8 +30,14 @@ export default class TI {
 
     init(params, res) {
         let {
-            sub, interval, meta, $props:$p, interval_ms, sub_start, ib
+            // $props:$p,
+            // sub, interval, meta,
+            interval_ms, 
+            sub_start, 
+            ib
         } = params
+        // let start = meta.sub_start
+        
 
         this.ti_map = []
         this.it_map = []
@@ -36,7 +46,6 @@ export default class TI {
         this.sub = res
         this.ss = sub_start
         this.tf = interval_ms
-        let start = meta.sub_start
 
         // Skip mapping for the regular mode
         if (this.ib) {

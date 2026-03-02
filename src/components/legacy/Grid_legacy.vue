@@ -1,9 +1,9 @@
 <script>
 // Sets up all layers/overlays for the grid with 'grid_id'
 
-import Grid from './js/grid.js'
-import Canvas from '../mixins/canvas.js'
-import UxList from '../mixins/uxlist.js'
+import Grid from '../js/grid.js'
+import Canvas from '../../mixins/canvas.js'
+import UxList from '../../mixins/uxlist.js'
 
 import Crosshair from './Crosshair.vue/index.js' // made V3
 import KeyboardListener from './KeyboardListener.vue'

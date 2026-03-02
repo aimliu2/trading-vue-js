@@ -6,36 +6,23 @@
 import { ref, onMounted } from 'vue';
 import UseCleanup from '@composables/cUseCleanup.js'
 
-/**
- * @name constant
- */
+/* -------------------------------------------------------------------------- */
+/*                                  constant                                  */
+/* -------------------------------------------------------------------------- */
 const { addCleanup } = UseCleanup()
 
-/**
- * @name state-var
- */
+/* -------------------------------- state-var ------------------------------- */
 const _listeners = ref();
 
-/**
- * @name methods
- * @function register
- * @desc add event listener to keyboard state var on 'this chart'
- */
+/* -------------------------------------------------------------------------- */
+/*                                   methods                                  */
+/* -------------------------------------------------------------------------- */
 const register = (listener) => {
     _listeners.value[listener.id] = listener
     console.log(`registered ${listener.id}`)
 }
 
-/**
- * @function remove
- * @desc remove event listener to keyboard state var on 'this chart'
- */
 const remove = (listener) => {delete _listeners.value[listener.id]}
-
-/**
- * @function keydown
- * @desc send keydown from window to component ?
- */
 const keydown = (event) => {
     for (let id in _listeners.value) {
         let l = _listeners.value[id]
@@ -47,10 +34,6 @@ const keydown = (event) => {
     }
 }
 
-/**
- * @function keyup
- * @desc send keyup from window to component ?
- */
 const keyup =  (event) => {
     for (var id in _listeners.value) {
         let l = _listeners.value[id]
@@ -62,10 +45,7 @@ const keyup =  (event) => {
     }
 }
 
-/**
- * @function keyup
- * @desc send keyup from window to component ?
- */
+
 const keypress  = (event) => {
     for (var id in _listeners.value) {
         let l = _listeners.value[id]
@@ -77,9 +57,9 @@ const keypress  = (event) => {
     }
 }
 
-/**
- * @name life-cycle hook
- */
+/* -------------------------------------------------------------------------- */
+/*                                  onmounted                                 */
+/* -------------------------------------------------------------------------- */
 onMounted(()=>{
     window.addEventListener('keydown', keydown)
     window.addEventListener('keyup', keyup)

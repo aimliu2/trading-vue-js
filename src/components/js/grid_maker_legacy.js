@@ -19,17 +19,14 @@ function GridMaker(id, params, master_grid = null) {
     } = params
 
     var self = { ti_map }
-    var lm = layers_meta[id] // TODO : has no y_range, what was the purpose of it ?
-    var y_range_fn = null // It is a function
+    var lm = layers_meta[id]
+    var y_range_fn = null
     var ls = grid.logScale
 
     if (lm && Object.keys(lm).length) {
         // Gets last y_range fn()
-        // safe guard if there were no y_range
-        // y_range intened to pass a function
-        let yrs = Object.values(lm).filter(x => x && typeof x.y_range === 'function')
-        // The first y_range() determines the range, but
-        // TODO : y_range was not assigned... ?
+        let yrs = Object.values(lm).filter(x => x.y_range)
+        // The first y_range() determines the range
         if (yrs.length) y_range_fn = yrs[0].y_range
     }
 

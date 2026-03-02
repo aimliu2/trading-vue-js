@@ -3,6 +3,8 @@ import Icons from '../stuff/icons.json'
 import WebWork from './script_ww_api.js'
 import Dataset from './dataset.js'
 
+//TODO : this.tv.getRange() was called in TradingVue setup-scope function, 
+//it is not accessible in Vue3
 
 /**
  * @class dc_event-js
@@ -71,7 +73,8 @@ export default class DCEvents {
                     this.system_tool(args[0].split(':')[1])
                     break
                 }
-                this.tv.$set(this.data, 'tool', args[0])
+                // this.tv.$set(this.data, 'tool', args[0])
+                this.data['tool'] = args[0]
                 if (args[0] === 'Cursor') {
                     this.drawing_mode_off()
                 }
@@ -116,13 +119,14 @@ export default class DCEvents {
                     Utils.delayed_exec(n.p)) {
                     delta[id] = n.v
                     changed = true
-                    this.tv.$set(n.p, 'loading', true)
+                    // this.tv.$set(n.p, 'loading', true)
+                    n.p['loading'] = true
                 }
             }
         }
 
         if (changed && Object.keys(delta).length) {
-            let tf = this.tv.$refs.chart.interval_ms ||
+            let tf = this.tv.chart.interval_ms ||
                 this.data.chart.tf
             let range = this.tv.getRange()
             this.ww.just('update-ov-settings', {
@@ -158,10 +162,9 @@ export default class DCEvents {
             delete tool.type
         }
         // var2 tools key
-        this.tv.$set(this.data, 'tools', [])
-        let list = [{
-            type: 'Cursor', icon: Icons['cursor.png']  // default - item1
-        }]
+        // this.tv.$set(this.data, 'tools', [])
+        this.data['tools'] = []
+        let list = [{ type: 'Cursor', icon: Icons['cursor.png'] }] // default - item1
         for (var tool of tools) {
             var proto = Object.assign({}, tool.info) // object returned from tool()
             let type = tool.info.type || 'Default' // line tool is type Segment
@@ -182,10 +185,12 @@ export default class DCEvents {
         // force Vue2 to modify JSON data
         // Notice : Datacube have 2 tools sections, tools(overlay) and tool(Cursor)
         // assume only string built
-        this.tv.$set(this.data, 'tools', list)
+        this.data['tools'] = list
+        // this.tv.$set(this.data, 'tools', list)
         // console.log('fired from dc_event registry')
         // console.log(list)
-        this.tv.$set(this.data, 'tool', 'Cursor')
+        this.data['tool'] = 'Cursor'
+        // this.tv.$set(this.data, 'tool', 'Cursor')
     }
 
     exec_script(args) {
@@ -227,8 +232,9 @@ export default class DCEvents {
                 }
             }
             s.$props = Object.keys(args[0].src.props || {})
-            this.tv.$set(obj, 'loading', true)
-            let tf = this.tv.$refs.chart.interval_ms ||
+            obj['loading'] = true
+            // this.tv.$set(obj, 'loading', true)
+            let tf = this.tv.chart.interval_ms ||
                 this.data.chart.tf
             let range = this.tv.getRange()
             if (obj.script && obj.script.output != null) {
@@ -244,7 +250,7 @@ export default class DCEvents {
     exec_all_scripts() {
         if (!this.sett.scripts) return
         this.set_loading(true)
-        let tf = this.tv.$refs.chart.interval_ms ||
+        let tf = this.tv.chart.interval_ms ||
             this.data.chart.tf
         let range = this.tv.getRange()
         this.ww.just('exec-all-scripts', { tf, range })
@@ -265,7 +271,7 @@ export default class DCEvents {
         })
 
         if (Object.keys(delta).length) {
-            let tf = this.tv.$refs.chart.interval_ms ||
+            let tf = this.tv.chart.interval_ms ||
                 this.data.chart.tf
             let range = this.tv.getRange()
             this.ww.just('update-ov-settings', {
@@ -282,7 +288,8 @@ export default class DCEvents {
                 if (typeof obj[k] === 'object') {
                     this.merge(`${upd.uuid}.${k}`, upd.fields[k])
                 } else {
-                    this.tv.$set(obj, k, upd.fields[k])
+                    // this.tv.$set(obj, k, upd.fields[k])
+                    obj[k] = upd.fields[k]
                 }
             }
         }
@@ -308,7 +315,7 @@ export default class DCEvents {
     }
 
     send_meta_2_ww() {
-        let tf = this.tv.$refs.chart.interval_ms ||
+        let tf = this.tv.chart.interval_ms ||
             this.data.chart.tf
         let range = this.tv.getRange()
         this.ww.just('send-meta-info', { tf, range })
@@ -336,7 +343,8 @@ export default class DCEvents {
             !this.data.drawingMode) {
             // Prevent from "null" tools (tool created with HODL)
             if (args[1].type !== 'tap') {
-                this.tv.$set(this.data, 'drawingMode', true)
+                // this.tv.$set(this.data, 'drawingMode', true)
+                this.data['drawingMode'] = true
                 this.build_tool(args[0])
             } else {
                 this.tv.showTheTip(
@@ -354,11 +362,14 @@ export default class DCEvents {
     }
 
     drawing_mode_off() {
-        this.tv.$set(this.data, 'drawingMode', false)
-        this.tv.$set(this.data, 'tool', 'Cursor')
+        this.data['drawingMode'] = false
+        this.data['tool'] = 'Cursor'
+        // this.tv.$set(this.data, 'drawingMode', false)
+        // this.tv.$set(this.data, 'tool', 'Cursor')
     }
 
     // Place a new tool
+    // also add that trash icon
     build_tool(grid_id, type) {
 
         let list = this.data.tools
@@ -384,7 +395,8 @@ export default class DCEvents {
 
         sett.$uuid = `${id}-${Utils.now()}`
 
-        this.tv.$set(this.data, 'selected', sett.$uuid)
+        this.data['selected'] = sett.$uuid
+        // this.tv.$set(this.data, 'selected', sett.$uuid)
         this.add_trash_icon()
     }
 
@@ -412,7 +424,8 @@ export default class DCEvents {
 
     // Lock the scrolling mechanism
     on_scroll_lock(flag) {
-        this.tv.$set(this.data, 'scrollLock', flag)
+        // this.tv.$set(this.data, 'scrollLock', flag)
+        this.data['scrollLock'] = flag
     }
 
     // When new object is selected / unselected
@@ -427,11 +440,12 @@ export default class DCEvents {
             })
             this.remove_trash_icon()
         }
-        this.tv.$set(this.data, 'selected', null)
+        // this.tv.$set(this.data, 'selected', null)
+        this.data['selected'] = null
 
         if (!args.length) return
-
-        this.tv.$set(this.data, 'selected', args[2])
+        this.data['selected'] = args[2]
+        // this.tv.$set(this.data, 'selected', args[2])
         this.merge(`${args[2]}.settings`, {
             $selected: true
         })
@@ -465,7 +479,8 @@ export default class DCEvents {
         for (var ov of data) {
             let obj = this.get_one(`${ov.id}`)
             if (obj) {
-                this.tv.$set(obj, 'loading', false)
+                // this.tv.$set(obj, 'loading', false)
+                obj['loading'] = false
                 if (!ov.data) continue
                 obj.data = ov.data
             }

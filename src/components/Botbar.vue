@@ -23,9 +23,10 @@ import Botbar from '@composables/cBotbar.js'
 // import { debounce } from '@stuff/utilities'; // Not GPU expensive, no need to debounce, direct update is better for UX
 import { markRaw, shallowRef, ref, computed, onMounted, watch } from 'vue';
 
-/**
- * @name props
- */
+/* -------------------------------------------------------------------------- */
+/*                                  constants                                 */
+/* -------------------------------------------------------------------------- */
+/* ---------------------------------- props --------------------------------- */
 const props = defineProps({
     sub:Array, // data
     layout:Object, // layout
@@ -43,35 +44,27 @@ const props = defineProps({
     timezone:Number // timezone from parent
 })
 
-/**
- * @name state-var
- * @desc assign this.renderer to botbarRenderer (Botbar class object)
- */
+/* -------------------------------- state-var ------------------------------- */
 const botbarCanvas = ref(); // HTMLcanvasElement
 const botbarPixel = shallowRef(null); // assign markRaw @onMounted
 // const debounceSetup = shallowRef(null); // assign markraw Setup @onMounted
 // const debounceUpdate = shallowRef(null); // assign markraw Update @onMounted
 // const frameTime = ref([]) // for performance measurement
 
-/**
- * @name computed
- * @function makeBotbarId
- * @return {object} id of bottom bar canvas
- */
+/* -------------------------------------------------------------------------- */
+/*                                  computed                                  */
+/* -------------------------------------------------------------------------- */
 const makeBotbarId = computed(() => `${props.tv_id}-botbar-canvas`)
-
-/**
- * @function divStyles
- * @desc add style to div parent of canvas
- */
 const divStyle = computed(() => {
+    // computed accessed props.layout.botbar.offset with no null check. Added an early return for !props.layout.
+    if (!props.layout) return { position: 'absolute', left: '0px', top: '0px' }
     let y = props.layout.botbar.offset || 0
     return {'position': 'absolute','left': '0px','top': `${y}px`}
 })
 
- /**
-  * @name life-cycle hook
-  */
+/* -------------------------------------------------------------------------- */
+/*                                  onMounted                                 */
+/* -------------------------------------------------------------------------- */
  onMounted(()=>{
     // init setup into layout, so that Chart.vue can access it when resizing and update the layout properties
     let sett = props.layout.botbar
@@ -103,11 +96,13 @@ const divStyle = computed(() => {
  })
 
 
-/**
- * @name watch
- * @desc watch width and height of props then trigger redraw
- */
+/* -------------------------------------------------------------------------- */
+/*                                    watch                                   */
+/* -------------------------------------------------------------------------- */
+// TODO : update layout
+// Both watchers crashed because botbarPixel.value is null until onMounted runs. Added if (!botbarPixel.value ...)
 watch([()=>props.width, ()=>props.height, ()=>props.rerender], ([nw, nh, nr], [ow, oh, or]) => {
+  if (!botbarPixel.value || !props.layout) return
   // mutate layout properties, then update chart
   props.layout.botbar.width = nw ? nw : ow
   props.layout.botbar.height = nh ? nh : oh
@@ -115,11 +110,8 @@ watch([()=>props.width, ()=>props.height, ()=>props.rerender], ([nw, nh, nr], [o
   botbarPixel.value.setup()
 });
 
-/**
- * @name watch2
- * @desc deep watch on range and cursor
- */
 watch([()=>props.range, ()=>props.cursor],([nr, nc], [or, oc]) => {
+    if (!botbarPixel.value) return
     // debounceUpdate.value()
     botbarPixel.value.update()
 },

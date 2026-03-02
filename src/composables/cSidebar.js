@@ -1,4 +1,4 @@
-import {clamp} from '@stuff/utilities.js'
+import {clamp, measureText} from '@stuff/utilities.js'
 import {sym_exp, log_mid} from '@stuff/math.js'
 import {nextTick} from 'vue'
 

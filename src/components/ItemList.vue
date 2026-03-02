@@ -13,6 +13,10 @@
 </template>
 
 <script setup>
+
+// TODO : list_style() fixed background color for selected item
+// now color is transparent ?
+
 /**
  * @component ItemList
  * @desc show all sub tools when click arrow, when expanding tool bar

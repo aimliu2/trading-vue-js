@@ -57,7 +57,7 @@ export default {
                     ref: 'canvas',
                     style: props.style,
                 })
-            ].concat(props.hs || []))
+            ].concat(props.hs || [])) // include children css ?
         },
         redraw() { // 3
             if (!this.renderer) return

@@ -19,18 +19,15 @@ import UseCleanup from '@composables/cUseCleanup.js'
 // @mouseup = "e => sidebarPixel.value.mouseup(e)"
 // @mousedown = "e => sidebarPixel.value.mousedown(e)"
 
-/**
- * @name state-var
- * @desc assign this.renderer to sidebarRenderer (Sidebar class object)
- */
+/* -------------------------------------------------------------------------- */
+/*                                  constants                                 */
+/* -------------------------------------------------------------------------- */
+/* ----------------------------- state-variable ----------------------------- */
 const sidebarCanvas = ref(); // HTMLcanvasElement
 const sidebarPixel = shallowRef(null); // assign markRaw @onMounted
 const debounceSetup = shallowRef(null); // assign markraw Setup @onMounted
 const debounceUpdate = shallowRef(null); // assign markraw Update @onMounted
-
- /**
- * @name props
- */
+/* ---------------------------------- props --------------------------------- */
 const props = defineProps({
     sub:Array, // data
     layout:Object, // layout
@@ -48,36 +45,16 @@ const props = defineProps({
     config:Object, // config from parent, contains PANHEIGHT
     shaders:Array, // shaders from parent
 })
-
-/**
- * @name internal-constant
- */
 const { addCleanup } = UseCleanup()
-
-/**
- * @name emit
- */
+/* --------------------------------- emitter -------------------------------- */
 const emit = defineEmits(['sidebar-transform']) // emit to Chart.vue, which will further emit 'grid-transform' event to Grid.vue, and then Grid.vue will update its layout params and redraw the main canvas.
 
 
-/**
- * @name computed
- * @function makeSidebarId
- * @return {string} id of sidebar canvas
- */
+/* -------------------------------------------------------------------------- */
+/*                                  computed                                  */
+/* -------------------------------------------------------------------------- */
 const makeSidebarId = computed(() => `${props.tv_id}-sidebar-${props.grid_id}-canvas`)
-
-/**
- * @function makeSidebarClass
- * @return {string} class of sidebar canvas
- */
 const makeSidebarClass = computed(() => `trading-vue-sidebar-${props.grid_id}`)
-
-/**
- * @function divStyles
- * @desc add style to div parent of canvas
- */
-// wrong
 const divStyle = computed(() => {
     let id = props.grid_id
     let layout = props.layout.grids[id]
@@ -86,20 +63,15 @@ const divStyle = computed(() => {
     return {'position': 'absolute','left': `${x}px`,'top': `${y}px`}
 })
 
-/**
- * @name watch
- * @desc watch width and height of props then trigger redraw
- */
+/* -------------------------------------------------------------------------- */
+/*                                    watch                                   */
+/* -------------------------------------------------------------------------- */
 // if attr w,h change trigger update
-watch([()=>props.width, ()=>props.layout.grids[props.grid_id], ()=>props.rerender], ([nw, nh, nr], [ow, oh, or]) => {
+watch([()=>props.width, ()=>props.layout.grids[props.grid_id].height, ()=>props.rerender], ([nw, nh, nr], [ow, oh, or]) => {
     // debounceSetup.value()
   sidebarPixel.value.setup()
 });
 
-/**
- * @name watch2
- * @desc deep watch on range and cursor
- */
 watch([()=>props.range, ()=>props.cursor],([nr, nc], [or, oc]) => {
     // debounceUpdate.value()
     sidebarPixel.value.update()
@@ -108,16 +80,10 @@ watch([()=>props.range, ()=>props.cursor],([nr, nc], [or, oc]) => {
 );
 
 
- /**
-  * @name life-cycle hook
-  */
+/* -------------------------------------------------------------------------- */
+/*                                  onMounted                                 */
+/* -------------------------------------------------------------------------- */
  onMounted(()=>{
-    // init setup
-    // let sett = props.layout.botbar
-    // sett.width = props.width
-    // sett.height = props.height
-
-    // set payload
     let payload = {
         panheight:props.config.PANHEIGHT, // came from  constant.js
         side:'right', // only right sidebar for now, can be extended to left in the future
@@ -134,7 +100,6 @@ watch([()=>props.range, ()=>props.cursor],([nr, nc], [or, oc]) => {
             shaders:props.shaders
         }
     }
-    // create raw object, direct DOM update
     sidebarPixel.value = markRaw(new Sidebar(sidebarCanvas.value||null, payload)) // mutate side bar with this class
     sidebarPixel.value.setup() // Canvas
     // not GPU expensive, no need to debounce
