@@ -1,6 +1,7 @@
+
 <script>
 // Line drawing tool
-// TODO: make an angle-snap when "Shift" is pressed
+// TODO: make an 45deg-snap when "Shift" is pressed
 
 import Overlay from '../../mixins/overlay.js'
 import Tool from '../../mixins/tool.js'
@@ -22,7 +23,7 @@ export default {
                 // Descriptor for the tool
                 group: 'Lines', icon: Icons['segment.png'],
                 type: 'Segment',
-                hint: 'This hint will be shown on hover',
+                hint: 'This is LineTool Hint',
                 data: [],     // Default data
                 settings: {}, // Default settings
                 // Modifications
@@ -52,7 +53,7 @@ export default {
                 // Call when current tool drawing is finished
                 // (Optionally) reset the mode back to 'Cursor'
                 this.set_state('finished')
-                this.$emit('drawing-mode-off')
+                this.bus_emit('drawing-mode-off')
             })
         },
         draw(ctx) {

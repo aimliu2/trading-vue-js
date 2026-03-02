@@ -1,61 +1,81 @@
+<template>
+<!-- Listens to native keyboard events,propagates to all KeyboardListeners -->
+</template>
 
-<!-- Listens to native keyboard events,
-     propagates to all KeyboardListeners -->
+<script setup>
+import { ref, onMounted } from 'vue';
+import UseCleanup from '@composables/cUseCleanup.js'
 
-<script>
+/* -------------------------------------------------------------------------- */
+/*                                  constant                                  */
+/* -------------------------------------------------------------------------- */
+const { addCleanup } = UseCleanup()
 
-export default {
-    name: 'Keyboard',
-    created: function () {
-        window.addEventListener('keydown', this.keydown)
-        window.addEventListener('keyup', this.keyup)
-        window.addEventListener('keypress', this.keypress)
-        this._listeners = {}
-    },
-    beforeDestroy: function () {
-        window.removeEventListener('keydown', this.keydown)
-        window.removeEventListener('keyup', this.keyup)
-        window.removeEventListener('keypress', this.keypress)
-    },
-    render(h) { return h() },
-    methods: {
-        keydown (event) {
-            for (var id in this._listeners) {
-                let l = this._listeners[id]
-                if (l && l.keydown) {
-                    l.keydown(event)
-                } else {
-                    console.warn(`No 'keydown' listener for ${id}`)
-                }
-            }
-        },
-        keyup (event) {
-            for (var id in this._listeners) {
-                let l = this._listeners[id]
-                if (l && l.keyup) {
-                    l.keyup(event)
-                } else {
-                    console.warn(`No 'keyup' listener for ${id}`)
-                }
-            }
-        },
-        keypress (event) {
-            for (var id in this._listeners) {
-                let l = this._listeners[id]
-                if (l && l.keypress) {
-                    l.keypress(event)
-                } else {
-                    console.warn(`No 'keypress' listener for ${id}`)
-                }
-            }
-        },
-        register(listener) {
-            this._listeners[listener.id] = listener
-        },
-        remove(listener) {
-            delete this._listeners[listener.id]
-        },
+/* -------------------------------- state-var ------------------------------- */
+const _listeners = ref();
+
+/* -------------------------------------------------------------------------- */
+/*                                   methods                                  */
+/* -------------------------------------------------------------------------- */
+const register = (listener) => {
+    _listeners.value[listener.id] = listener
+    console.log(`registered ${listener.id}`)
+}
+
+const remove = (listener) => {delete _listeners.value[listener.id]}
+const keydown = (event) => {
+    for (let id in _listeners.value) {
+        let l = _listeners.value[id]
+        if (l && l.keydown) {
+            l.keydown(event)
+        } else {
+            console.warn(`No 'keydown' listener for ${id}`)
+        }
     }
 }
+
+const keyup =  (event) => {
+    for (var id in _listeners.value) {
+        let l = _listeners.value[id]
+        if (l && l.keyup) {
+            l.keyup(event)
+        } else {
+            console.warn(`No 'keyup' listener for ${id}`)
+        }
+    }
+}
+
+
+const keypress  = (event) => {
+    for (var id in _listeners.value) {
+        let l = _listeners.value[id]
+        if (l && l.keypress) {
+            l.keypress(event)
+        } else {
+            console.warn(`No 'keypress' listener for ${id}`)
+        }
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  onmounted                                 */
+/* -------------------------------------------------------------------------- */
+onMounted(()=>{
+    window.addEventListener('keydown', keydown)
+    window.addEventListener('keyup', keyup)
+    window.addEventListener('keypress', keypress)
+    _listeners.value = {}
+
+    // cleanup
+    addCleanup(()=>window.removeEventListener('keydown', keydown))
+    addCleanup(()=>window.removeEventListener('keyup', keyup))
+    addCleanup(()=>window.removeEventListener('keypress', keypress))
+})
+
+// <script setup> components are closed by default.
+// Chart.vue calls keyboardRef.value.register(event) and .remove(event) to manage keyboard listeners.
+defineExpose({ register, remove })
+
+// export default {name: 'Keyboard',}
 
 </script>

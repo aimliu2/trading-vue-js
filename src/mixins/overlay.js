@@ -4,10 +4,19 @@
 import Mouse from '../stuff/mouse.js'
 
 export default {
+    emits: [
+        'new-shader',
+        'new-grid-layer',
+        'delete-grid-layer',
+        'show-grid-layer',
+        'layer-meta-props',
+        'custom-event',
+        'exec-script',
+    ],
     props: [
         'id', 'num', 'interval', 'cursor', 'colors',
         'layout', 'sub', 'data', 'settings', 'grid_id',
-        'font', 'config', 'meta', 'tf', 'i0', 'last'
+        'font', 'config', 'meta', 'tf', 'i0', 'last', 'bus'
     ],
     mounted() {
         // TODO(1): when hot reloading, dynamicaly changed mixins
@@ -24,16 +33,7 @@ export default {
 
         this.meta_info()
 
-        // TODO(1): quick fix for vue2, in vue3 we use 3rd party emit
-        try {
-            new Function('return ' + this.$emit)()
-            this._$emit = this.$emit
-            this.$emit = this.custom_event
-        } catch(e) {
-            return
-        }
-
-        this._$emit('new-grid-layer', {
+        this.$emit('new-grid-layer', {
             name: this.$options.name,
             id: this.$props.id,
             renderer: this,
@@ -44,7 +44,7 @@ export default {
         })
 
         // Overlay meta-props (adjusting behaviour)
-        this._$emit('layer-meta-props', {
+        this.$emit('layer-meta-props', {
             grid_id: this.$props.grid_id,
             layer_id: this.$props.id,
             legend: this.legend,
@@ -56,9 +56,9 @@ export default {
         if (this.init_tool) this.init_tool()
         if (this.init) this.init()
     },
-    beforeDestroy() {
+    beforeUnmount() {
         if (this.destroy) this.destroy()
-        this._$emit('delete-grid-layer', this.$props.id)
+        this.$emit('delete-grid-layer', this.$props.id)
     },
     methods: {
         use_for() {
@@ -82,7 +82,9 @@ export default {
                 github: (opt) '<GitHub Page>',
             }`)
         },
-        custom_event(event, ...args) {
+        // Route tool/pin events through the mitt bus → custom-event chain.
+        // Replaces the old Vue2 $emit proxy pattern.
+        bus_emit(event, ...args) {
             if (event.split(':')[0] === 'hook') return
             if (event === 'change-settings' ||
                 event === 'object-selected' ||
@@ -99,16 +101,16 @@ export default {
                 args[0].uuid = this.last_ux_id =
                     `${this.grid_id}-${this.id}-${this.uxs_count++}`
             }
-            // TODO: add a namespace to the event name
-            // TODO(2): this prevents call overflow, but
-            // the root of evil is in (1)
+            this.$props.bus.emit(event, args)
+        },
+        custom_event(event, ...args) {
             if (event === 'custom-event') return
-            this._$emit('custom-event', {event, args})
+            this.bus_emit(event, ...args)
         },
         // TODO: the event is not firing when the same
         // overlay type is added to the offchart[]
-        exec_script() {
-            if (this.calc) this.$emit('exec-script', {
+        exec_script() { // when overlay has calc methods i.e indicator EMA
+            if (this.calc) this.$emit('exec-script', { // --> send to dc_event and dc_core.js
                 grid_id: this.$props.grid_id,
                 layer_id: this.$props.id,
                 src: this.calc(),
@@ -120,7 +122,7 @@ export default {
         settings: {
             handler: function(n, p) {
                 if (this.watch_uuid) this.watch_uuid(n, p)
-                this._$emit('show-grid-layer', {
+                this.$emit('show-grid-layer', {
                     id: this.$props.id,
                     display: 'display' in this.$props.settings ?
                         this.$props.settings['display'] : true,
@@ -130,5 +132,5 @@ export default {
         }
     },
     data() { return { uxs_count: 0, last_ux_id: null } },
-    render(h) { return h() }
+    render(h) { return null }
 }

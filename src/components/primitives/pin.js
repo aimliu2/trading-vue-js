@@ -38,7 +38,7 @@ export default class Pin {
         }
 
         if (this.state !== 'settled') {
-            this.comp.$emit('scroll-lock', true)
+            this.comp.bus_emit('scroll-lock', true)
         }
     }
 
@@ -96,7 +96,7 @@ export default class Pin {
         //}
 
         // Reset the settings attahed to the pin (position)
-        this.comp.$emit('change-settings', {
+        this.comp.bus_emit('change-settings', {
              [this.name]: [this.t, this.y$]
         })
     }
@@ -116,7 +116,7 @@ export default class Pin {
         //    this.t = this.layout.ti_map.i2t(this.t )
         //}
 
-        if (emit) this.comp.$emit('change-settings', {
+        if (emit) this.comp.bus_emit('change-settings', {
              [this.name]: [this.t, this.y$]
         })
 
@@ -146,15 +146,15 @@ export default class Pin {
             case 'tracking':
                 this.state = 'settled'
                 if (this.on_settled) this.on_settled()
-                this.comp.$emit('scroll-lock', false)
+                this.comp.bus_emit('scroll-lock', false)
                 break
             case 'settled':
                 if (this.hidden) return
                 if (this.hover()) {
                     this.state = 'dragging'
                     this.moved = false
-                    this.comp.$emit('scroll-lock', true)
-                    this.comp.$emit('object-selected')
+                    this.comp.bus_emit('scroll-lock', true)
+                    this.comp.bus_emit('object-selected')
                 }
                 break
         }
@@ -168,7 +168,7 @@ export default class Pin {
             case 'dragging':
                 this.state = 'settled'
                 if (this.on_settled) this.on_settled()
-                this.comp.$emit('scroll-lock', false)
+                this.comp.bus_emit('scroll-lock', false)
                 break
         }
     }

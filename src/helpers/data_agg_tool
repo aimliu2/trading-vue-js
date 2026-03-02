@@ -1,0 +1,99 @@
+
+
+
+/**
+ * @class DataAggregatorTool
+ * @desc fusion all data from price api, session api and profile api into a JSON. got complete {priceData, overlayData, toolData, indicatorData}
+ */
+
+export default class DataAgg {
+    
+    constructor(data = {}, sett = {}) {
+
+    }
+}
+// validate each json source
+// merge json
+
+
+// import DataCube from '@helpers/datacube.js'; // can not pass read-only value, using $set operator
+// import { ref, computed } from 'vue';
+
+// import priceAPI from './price-api.js' // fetch price from static file/ websocket
+// import { toolAPI } from './profile-api.js' // fetch settings from user profile, store indys, preset tool for this user
+// // session API - store drawing on this symbol
+
+
+// // export const DataCuber = (bj) => DataCube(bj);
+
+// /**
+//  * @name DataCubic
+//  * @memberof cd1-data-aggregator-js
+//  * @desc AllData - return All data state
+//  */
+// export const DataCubic = () => {
+
+//   /**@name reactive-var */
+//   let { state: priceData } = priceAPI(); // priceData become a property
+//   // const overlayData = shallowRef();
+//   let toolData = toolAPI; // simple static for now
+//   // const indicatorData = shallowRef();
+//   // const dataReady = ref(false);
+//   // let test = ref(priceData.JSON)
+
+//   /**
+//    * @function aggData
+//    * @desc methods return mutable agg JSON
+//    * @memberof cd1-data-aggregator-js
+//    * @returns {AllData} AllData - must be mutable object
+//    */
+//   const aggData = () => {
+//     // smart aggregator
+//     let bundleJSON = { ...priceData.JSON }
+//     return bundleJSON // simple return
+//   }
+
+//   /**
+//    * ready - computed return flag when AllData is ready
+//    * @function ready
+//    * @memberof cd1-data-aggregator-js
+//    * @returns {Boolean} readyFlag
+//    */
+//   const ready = computed(() => {
+//     // somehow this has to be smart props signal
+//     return priceData.isLoading // simple return
+//   })
+
+//   /**
+//    * cube - computed return flag when AllData is ready
+//    * @function cube
+//    * @memberof cd1-data-aggregator-js
+//    * @returns {object} Datacube
+//    */
+//   const cube = computed(() => {
+//     // move agg function here 
+//     let c = new DataCube(aggData()) // can not pass read-only value, using $set operator
+//     // datacube was mutated elsewhere outside of datafeed i.e. dc_core
+//     // may not suitable to return compute
+//     return c
+//   })
+
+//   return {
+//     cube,
+//     ready
+//   }
+
+// }
+// /**
+//  * @typedef PriceState
+//  * @property {string} path
+//  * @property {boolean} isLoading
+//  * @property {object} JSON
+//  */
+// /**
+//  * @typedef AllData
+//  * @property {object} priceData - JSON of price data, each timestamp must be unique
+//  * @property {object} overlayData - JSON of current overlays on chart if any
+//  * @property {object} toolData - JSON of current tools on chart if any
+//  * @property {object} indicatorData - JSON of onchart/ offchart indicator, contains no data
+//  */

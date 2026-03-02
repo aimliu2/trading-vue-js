@@ -1,3 +1,4 @@
+```js
 /* Indicator calculation function (sketch): */
 
 class Overlay1 {
@@ -66,3 +67,4 @@ class Overlay2 {
         `
     }
 }
+```

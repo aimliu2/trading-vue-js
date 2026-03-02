@@ -1,8 +1,6 @@
-
-<!-- Waits for an event from Keyboard.vue
-     and converts it to a Vue.js event -->
-
 <script>
+// TODO : make this a composable, and use it in Grid.vue, Crosshair.vue, Legend.vue, etc. 
+// to listen to keyboard events globally and emit them to the parent component
 
 export default {
     name: 'KeyboardListener',

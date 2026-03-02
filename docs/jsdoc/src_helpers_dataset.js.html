@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>src/helpers/dataset.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Datacube.html">Datacube</a></li><li><a href="DatasetWW.html">DatasetWW</a></li><li></li><li><a href="dc_core-js.html">dc_core-js</a><ul class='methods'><li data-type='method'><a href="dc_core-js.html#.init_data">init_data</a></li><li data-type='method'><a href="dc_core-js.html#.init_tvjs">init_tvjs</a></li><li data-type='method'><a href="dc_core-js.html#.update_ids">update_ids</a></li></ul></li><li><a href="dc_event-js.html">dc_event-js</a><ul class='methods'><li data-type='method'><a href="dc_event-js.html#.register_tools">register_tools</a></li></ul></li><li><a href="module.html#.exports">exports</a></li><li></li><li></li><li></li><li></li></ul><h3>Modules</h3><ul><li><a href="module-JSON-Aggregate.html">JSON-Aggregate</a></li><li><a href="module-JSON-Chart.html">JSON-Chart</a></li><li><a href="module-JSON-indy.html">JSON-indy</a></li><li><a href="module-JSON-tools.html">JSON-tools</a></li></ul><h3>Namespaces</h3><ul><li><a href="Utility-js.html">Utility-js</a><ul class='methods'><li data-type='method'><a href="Utility-js.html#.clamp()">clamp()</a></li><li data-type='method'><a href="Utility-js.html#.now()">now()</a></li></ul></li><li><a href="c3-overlay-registry-core-js.html">c3-overlay-registry-core-js</a></li><li><a href="cd1-data-aggregator-js.html">cd1-data-aggregator-js</a><ul class='methods'><li data-type='method'><a href="cd1-data-aggregator-js.html#.aggData">aggData</a></li><li data-type='method'><a href="cd1-data-aggregator-js.html#.cube">cube</a></li><li data-type='method'><a href="cd1-data-aggregator-js.html#.ready">ready</a></li></ul></li><li><a href="stuff-js.html">stuff-js</a></li></ul><h3>Vue</h3><ul><li><a href="tutorial-ItemList-vue.html">ItemList.vue</a></li><li><a href="tutorial-Toolbar-vue.html">Toolbar.vue</a></li><li><a href="tutorial-ToolbarItem-vue.html">ToolbarItem.vue</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Core-Indicator">Core-Indicator</a></li><li><a href="global.html#Core-Overlay">Core-Overlay</a></li><li><a href="global.html#Core-Tool">Core-Tool</a></li><li><a href="global.html#TB_ICON_HOLD">TB_ICON_HOLD</a></li><li><a href="global.html#abs">abs</a></li><li><a href="global.html#acos">acos</a></li><li><a href="global.html#add">add</a></li><li><a href="global.html#alma">alma</a></li><li><a href="global.html#asin">asin</a></li><li><a href="global.html#atan">atan</a></li><li><a href="global.html#atr">atr</a></li><li><a href="global.html#avg">avg</a></li><li><a href="global.html#bb">bb</a></li><li><a href="global.html#bbw">bbw</a></li><li><a href="global.html#bool">bool</a></li><li><a href="global.html#buffsize">buffsize</a></li><li><a href="global.html#cci">cci</a></li><li><a href="global.html#ceil">ceil</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#cmo">cmo</a></li><li><a href="global.html#cog">cog</a></li><li><a href="global.html#cos">cos</a></li><li><a href="global.html#cross">cross</a></li><li><a href="global.html#crossover">crossover</a></li><li><a href="global.html#crossunder">crossunder</a></li><li><a href="global.html#cum">cum</a></li><li><a href="global.html#dataCube">dataCube</a></li><li><a href="global.html#dayofmonth">dayofmonth</a></li><li><a href="global.html#dayofweek">dayofweek</a></li><li><a href="global.html#dev">dev</a></li><li><a href="global.html#div">div</a></li><li><a href="global.html#dmi">dmi</a></li><li><a href="global.html#ema">ema</a></li><li><a href="global.html#exp">exp</a></li><li><a href="global.html#falling">falling</a></li><li><a href="global.html#fixnan">fixnan</a></li><li><a href="global.html#floor">floor</a></li><li><a href="global.html#highest">highest</a></li><li><a href="global.html#highestbars">highestbars</a></li><li><a href="global.html#hma">hma</a></li><li><a href="global.html#hour">hour</a></li><li><a href="global.html#iff">iff</a></li><li><a href="global.html#initState">initState</a></li><li><a href="global.html#init_data">init_data</a></li><li><a href="global.html#init_tvjs">init_tvjs</a></li><li><a href="global.html#kc">kc</a></li><li><a href="global.html#kcw">kcw</a></li><li><a href="global.html#linreg">linreg</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#log10">log10</a></li><li><a href="global.html#lowest">lowest</a></li><li><a href="global.html#lowestbars">lowestbars</a></li><li><a href="global.html#macd">macd</a></li><li><a href="global.html#max">max</a></li><li><a href="global.html#mfi">mfi</a></li><li><a href="global.html#min">min</a></li><li><a href="global.html#minute">minute</a></li><li><a href="global.html#modify">modify</a></li><li><a href="global.html#mom">mom</a></li><li><a href="global.html#month">month</a></li><li><a href="global.html#mult">mult</a></li><li><a href="global.html#na">na</a></li><li><a href="global.html#neg">neg</a></li><li><a href="global.html#nf">nf</a></li><li><a href="global.html#now">now</a></li><li><a href="global.html#nz">nz</a></li><li><a href="global.html#offchart">offchart</a></li><li><a href="global.html#offset">offset</a></li><li><a href="global.html#onchart">onchart</a></li><li><a href="global.html#onclose">onclose</a></li><li><a href="global.html#pivothigh">pivothigh</a></li><li><a href="global.html#pivotlow">pivotlow</a></li><li><a href="global.html#pow">pow</a></li><li><a href="global.html#reactive-var">reactive-var</a></li><li><a href="global.html#register_tools">register_tools</a></li><li><a href="global.html#rising">rising</a></li><li><a href="global.html#rma">rma</a></li><li><a href="global.html#roc">roc</a></li><li><a href="global.html#round">round</a></li><li><a href="global.html#rsi">rsi</a></li><li><a href="global.html#sample">sample</a></li><li><a href="global.html#sar">sar</a></li><li><a href="global.html#second">second</a></li><li><a href="global.html#settings">settings</a></li><li><a href="global.html#sign">sign</a></li><li><a href="global.html#signal">signal</a></li><li><a href="global.html#signalif">signalif</a></li><li><a href="global.html#sin">sin</a></li><li><a href="global.html#since">since</a></li><li><a href="global.html#sma">sma</a></li><li><a href="global.html#sqrt">sqrt</a></li><li><a href="global.html#stdev">stdev</a></li><li><a href="global.html#stoch">stoch</a></li><li><a href="global.html#sub">sub</a></li><li><a href="global.html#sum">sum</a></li><li><a href="global.html#supertrend">supertrend</a></li><li><a href="global.html#swma">swma</a></li><li><a href="global.html#sym">sym</a></li><li><a href="global.html#tan">tan</a></li><li><a href="global.html#tr">tr</a></li><li><a href="global.html#ts">ts</a></li><li><a href="global.html#tsi">tsi</a></li><li><a href="global.html#tstf">tstf</a></li><li><a href="global.html#vwma">vwma</a></li><li><a href="global.html#weekofyear">weekofyear</a></li><li><a href="global.html#wma">wma</a></li><li><a href="global.html#wpr">wpr</a></li><li><a href="global.html#year">year</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/helpers/dataset.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { now } from './script_utils.js'
+
+/**
+ * Data Proxy between Vue and webworker
+ */
+
+export default class Dataset {
+
+    constructor(dc, desc) {
+
+        // TODO: dataset url arrow fn tells WW
+        // to load the ds directly from web
+
+        this.type = desc.type
+        this.id = desc.id
+        this.dc = dc
+
+        // Send the data to WW
+        if (desc.data) {
+            this.dc.ww.just('upload-data', {
+                [this.id]: desc
+            })
+            // Remove the data from the descriptor
+            delete desc.data
+        }
+
+        let proto = Object.getPrototypeOf(this)
+        Object.setPrototypeOf(desc, proto)
+        Object.defineProperty(desc, 'dc', {
+            get() { return dc }
+        })
+
+    }
+
+    // Watch for the changes of descriptors
+    static watcher(n, p) {
+        let nids = n.map(x => x.id)
+        let pids = p.map(x => x.id)
+
+        for (var id of nids) {
+            if (!pids.includes(id)) {
+                let ds = n.filter(x => x.id === id)[0]
+                this.dss[id] = new Dataset(this, ds)
+            }
+        }
+
+        for (var id of pids) {
+            if (!nids.includes(id) &amp;&amp; this.dss[id]) {
+                this.dss[id].remove()
+            }
+        }
+    }
+
+    // Make an object for data transfer
+    static make_tx(dc, types) {
+
+        let main = dc.data.chart.data
+        let base = {}
+        if (types.find(x => x.type === 'OHLCV')) {
+            base = { ohlcv: main }
+        }
+
+        // TODO: add more sophisticated search
+        // (using 'script.datasets' paramerter)
+        /*for (var req of types) {
+            let ds = Object.values(dc.dss || {})
+                .find(x => x.type === req.type)
+            if (ds &amp;&amp; ds.data) {
+                base[ds.id] = {
+                    id: ds.id,
+                    type: ds.type,
+                    data: ds.data
+                }
+            }
+        }*/
+        // TODO: Data request callback ?
+
+        return base
+    }
+
+    // Set data (overwrite the whole dataset)
+    set(data, exec = true) {
+        this.dc.ww.just('dataset-op', {
+            id: this.id,
+            type: 'set',
+            data: data,
+            exec: exec
+        })
+    }
+
+    // Update with new data (array of data points)
+    update(arr) {
+        this.dc.ww.just('update-data', {
+            [this.id]: arr
+        })
+    }
+
+    // Send WW a chunk to merge. The merge algo
+    // here is simpler than in DC. It just adds
+    // data at the beginning or/and the end of ds
+    merge(data, exec = true) {
+        this.dc.ww.just('dataset-op', {
+            id: this.id,
+            type: 'mrg',
+            data: data,
+            exec: exec
+        })
+    }
+
+    // Remove the ds from WW
+    remove(exec = true) {
+        this.dc.del(`datasets.${this.id}`)
+        this.dc.ww.just('dataset-op', {
+            id: this.id,
+            type: 'del',
+            exec: exec
+        })
+        delete this.dc.dss[this.id]
+    }
+
+    // Fetch data from WW
+    async data() {
+        let ds = await this.dc.ww.exec(
+            'get-dataset',
+            this.id
+        )
+        if (!ds) return
+        return ds.data
+    }
+
+}
+
+/**
+ * Dataset reciever (created on WW)
+ */
+export class DatasetWW {
+
+    constructor(id, data) {
+        this.last_upd = now()
+        this.id = id
+        if (Array.isArray(data)) {
+            // Regular array
+            this.data = data
+            if (id === 'ohlcv') this.type = 'OHLCV'
+        } else {
+            // Dataset descriptor
+            this.data = data.data
+            this.type = data.type
+        }
+    }
+
+    // Update from 'update-data' event
+    // TODO: ds size limit (in MB / data points)
+    static update_all(se, data) {
+        for (var k in data) {
+            if (k === 'ohlcv') continue
+            let id = k.split('.')[1] || k
+            if (!se.data[id]) continue
+            let arr = se.data[id].data
+            let iN = arr.length - 1
+            let last = arr[iN]
+
+            for (var dp of data[k]) {
+                if (!last || dp[0] > last[0]) {
+                    arr.push(dp)
+                }
+            }
+            se.data[id].last_upd = now()
+        }
+    }
+
+    merge(data) {
+        let len = this.data.length
+        if (!len) {
+            this.data = data
+            return
+        }
+        let t0 = this.data[0][0]
+        let tN = this.data[len - 1][0]
+        let l = data.filter(x => x[0] &lt; t0)
+        let r = data.filter(x => x[0] > tN)
+        this.data = l.concat(this.data, r)
+    }
+
+    // On dataset operation
+    op(se, op) {
+        this.last_upd = now()
+        switch(op.type) {
+            case 'set':
+                this.data = op.data
+                se.recalc_size()
+                break
+            case 'del':
+                delete se.data[this.id]
+                se.recalc_size()
+                break
+            case 'mrg':
+                this.merge(op.data)
+                se.recalc_size()
+                break
+        }
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Fri Feb 20 2026 20:58:51 GMT+0700 (Indochina Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

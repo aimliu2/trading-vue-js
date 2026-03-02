@@ -1,23 +1,37 @@
+// TO-DO : optimization
 
-
+/**
+ * @class Crosshair
+ * @desc A grid overlay-renderer that draws a crosshair at the cursor position.
+ *       The crosshair is only visible when the cursor is in 'explore' mode.
+ *       The horizontal line is only drawn when the cursor is on the same grid as the layout.
+ */
 export default class Crosshair {
 
-    constructor(comp) {
-
-        this.comp = comp
-        this.$p = comp.$props
-        this.data = this.$p.sub
+    /**
+     * @constructor
+     * @param {*} props 
+     * @memberof Crosshair
+     */
+    constructor(props) {
+        this.$p = props
         this._visible = false
-        this.locked = false
         this.layout = this.$p.layout
 
     }
 
+    /**
+     * @method draw
+     * @param {Object} ctx - canvas context from HTMLCanvasElement.getContext('2d')
+     * @memberof Crosshair
+     * @desc Draws the crosshair on the canvas. The horizontal line is only drawn when the cursor is on the same grid as the layout.
+     */
     draw(ctx) {
         // Update reference to the grid
         this.layout = this.$p.layout
 
-        const cursor = this.comp.$props.cursor
+        // const cursor = this.comp.$props.cursor
+        const cursor = this.$p.cursor
         if (!this.visible && cursor.mode === 'explore') return
 
         this.x = this.$p.cursor.x
@@ -42,12 +56,22 @@ export default class Crosshair {
 
     }
 
+    /**
+     * @method hide
+     * @memberof Crosshair 
+     * @desc Hides the crosshair by setting visible to false and clearing the x and y coordinates.
+     */
     hide() {
         this.visible = false
         this.x = undefined
         this.y = undefined
     }
 
+    /**
+     * @method visible
+     * @memberof Crosshair
+     * @desc Getter and setter for the visible property. The visible property determines whether the crosshair is drawn on the canvas.
+     */
     get visible() {
         return this._visible
     }

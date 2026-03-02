@@ -1,4 +1,5 @@
 {
+    "_comment": "Test data for dev config has (overlay+indicator+tool ?)",
     "ohlcv": [
         [
             1543572000000,
@@ -68394,7 +68395,8 @@
                 [
                     1558573200000,
                     1,
-                    7671.821219412739
+                    7671.821219412739,
+                    "trade overlay"
                 ]
             ],
             "settings": {

@@ -1,14 +1,13 @@
-
-// Main DataHelper class. A container for data,
-// which works as a proxy and CRUD interface
-
-import Utils from '../stuff/utils.js'
+// import Utils from '../stuff/utils.js'
 import DCCore from './dc_core.js'
 import SettProxy from './sett_proxy.js'
 import AggTool from './agg_tool.js'
 
 
-// Interface methods. Private methods in dc_core.js
+/**
+ * @class Datacube
+ * @desc Datacube object builder.js
+ */
 export default class DataCube extends DCCore {
 
     constructor(data = {}, sett = {}) {
@@ -24,7 +23,11 @@ export default class DataCube extends DCCore {
         }
         sett = Object.assign(def_sett, sett)
 
-        super()
+        /**
+         * Call all DC_CORE Constructors which extended from DC_event
+         * this.ww and this.ww.onevent .... 
+         */
+        super() // call all [DCCore] Constructor, inherit every this. ...
         this.sett = sett
         this.data = data
         this.sett = SettProxy(sett, this.ww)
@@ -34,7 +37,14 @@ export default class DataCube extends DCCore {
         //this.agg.update = this.agg_update.bind(this)
     }
 
-    // Add new overlay
+    /**
+     * @function add
+     * @desc add overlay? into datacube
+     * @memberof Datacube
+     * @param {string} side - overlay location. exclusive to 3 locations 'onchart', 'offchart', or 'datasets'
+     * @param {object} overlay - overlay data
+     * @returns {string} id - id of new overlay added
+     */
     add(side, overlay) {
 
         if (side !== 'onchart' && side !== 'offchart' &&
@@ -48,15 +58,14 @@ export default class DataCube extends DCCore {
         return overlay.id
     }
 
-    // Get all objects matching the query
-    get(query) {
-        return this.get_by_query(query).map(x => x.v)
-    }
-
-    // Get first object matching the query
-    get_one(query) {
-        return this.get_by_query(query).map(x => x.v)[0]
-    }
+    /**
+     * @function get
+     * @param {*} query 
+     * @memberof Datacube
+     * @returns get data specified in query
+     */
+    get(query) {return this.get_by_query(query).map(x => x.v)}
+    get_one(query) {return this.get_by_query(query).map(x => x.v)[0]}
 
     // Set data (reactively)
     set(query, data) {
@@ -70,7 +79,8 @@ export default class DataCube extends DCCore {
                 obj.p.indexOf(obj.v)
 
             if (i !== -1) {
-                this.tv.$set(obj.p, i, data)
+                obj.p[i] = data
+                // this.tv.$set(obj.p, i, data)
             }
         }
 
@@ -114,7 +124,11 @@ export default class DataCube extends DCCore {
                 obj.i : obj.p.indexOf(obj.v)
 
             if (i !== -1) {
-                this.tv.$delete(obj.p, i)
+                if (typeof i === 'number') {
+                    obj.p.splice(i, 1) // replaces Vue2 $delete — removes cleanly, no null slots
+                } else {
+                    obj.p[i] = null // field deletion (e.g. overlay property), null is fine here
+                }
             }
 
         }

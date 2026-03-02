@@ -4,26 +4,46 @@
 // one components size can depend on other component
 // data formatting (e.g. grid width depends on sidebar precision)
 // So it's better to calc all in one place.
+// TODO : make it a composable
 
+// leave all of them 
 import GridMaker from './grid_maker.js'
 import Utils from '../../stuff/utils.js'
 import math from '../../stuff/math.js'
 import log_scale from './log_scale.js'
 
-function Layout(params) {
+/**
+ * @function Layout
+ * @desc gather all reactive variable here then calculate them
+ * @param {*} props 
+ * @returns {Object} grid, botbar (sidebar and bottom bar value)
+ */
+// not constructor, can not use `new` anymore
+const Layout = (props) => {
 
     let {
-        chart, sub, offsub, interval, range, ctx, layers_meta,
-        ti_map, $props:$p, y_transforms: y_ts
-    } = params
+        chart,
+        sub,
+        offsub,
+        interval,
+        range,
+        ctx,
+        layers_meta,
+        ti_map,
+        $props: $p,
+        y_transforms: y_ts
+    } = props
 
+    // console.log('[Layout] A - destructured | chart:', chart, '| offsub:', offsub, '| $p:', $p)
     let mgrid = chart.grid || {}
+    // console.log('[Layout] B - mgrid ok:', mgrid)
 
     offsub = offsub.filter((x, i) => {
         // Skip offchart overlays with custom grid id,
         // because they will be mergred with the existing grids
         return !(x.grid && x.grid.id)
     })
+    // console.log('[Layout] C - offsub filtered:', offsub.length)
 
     // Splits space between main chart
     // and offchart indicator grids
@@ -50,7 +70,7 @@ function Layout(params) {
     }
 
     function weighted_hs(grid, height) {
-        let hs = [{grid}, ...offsub].map(x => x.grid.height || 1)
+        let hs = [{ grid }, ...offsub].map(x => x.grid.height || 1)
         let sum = hs.reduce((a, b) => a + b, 0)
         hs = hs.map(x => Math.floor((x / sum) * height))
 
@@ -76,17 +96,17 @@ function Layout(params) {
             let p = sub[i]
             mid = self.t2screen(p[0]) + 0.5
             self.candles.push(mgrid.logScale ?
-                log_scale.candle(self, mid, p, $p): {
-                x: mid,
-                w: self.px_step * $p.config.CANDLEW,
-                o: Math.floor(p[1] * self.A + self.B),
-                h: Math.floor(p[2] * self.A + self.B),
-                l: Math.floor(p[3] * self.A + self.B),
-                c: Math.floor(p[4] * self.A + self.B),
-                raw: p
-            })
+                log_scale.candle(self, mid, p, $p) : {
+                    x: mid,
+                    w: self.px_step * $p.config.CANDLEW,
+                    o: Math.floor(p[1] * self.A + self.B),
+                    h: Math.floor(p[2] * self.A + self.B),
+                    l: Math.floor(p[3] * self.A + self.B),
+                    c: Math.floor(p[4] * self.A + self.B),
+                    raw: p
+                })
             // Clear volume bar if there is a time gap
-            if (sub[i-1] && p[0] - sub[i-1][0] > interval) {
+            if (sub[i - 1] && p[0] - sub[i - 1][0] > interval) {
                 prev = null
             }
             x1 = prev || Math.floor(mid - hf_px_step)
@@ -102,16 +122,27 @@ function Layout(params) {
         }
     }
 
-    // Main grid
+    // DEBUG checkpoints — remove after fixing
+    // console.log('[Layout] step 1 - grid_hs')
     const hs = grid_hs()
+    // console.log('[Layout] step 2 - GridMaker main, hs:', hs)
     let specs = {
-        sub, interval, range, ctx, $p, layers_meta,
-        ti_map, height: hs[0], y_t: y_ts[0],
-        grid: mgrid, timezone: $p.timezone
+        sub, 
+        interval, 
+        range, 
+        ctx, 
+        $p, 
+        layers_meta,
+        ti_map, 
+        height: hs[0], 
+        y_t: y_ts[0],
+        grid: mgrid, 
+        timezone: $p.timezone
     }
     let gms = [new GridMaker(0, specs)]
 
     // Sub grids
+    // console.log('[Layout] step 3 - sub grids, offsub.length:', offsub.length)
     for (var [i, { data, grid }] of offsub.entries()) {
         specs.sub = data
         specs.height = hs[i + 1]
@@ -121,10 +152,12 @@ function Layout(params) {
     }
 
     // Max sidebar among all grinds
+    // console.log('[Layout] step 4 - sidebar')
     let sb = Math.max(...gms.map(x => x.get_sidebar()))
 
     let grids = [], offset = 0
 
+    // console.log('[Layout] step 5 - create grids')
     for (i = 0; i < gms.length; i++) {
         gms[i].set_sidebar(sb)
         grids.push(gms[i].create())
@@ -135,7 +168,9 @@ function Layout(params) {
 
     let self = grids[0]
 
+    // console.log('[Layout] step 6 - candles_n_vol, self:', self)
     candles_n_vol()
+    // console.log('[Layout] step 7 - returning')
 
     return {
         grids: grids,

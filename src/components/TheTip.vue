@@ -1,25 +1,57 @@
 <template>
     <div class="tvjs-the-tip"
-        v-html="data.text" @mousedown="$emit('remove-me')"
+        v-html="props.data.text" @mousedown="emit('remove-me')"
         :style="style">
     </div>
 </template>
-<script>
-export default {
-    name: 'TheTip',
-    props: ['data'],
-    mounted() {
-        setTimeout(() => this.$emit('remove-me'), 3000)
-    },
-    computed: {
-        style() {
-            return {
-                background: this.data.color
-            }
-        }
-    },
-}
+
+<script setup>
+import {ref, computed, onMounted} from 'vue'
+import useCleanup from '@composables/cUseCleanup.js'
+
+/**
+ * @name internal-const
+ */
+const {addCleanup} = useCleanup()
+const popupTime = 1000 //ms
+let timeoutTips;
+
+/**
+ * @name props
+ */
+const props = defineProps({
+     data:Object // set from TradingVue.vue
+})
+
+/**
+ * @event emit
+ */
+const emit = defineEmits(['remove-me'])
+
+ /**
+ * @function style
+ * @name computed
+ * @desc return style
+ */
+const style = computed(()=>{
+    return {background: props.data.color}
+})
+
+/**
+ * @name life-cycle hook
+ */
+onMounted(()=>{
+    // show tips for 2 secs
+    timeoutTips = setTimeout(() => emit('remove-me'), popupTime)
+
+    // cleanup when unmount
+    addCleanup(()=> console.log('Cleanup from the tip'))
+    addCleanup(()=> clearTimeout(timeoutTips))
+})
+
+// export default {name: 'TheTip'}
 </script>
+
 <style>
 .tvjs-drift-enter-active {
     transition: all .3s ease;

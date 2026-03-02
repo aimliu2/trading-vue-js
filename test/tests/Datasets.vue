@@ -32,16 +32,18 @@
 <script>
 import TradingVue from '../../src/TradingVue.vue'
 import TfSelector from './Timeframes/TFSelector.vue'
+
+import Icon from './Datasets/ds.json'
 import Data from '../data/data_skybtc_trades.json'
 import Data2 from '../data/data_btc_1m.json'
+
 import DataCube from '../../src/helpers/datacube.js'
 import DatasetCalc from './Scripts/DatasetCalc.vue'
 import Alps from './Extensions/Alps/index.js'
-import Icon from './Datasets/ds.json'
 
 export default {
     name: 'Datasets',
-    description: 'Dataset testing app. Checks uploading, ops, updates',
+    description: 'Dataset testing app. Checks uploading, ops, updates, font',
     props: ['night'],
     components: {
         TradingVue, TfSelector

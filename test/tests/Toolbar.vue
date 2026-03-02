@@ -10,15 +10,20 @@
 </template>
 
 <script>
+import emitter from '@helpers/eventbus.js'
 import TradingVue from '../../src/TradingVue.vue'
 import Data from '../data/data_tools.json'
-import Utils from '../../src/stuff/utils.js'
+// import Utils from '../../src/stuff/utils.js'
 import DataCube from '../../src/helpers/datacube.js'
 
+const n =  'Toolbar';
+const i = '🔪';
+const d = 'Test : Datacube bundled with "tools" in data_tools.json';
+
 export default {
-    name: 'Toolbar',
-    icon: '🔪',
-    description: 'Toolbar & drawing tools',
+    name: n,
+    icon: i,
+    description: d,
     props: ['night'],
     components: {
         TradingVue
@@ -34,6 +39,7 @@ export default {
         this.onResize()
         window.dc = this.chart
         window.tv = this.$refs.tvjs
+        emitter.emit('testcase-mount', this.emitMsg); // once
     },
     computed: {
         colors() {
@@ -43,6 +49,14 @@ export default {
                 colorText: '#333'
             }
         },
+        emitMsg() {
+            return {
+                name : n,
+                description :d,
+                icon : i,
+                early: false
+            }
+        }
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)
@@ -56,7 +70,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

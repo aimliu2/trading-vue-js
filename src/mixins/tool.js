@@ -5,6 +5,13 @@ import Keys from '../stuff/keys.js'
 import Utils from '../stuff/utils.js'
 
 export default {
+    emits: [
+        'drawing-mode-off',
+        'object-selected',
+        'scroll-lock',
+        'change-settings',
+        'remove-tool',
+    ],
     methods: {
         init_tool() {
             // Collision functions (float, float) => bool,
@@ -27,7 +34,7 @@ export default {
                     this.mouse.x, this.mouse.y,
                 ))) {
                     if (!this.selected) {
-                        this.$emit('object-selected')
+                        this.bus_emit('object-selected')
                     }
                     this.start_drag()
                     e.preventDefault()
@@ -36,7 +43,7 @@ export default {
             })
             this.mouse.on('mouseup', e => {
                 this.drag = null
-                this.$emit('scroll-lock', false)
+                this.bus_emit('scroll-lock', false)
             })
 
             this.keys = new Keys(this)
@@ -52,7 +59,7 @@ export default {
             }
         },
         set_state(name) {
-            this.$emit('change-settings', {
+            this.bus_emit('change-settings', {
                  $state: name
             })
         },
@@ -73,10 +80,10 @@ export default {
             this.collisions = []
         },
         remove_tool() {
-            if (this.selected) this.$emit('remove-tool')
+            if (this.selected) this.bus_emit('remove-tool')
         },
         start_drag() {
-            this.$emit('scroll-lock', true)
+            this.bus_emit('scroll-lock', true)
             let cursor = this.$props.cursor
             this.drag = { t: cursor.t, y$: cursor.y$ }
             this.pins.forEach(x => x.rec_position())

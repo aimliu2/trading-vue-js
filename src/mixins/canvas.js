@@ -5,7 +5,7 @@ import Utils from '../stuff/utils.js'
 
 export default {
     methods: {
-        setup() {
+        setup() { // 1
             const id = `${this.$props.tv_id}-${this._id}-canvas`
             const canvas = document.getElementById(id)
             let dpr = window.devicePixelRatio || 1
@@ -33,7 +33,7 @@ export default {
                     Utils.measureText(ctx, text, this.$props.tv_id)
             })
         },
-        create_canvas(h, id, props) {
+        create_canvas(h, id, props) { // 2
             this._id = id
             this._attrs = props.attrs
             return h('div', {
@@ -57,9 +57,9 @@ export default {
                     ref: 'canvas',
                     style: props.style,
                 })
-            ].concat(props.hs || []))
+            ].concat(props.hs || [])) // include children css ?
         },
-        redraw() {
+        redraw() { // 3
             if (!this.renderer) return
             this.renderer.update()
         }

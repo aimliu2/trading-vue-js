@@ -3,13 +3,32 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WWPlugin = require('./ww_plugin.js')
 const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
+const path = require('path')
 
 global.port = '8080'
 
 module.exports = (env, options) => ({
     entry: './src/main.js',
+    resolve: {
+        alias: {
+        '@src': path.resolve(__dirname, '..', 'src'),
+        '@data': path.resolve(__dirname, '..', 'data'),
+        '@components': path.resolve(__dirname, '..', 'src', 'components'),
+        '@component-js': path.resolve(__dirname, '..', 'src', 'components', 'js'),
+        '@composables': path.resolve(__dirname, '..', 'src', 'composables'),
+        '@helpers': path.resolve(__dirname, '..', 'src', 'helpers'),
+        '@icons': path.resolve(__dirname, '..', 'src', 'icons'),
+        '@overlay-comps': path.resolve(__dirname, '..', 'src', 'components', 'overlays'),
+        '@stuff': path.resolve(__dirname, '..', 'src', 'stuff'),
+        },
+    },
     module: {
         rules: [{
+                test: /\.ts$/, // Regex to test for .ts files
+                use: 'ts-loader', // Use ts-loader for these files
+                exclude: /node_modules/, // Exclude node_modules directory
+            },
+            {
                 test: /\.vue$/,
                 exclude: /node_modules/,
                 loader: 'vue-loader'
@@ -29,7 +48,8 @@ module.exports = (env, options) => ({
             {
                 test: /script_ww\.js$/,
                 loader: 'worker-loader'
-            }
+            },
+            
         ]
     },
     plugins: [
@@ -42,7 +62,8 @@ module.exports = (env, options) => ({
             MOB_DEBUG: JSON.stringify(process.env.MOB_DEBUG)
         })
     ],
-    devServer: {
+    devServer: { // webpack 3 has no 'static' options
+        contentBase: [path.join(__dirname, '../data'), path.join(__dirname, '../assets')], // served at root i.e. locahost/data.json
         host: '0.0.0.0',
         onListening: function(server) {
             const port = server.listeningApp.address().port

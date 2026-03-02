@@ -1,13 +1,13 @@
 // Canvas context for text measurments
-
-function Context($p) {
+// font string as input
+function ContextFont(font) {
 
     let el = document.createElement('canvas')
     let ctx = el.getContext("2d")
-    ctx.font = $p.font
+    ctx.font = font
 
     return ctx
 
 }
 
-export default Context
+export default ContextFont

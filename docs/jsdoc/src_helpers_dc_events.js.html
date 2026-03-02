@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>src/helpers/dc_events.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Datacube.html">Datacube</a></li><li><a href="DatasetWW.html">DatasetWW</a></li><li></li><li><a href="dc_core-js.html">dc_core-js</a><ul class='methods'><li data-type='method'><a href="dc_core-js.html#.init_data">init_data</a></li><li data-type='method'><a href="dc_core-js.html#.init_tvjs">init_tvjs</a></li><li data-type='method'><a href="dc_core-js.html#.update_ids">update_ids</a></li></ul></li><li><a href="dc_event-js.html">dc_event-js</a><ul class='methods'><li data-type='method'><a href="dc_event-js.html#.register_tools">register_tools</a></li></ul></li><li><a href="module.html#.exports">exports</a></li><li></li><li></li><li></li><li></li></ul><h3>Modules</h3><ul><li><a href="module-JSON-Aggregate.html">JSON-Aggregate</a></li><li><a href="module-JSON-Chart.html">JSON-Chart</a></li><li><a href="module-JSON-indy.html">JSON-indy</a></li><li><a href="module-JSON-tools.html">JSON-tools</a></li></ul><h3>Namespaces</h3><ul><li><a href="Utility-js.html">Utility-js</a><ul class='methods'><li data-type='method'><a href="Utility-js.html#.clamp()">clamp()</a></li><li data-type='method'><a href="Utility-js.html#.now()">now()</a></li></ul></li><li><a href="c3-overlay-registry-core-js.html">c3-overlay-registry-core-js</a></li><li><a href="cd1-data-aggregator-js.html">cd1-data-aggregator-js</a><ul class='methods'><li data-type='method'><a href="cd1-data-aggregator-js.html#.aggData">aggData</a></li><li data-type='method'><a href="cd1-data-aggregator-js.html#.cube">cube</a></li><li data-type='method'><a href="cd1-data-aggregator-js.html#.ready">ready</a></li></ul></li><li><a href="stuff-js.html">stuff-js</a></li></ul><h3>Vue</h3><ul><li><a href="tutorial-ItemList-vue.html">ItemList.vue</a></li><li><a href="tutorial-Toolbar-vue.html">Toolbar.vue</a></li><li><a href="tutorial-ToolbarItem-vue.html">ToolbarItem.vue</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Core-Indicator">Core-Indicator</a></li><li><a href="global.html#Core-Overlay">Core-Overlay</a></li><li><a href="global.html#Core-Tool">Core-Tool</a></li><li><a href="global.html#TB_ICON_HOLD">TB_ICON_HOLD</a></li><li><a href="global.html#abs">abs</a></li><li><a href="global.html#acos">acos</a></li><li><a href="global.html#add">add</a></li><li><a href="global.html#alma">alma</a></li><li><a href="global.html#asin">asin</a></li><li><a href="global.html#atan">atan</a></li><li><a href="global.html#atr">atr</a></li><li><a href="global.html#avg">avg</a></li><li><a href="global.html#bb">bb</a></li><li><a href="global.html#bbw">bbw</a></li><li><a href="global.html#bool">bool</a></li><li><a href="global.html#buffsize">buffsize</a></li><li><a href="global.html#cci">cci</a></li><li><a href="global.html#ceil">ceil</a></li><li><a href="global.html#change">change</a></li><li><a href="global.html#cmo">cmo</a></li><li><a href="global.html#cog">cog</a></li><li><a href="global.html#cos">cos</a></li><li><a href="global.html#cross">cross</a></li><li><a href="global.html#crossover">crossover</a></li><li><a href="global.html#crossunder">crossunder</a></li><li><a href="global.html#cum">cum</a></li><li><a href="global.html#dataCube">dataCube</a></li><li><a href="global.html#dayofmonth">dayofmonth</a></li><li><a href="global.html#dayofweek">dayofweek</a></li><li><a href="global.html#dev">dev</a></li><li><a href="global.html#div">div</a></li><li><a href="global.html#dmi">dmi</a></li><li><a href="global.html#ema">ema</a></li><li><a href="global.html#exp">exp</a></li><li><a href="global.html#falling">falling</a></li><li><a href="global.html#fixnan">fixnan</a></li><li><a href="global.html#floor">floor</a></li><li><a href="global.html#highest">highest</a></li><li><a href="global.html#highestbars">highestbars</a></li><li><a href="global.html#hma">hma</a></li><li><a href="global.html#hour">hour</a></li><li><a href="global.html#iff">iff</a></li><li><a href="global.html#initState">initState</a></li><li><a href="global.html#init_data">init_data</a></li><li><a href="global.html#init_tvjs">init_tvjs</a></li><li><a href="global.html#kc">kc</a></li><li><a href="global.html#kcw">kcw</a></li><li><a href="global.html#linreg">linreg</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#log10">log10</a></li><li><a href="global.html#lowest">lowest</a></li><li><a href="global.html#lowestbars">lowestbars</a></li><li><a href="global.html#macd">macd</a></li><li><a href="global.html#max">max</a></li><li><a href="global.html#mfi">mfi</a></li><li><a href="global.html#min">min</a></li><li><a href="global.html#minute">minute</a></li><li><a href="global.html#modify">modify</a></li><li><a href="global.html#mom">mom</a></li><li><a href="global.html#month">month</a></li><li><a href="global.html#mult">mult</a></li><li><a href="global.html#na">na</a></li><li><a href="global.html#neg">neg</a></li><li><a href="global.html#nf">nf</a></li><li><a href="global.html#now">now</a></li><li><a href="global.html#nz">nz</a></li><li><a href="global.html#offchart">offchart</a></li><li><a href="global.html#offset">offset</a></li><li><a href="global.html#onchart">onchart</a></li><li><a href="global.html#onclose">onclose</a></li><li><a href="global.html#pivothigh">pivothigh</a></li><li><a href="global.html#pivotlow">pivotlow</a></li><li><a href="global.html#pow">pow</a></li><li><a href="global.html#reactive-var">reactive-var</a></li><li><a href="global.html#register_tools">register_tools</a></li><li><a href="global.html#rising">rising</a></li><li><a href="global.html#rma">rma</a></li><li><a href="global.html#roc">roc</a></li><li><a href="global.html#round">round</a></li><li><a href="global.html#rsi">rsi</a></li><li><a href="global.html#sample">sample</a></li><li><a href="global.html#sar">sar</a></li><li><a href="global.html#second">second</a></li><li><a href="global.html#settings">settings</a></li><li><a href="global.html#sign">sign</a></li><li><a href="global.html#signal">signal</a></li><li><a href="global.html#signalif">signalif</a></li><li><a href="global.html#sin">sin</a></li><li><a href="global.html#since">since</a></li><li><a href="global.html#sma">sma</a></li><li><a href="global.html#sqrt">sqrt</a></li><li><a href="global.html#stdev">stdev</a></li><li><a href="global.html#stoch">stoch</a></li><li><a href="global.html#sub">sub</a></li><li><a href="global.html#sum">sum</a></li><li><a href="global.html#supertrend">supertrend</a></li><li><a href="global.html#swma">swma</a></li><li><a href="global.html#sym">sym</a></li><li><a href="global.html#tan">tan</a></li><li><a href="global.html#tr">tr</a></li><li><a href="global.html#ts">ts</a></li><li><a href="global.html#tsi">tsi</a></li><li><a href="global.html#tstf">tstf</a></li><li><a href="global.html#vwma">vwma</a></li><li><a href="global.html#weekofyear">weekofyear</a></li><li><a href="global.html#wma">wma</a></li><li><a href="global.html#wpr">wpr</a></li><li><a href="global.html#year">year</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/helpers/dc_events.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Utils from '../stuff/utils.js'
+import Icons from '../stuff/icons.json'
+import WebWork from './script_ww_api.js'
+import Dataset from './dataset.js'
+
+
+/**
+ * @class dc_event-js
+ * @desc listen to and handle all events fired from each components. Have to use web worker ?
+ */
+export default class DCEvents {
+
+    constructor() {
+
+        this.ww = new WebWork(this)
+
+        // Listen to the web-worker events
+        this.ww.onevent = e => {
+            for (var ctrl of this.tv.controllers) {
+                if (ctrl.ww) ctrl.ww(e.data)
+            }
+            switch (e.data.type) {
+                case 'request-data':
+                    // TODO: DataTunnel class for smarter data transfer
+                    if (this.ww._data_uploading) break
+                    let data = Dataset.make_tx(this, e.data.data)
+                    this.send_meta_2_ww()
+                    this.ww.just('upload-data', data)
+                    this.ww._data_uploading = true
+                    break
+                case 'overlay-data':
+                    this.on_overlay_data(e.data.data)
+                    break
+                case 'overlay-update':
+                    this.on_overlay_update(e.data.data)
+                    break
+                case 'data-uploaded':
+                    this.ww._data_uploading = false
+                    break
+                case 'engine-state':
+                    this.se_state = Object.assign(
+                        this.se_state || {}, e.data.data)
+                    break
+                case 'modify-overlay':
+                    this.modify_overlay(e.data.data)
+                    break
+                case 'script-signal':
+                    this.tv.$emit('signal', e.data.data)
+                    break
+            }
+            for (var ctrl of this.tv.controllers) {
+                if (ctrl.post_ww) ctrl.post_ww(e.data)
+            }
+        }
+    }
+
+    // Called when overalay/tv emits 'custom-event'
+    on_custom_event(event, args) {
+        switch (event) {
+            case 'register-tools': this.register_tools(args)
+                break
+            case 'exec-script': this.exec_script(args)
+                break
+            case 'exec-all-scripts': this.exec_all_scripts()
+                break
+            case 'data-len-changed': this.data_changed(args)
+                break
+            case 'tool-selected':
+                if (!args[0]) break // TODO: Quick fix, investigate
+                if (args[0].split(':')[0] === 'System') {
+                    this.system_tool(args[0].split(':')[1])
+                    break
+                }
+                this.tv.$set(this.data, 'tool', args[0])
+                if (args[0] === 'Cursor') {
+                    this.drawing_mode_off()
+                }
+                break
+            case 'grid-mousedown': this.grid_mousedown(args)
+                break
+            case 'drawing-mode-off': this.drawing_mode_off()
+                break
+            case 'change-settings': this.change_settings(args)
+                break
+            case 'range-changed': this.scripts_onrange(...args)
+                break
+            case 'scroll-lock': this.on_scroll_lock(args[0])
+                break
+            case 'object-selected': this.object_selected(args)
+                break
+            case 'remove-tool': this.system_tool('Remove')
+                break
+            case 'before-destroy': this.before_destroy()
+                break
+
+        }
+
+    }
+
+    // Triggered when one or multiple settings are changed
+    // We select only the changed ones &amp; re-exec them on the
+    // web worker
+    on_settings(values, prev) {
+
+        if (!this.sett.scripts) return
+
+        let delta = {}
+        let changed = false
+
+        for (var i = 0; i &lt; values.length; i++) {
+            let n = values[i]
+            let arr = prev.filter(x => x.v === n.v)
+            if (!arr.length &amp;&amp; n.p.settings.$props) {
+                let id = n.p.settings.$uuid
+                if (Utils.is_scr_props_upd(n, prev) &amp;&amp;
+                    Utils.delayed_exec(n.p)) {
+                    delta[id] = n.v
+                    changed = true
+                    this.tv.$set(n.p, 'loading', true)
+                }
+            }
+        }
+
+        if (changed &amp;&amp; Object.keys(delta).length) {
+            let tf = this.tv.$refs.chart.interval_ms ||
+                this.data.chart.tf
+            let range = this.tv.getRange()
+            this.ww.just('update-ov-settings', {
+                delta, tf, range
+            })
+        }
+
+    }
+
+    // When the set of $uuids is changed
+    on_ids_changed(values, prev) {
+
+        let rem = prev.filter(
+            x => x !== undefined &amp;&amp; !values.includes(x))
+
+        if (rem.length) {
+            this.ww.just('remove-scripts', rem)
+        }
+    }
+
+    /**
+     * register_tools - Combine all tools and their mods
+     * @memberof dc_event-js
+     * @param {Tools} tools 
+     */
+    // WIP - instead of firing event from Grid.Vue to register tool, then bundled in datacube (unreliable)
+    // why don't we build it in DataCube instead ?/ Since DataCube've already watched it anyway
+    register_tools(tools) {
+        // global setter
+        let preset = {} // var1 preset
+        for (var tool of this.data.tools || []) {
+            preset[tool.type] = tool
+            delete tool.type
+        }
+        // var2 tools key
+        this.tv.$set(this.data, 'tools', [])
+        let list = [{
+            type: 'Cursor', icon: Icons['cursor.png']  // default - item1
+        }]
+        for (var tool of tools) {
+            var proto = Object.assign({}, tool.info) // object returned from tool()
+            let type = tool.info.type || 'Default' // line tool is type Segment
+            proto.type = `${tool.use_for}:${type}`
+            this.merge_presets(proto, preset[tool.use_for])
+            this.merge_presets(proto, preset[proto.type])
+            delete proto.mods
+            list.push(proto)
+            for (var mod in tool.info.mods) {
+                var mp = Object.assign({}, proto)
+                mp = Object.assign(mp, tool.info.mods[mod])
+                mp.type = `${tool.use_for}:${mod}`
+                this.merge_presets(mp, preset[tool.use_for])
+                this.merge_presets(mp, preset[mp.type])
+                list.push(mp)
+            }
+        }
+        // force Vue2 to modify JSON data
+        // Notice : Datacube have 2 tools sections, tools(overlay) and tool(Cursor)
+        // assume only string built
+        this.tv.$set(this.data, 'tools', list)
+        // console.log('fired from dc_event registry')
+        // console.log(list)
+        this.tv.$set(this.data, 'tool', 'Cursor')
+    }
+
+    exec_script(args) {
+        // i.e. return ema(close, length)[0]
+        if (args.length &amp;&amp; this.sett.scripts) {
+            let obj = this.get_overlay(args[0])
+            if (!obj || obj.scripts === false) return
+            if (obj.script &amp;&amp; obj.script.src) {
+                args[0].src = obj.script.src // opt, override the src
+            }
+            // Parse script props &amp; get the values from the ov
+            // TODO: remove unnecessary script initializations
+            let s = obj.settings
+            let props = args[0].src.props || {}
+            if (!s.$uuid) s.$uuid = `${obj.type}-${Utils.uuid2()}`
+            args[0].uuid = s.$uuid
+            args[0].sett = s
+            for (var k in props || {}) {
+                let proto = props[k]
+                if (s[k] !== undefined) {
+                    proto.val = s[k] // use the existing val
+                    continue
+                }
+                if (proto.def === undefined) {
+                    // TODO: add support of info / errors to the legend
+                    console.error(
+                        `Overlay ${obj.id}: script prop '${k}' ` +
+                        `doesn't have a default value`)
+                    return
+                }
+                s[k] = proto.val = proto.def // set the default
+            }
+            // Remove old props (dropped by the current exec)
+            if (s.$props) {
+                for (var k in s) {
+                    if (s.$props.includes(k) &amp;&amp; !(k in props)) {
+                        delete s[k]
+                    }
+                }
+            }
+            s.$props = Object.keys(args[0].src.props || {})
+            this.tv.$set(obj, 'loading', true)
+            let tf = this.tv.$refs.chart.interval_ms ||
+                this.data.chart.tf
+            let range = this.tv.getRange()
+            if (obj.script &amp;&amp; obj.script.output != null) {
+                args[0].output = obj.script.output
+            }
+            // send to web-worker script_ww.js -> script_engine.js
+            this.ww.just('exec-script', {
+                s: args[0], tf, range
+            })
+        }
+    }
+
+    exec_all_scripts() {
+        if (!this.sett.scripts) return
+        this.set_loading(true)
+        let tf = this.tv.$refs.chart.interval_ms ||
+            this.data.chart.tf
+        let range = this.tv.getRange()
+        this.ww.just('exec-all-scripts', { tf, range })
+    }
+
+    scripts_onrange(r) {
+        if (!this.sett.scripts) return
+        let delta = {}
+
+        this.get('.').forEach(v => {
+            if (v.script &amp;&amp; v.script.execOnRange &amp;&amp;
+                v.settings.$uuid) {
+                // TODO: execInterrupt flag?
+                if (Utils.delayed_exec(v)) {
+                    delta[v.settings.$uuid] = v.settings
+                }
+            }
+        })
+
+        if (Object.keys(delta).length) {
+            let tf = this.tv.$refs.chart.interval_ms ||
+                this.data.chart.tf
+            let range = this.tv.getRange()
+            this.ww.just('update-ov-settings', {
+                delta, tf, range
+            })
+        }
+    }
+
+    // Overlay modification from WW
+    modify_overlay(upd) {
+        let obj = this.get_overlay(upd)
+        if (obj) {
+            for (var k in upd.fields || {}) {
+                if (typeof obj[k] === 'object') {
+                    this.merge(`${upd.uuid}.${k}`, upd.fields[k])
+                } else {
+                    this.tv.$set(obj, k, upd.fields[k])
+                }
+            }
+        }
+    }
+
+    data_changed(args) {
+        if (!this.sett.scripts) return
+        if (this.sett.data_change_exec === false) return
+        let main = this.data.chart.data
+        if (this.ww._data_uploading) return
+        if (!this.se_state.scripts) return
+        this.send_meta_2_ww()
+        this.ww.just('upload-data', { ohlcv: main })
+        this.ww._data_uploading = true
+        this.set_loading(true)
+    }
+
+    set_loading(flag) {
+        let skrr = this.get('.').filter(x => x.settings.$props)
+        for (var s of skrr) {
+            this.merge(`${s.id}`, { loading: flag })
+        }
+    }
+
+    send_meta_2_ww() {
+        let tf = this.tv.$refs.chart.interval_ms ||
+            this.data.chart.tf
+        let range = this.tv.getRange()
+        this.ww.just('send-meta-info', { tf, range })
+    }
+
+    merge_presets(proto, preset) {
+        if (!preset) return
+        for (var k in preset) {
+            if (k === 'settings') {
+                Object.assign(proto[k], preset[k])
+            } else {
+                proto[k] = preset[k]
+            }
+        }
+    }
+
+    grid_mousedown(args) {
+        // TODO: tool state finished?
+        this.object_selected([])
+        // Remove the previous RangeTool
+        let rem = () => this.get('RangeTool')
+            .filter(x => x.settings.shiftMode)
+            .forEach(x => this.del(x.id))
+        if (this.data.tool &amp;&amp; this.data.tool !== 'Cursor' &amp;&amp;
+            !this.data.drawingMode) {
+            // Prevent from "null" tools (tool created with HODL)
+            if (args[1].type !== 'tap') {
+                this.tv.$set(this.data, 'drawingMode', true)
+                this.build_tool(args[0])
+            } else {
+                this.tv.showTheTip(
+                    `&lt;b>Hodl&lt;/b>+&lt;b>Drug&lt;/b> to create, ` +
+                    `&lt;b>Tap&lt;/b> to finish a tool`
+                )
+            }
+        } else if (this.sett.shift_measure &amp;&amp; args[1].shiftKey) {
+            rem()
+            this.tv.$nextTick(() =>
+                this.build_tool(args[0], 'RangeTool:ShiftMode'))
+        } else {
+            rem()
+        }
+    }
+
+    drawing_mode_off() {
+        this.tv.$set(this.data, 'drawingMode', false)
+        this.tv.$set(this.data, 'tool', 'Cursor')
+    }
+
+    // Place a new tool
+    build_tool(grid_id, type) {
+
+        let list = this.data.tools
+        type = type || this.data.tool
+        let proto = list.find(x => x.type === type)
+        if (!proto) return
+        let sett = Object.assign({}, proto.settings || {})
+        let data = (proto.data || []).slice()
+
+        if (!('legend' in sett)) sett.legend = false
+        if (!('z-index' in sett)) sett['z-index'] = 100
+        sett.$selected = true
+        sett.$state = 'wip'
+
+        let side = grid_id ? 'offchart' : 'onchart'
+        let id = this.add(side, {
+            name: proto.name,
+            type: type.split(':')[0],
+            settings: sett,
+            data: data,
+            grid: { id: grid_id }
+        })
+
+        sett.$uuid = `${id}-${Utils.now()}`
+
+        this.tv.$set(this.data, 'selected', sett.$uuid)
+        this.add_trash_icon()
+    }
+
+    // Remove selected / Remove all, etc
+    system_tool(type) {
+        switch (type) {
+            case 'Remove':
+                if (this.data.selected) {
+                    this.del(this.data.selected)
+                    this.remove_trash_icon()
+                    this.drawing_mode_off()
+                    this.on_scroll_lock(false)
+                }
+                break
+        }
+    }
+
+    // Apply new overlay settings
+    change_settings(args) {
+        let settings = args[0]
+        delete settings.id
+        let grid_id = args[1]
+        this.merge(`${args[3]}.settings`, settings)
+    }
+
+    // Lock the scrolling mechanism
+    on_scroll_lock(flag) {
+        this.tv.$set(this.data, 'scrollLock', flag)
+    }
+
+    // When new object is selected / unselected
+    object_selected(args) {
+        var q = this.data.selected
+        if (q) {
+            // Check if current drawing is finished
+            //let res = this.get_one(`${q}.settings`)
+            //if (res &amp;&amp; res.$state !== 'finished') return
+            this.merge(`${q}.settings`, {
+                $selected: false
+            })
+            this.remove_trash_icon()
+        }
+        this.tv.$set(this.data, 'selected', null)
+
+        if (!args.length) return
+
+        this.tv.$set(this.data, 'selected', args[2])
+        this.merge(`${args[2]}.settings`, {
+            $selected: true
+        })
+
+        this.add_trash_icon()
+    }
+
+    add_trash_icon() {
+        const type = 'System:Remove'
+        if (this.data.tools.find(x => x.type === type)) {
+            return
+        }
+        this.data.tools.push({
+            type, icon: Icons['trash.png']
+        })
+    }
+
+    remove_trash_icon() {
+        // TODO: Does not call Toolbar render (distr version)
+        const type = 'System:Remove'
+        Utils.overwrite(this.data.tools,
+            this.data.tools.filter(x => x.type !== type)
+        )
+    }
+
+    // Set overlay data from the web-worker
+    on_overlay_data(data) {
+        this.get('.').forEach(x => {
+            if (x.settings.$synth) this.del(`${x.id}`)
+        })
+        for (var ov of data) {
+            let obj = this.get_one(`${ov.id}`)
+            if (obj) {
+                this.tv.$set(obj, 'loading', false)
+                if (!ov.data) continue
+                obj.data = ov.data
+            }
+            if (!ov.new_ovs) continue
+            for (var id in ov.new_ovs.onchart) {
+                if (!this.get_one(`onchart.${id}`)) {
+                    this.add('onchart', ov.new_ovs.onchart[id])
+                }
+            }
+            for (var id in ov.new_ovs.offchart) {
+                if (!this.get_one(`offchart.${id}`)) {
+                    this.add('offchart', ov.new_ovs.offchart[id])
+                }
+            }
+        }
+    }
+
+    // Push overlay updates from the web-worker
+    on_overlay_update(data) {
+        for (var ov of data) {
+            if (!ov.data) continue
+            let obj = this.get_one(`${ov.id}`)
+            if (obj) {
+                this.fast_merge(obj.data, ov.data, false)
+            }
+        }
+    }
+
+    // Clean-up unfinished business (tools)
+    before_destroy() {
+        let f = x => !x.settings.$state ||
+            x.settings.$state === 'finished'
+        this.data.onchart = this.data.onchart
+            .filter(f)
+        this.data.offchart = this.data.offchart
+            .filter(f)
+        this.drawing_mode_off()
+        this.on_scroll_lock(false)
+        this.object_selected([])
+        this.ww.destroy()
+    }
+
+    // Get overlay by grid-layer id
+    get_overlay(obj) {
+        let id = obj.id || `g${obj.grid_id}_${obj.layer_id}`
+        let dcid = obj.uuid || this.gldc[id]
+        return this.get_one(`${dcid}`)
+    }
+
+
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                               jsDoc appendix                               */
+/* -------------------------------------------------------------------------- */
+/**
+ * @typedef {object} ToolInfos
+ * @property {string} group - group name
+ * @property {string} icon - icon svg
+ * @property {string} type - tool type, use overlay render ?
+ * @property {string} hint - This hint will be shown on hover, where ?
+ * @property {Array} data - Default data
+ * @property {object} settings - Default settings
+ * @property {object} mods - Tools variant
+ */
+/**
+ * @typedef {object} Tools
+ * @property {ToolInfos} info - The info of the tools
+ * @property {Array&lt;string>} use_for - list of use for properties, should be unique one ?
+ */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Fri Feb 20 2026 20:58:51 GMT+0700 (Indochina Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

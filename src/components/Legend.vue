@@ -20,7 +20,7 @@
             {{(common.meta.last || [])[4]}}
         </span>
     </div>
-    <div class="t-vue-ind" v-for="ind in this.indicators">
+    <div class="t-vue-ind" v-for="ind in indicators">
         <span class="t-vue-iname">{{ind.name}}</span>
         <button-group
             v-bind:buttons="common.buttons"
@@ -49,121 +49,133 @@
     </div>
 </div>
 </template>
-<script>
 
-import ButtonGroup from './ButtonGroup.vue'
-import Spinner from './Spinner.vue'
+<script setup>
+import ButtonGroup from './ButtonGroup.vue' // V3
+import Spinner from './Spinner.vue' // V3
+import {computed} from 'vue'
 
-export default {
-    name: 'ChartLegend',
-    props: [
-        'common', 'values', 'grid_id', 'meta_props'
-    ],
-    components: { ButtonGroup, Spinner },
-    computed: {
-        ohlcv() {
-            if (!this.$props.values || !this.$props.values.ohlcv) {
-                return Array(6).fill('n/a')
-            }
-            const prec = this.layout.prec
+/* -------------------------------------------------------------------------- */
+/*                                  constant                                  */
+/* -------------------------------------------------------------------------- */
+const props = defineProps({
+    common: Object,
+    values: Object,
+    grid_id: Number,
+    meta_props: Object
+})
 
-            // TODO: main the main legend more customizable
-            let id = this.main_type + '_0'
-            let meta = this.$props.meta_props[id] || {}
-            if (meta.legend) {
-                return (meta.legend() || []).map(x => x.value)
-            }
+/* --------------------------------- emitter -------------------------------- */
+const emit = defineEmits(['legend-button-click'])
 
-            return [
-                this.$props.values.ohlcv[1].toFixed(prec),
-                this.$props.values.ohlcv[2].toFixed(prec),
-                this.$props.values.ohlcv[3].toFixed(prec),
-                this.$props.values.ohlcv[4].toFixed(prec),
-                this.$props.values.ohlcv[5] ?
-                    this.$props.values.ohlcv[5].toFixed(2):
-                    'n/a'
-            ]
-        },
-        // TODO: add support for { grid: { id : N }}
-        indicators() {
-            const values = this.$props.values
-            const f = this.format
-            var types = {}
+/* -------------------------------------------------------------------------- */
+/*                                  computed                                  */
+/* -------------------------------------------------------------------------- */
+const show_values = computed(() => props.common.cursor.mode !== 'explore')
 
-            return this.json_data.filter(
-                x => x.settings.legend !== false && !x.main
-            ).map(x => {
-                if (!(x.type in types)) types[x.type] = 0
-                const id = x.type + `_${types[x.type]++}`
-                return {
-                    v: 'display' in x.settings ? x.settings.display : true,
-                    name: x.name || id,
-                    index: (this.off_data || this.json_data).indexOf(x),
-                    id: id,
-                    values: values ? f(id, values) : this.n_a(1),
-                    unk: !(id in (this.$props.meta_props || {})),
-                    loading: x.loading
-                }
-            })
-        },
-        calc_style() {
-            let top = this.layout.height > 150 ? 10 : 5
-            let grids = this.$props.common.layout.grids
-            let w = grids[0] ? grids[0].width : undefined
-            return {
-                top: `${this.layout.offset + top}px`,
-                width: `${w-20}px`
-            }
-        },
-        layout() {
-            const id = this.$props.grid_id
-            return this.$props.common.layout.grids[id]
-        },
-        json_data() {
-            return this.$props.common.data
-        },
-        off_data() {
-            return this.$props.common.offchart
-        },
-        main_type() {
-            let f = this.common.data.find(x => x.main)
-            return f ? f.type : undefined
-        },
-        show_values() {
-            return this.common.cursor.mode !== 'explore'
-        }
-    },
-    methods: {
-        format(id, values) {
-            let meta = this.$props.meta_props[id] || {}
-            // Matches Overlay.data_colors with the data values
-            // (see Spline.vue)
-            if (!values[id]) return this.n_a(1)
+const main_type = computed(() => {
+    let f = props.common.data.find(x => x.main)
+    return f ? f.type : undefined
+})
 
-            // Custom formatter
-            if (meta.legend) return meta.legend(values[id])
+const off_data = computed(() => props.common.offchart)
 
-            return values[id].slice(1).map((x, i) => {
-                const cs = meta.data_colors ? meta.data_colors() : []
-                if (typeof x == 'number') {
-                    // Show 8 digits for small values
-                    x = x.toFixed(Math.abs(x) > 0.001 ? 4 : 8)
-                }
-                return {
-                    value: x,
-                    color: cs ? cs[i % cs.length] : undefined
-                }
-            })
-        },
-        n_a(len) {
-            return Array(len).fill({ value: 'n/a' })
-        },
-        button_click(event) {
-            this.$emit('legend-button-click', event)
-        }
+const json_data = computed(() => props.common.data)
+
+const calc_style = computed(() => {
+    let top = layout.value.height > 150 ? 10 : 5
+    let grids = props.common.layout.grids
+    let w = grids[0] ? grids[0].width : undefined
+    return {
+        top: `${layout.value.offset + top}px`,
+        width: `${w-20}px`
     }
+})
+
+const layout = computed(() => {
+    const id = props.grid_id
+    return props.common.layout.grids[id]
+})
+
+// TODO: add support for { grid: { id : N }}
+const indicators = computed(() => {
+    const values = props.values
+    var types = {}
+
+    return json_data.value.filter(
+        x => x.settings.legend !== false && !x.main
+    ).map(x => {
+        if (!(x.type in types)) types[x.type] = 0
+        const id = x.type + `_${types[x.type]++}`
+        return {
+            v: 'display' in x.settings ? x.settings.display : true,
+            name: x.name || id,
+            index: (off_data.value || json_data.value).indexOf(x),
+            id: id,
+            values: values ? format(id, values) : n_a(1),
+            unk: !(id in (props.meta_props || {})),
+            loading: x.loading
+        }
+    })
+})
+
+const ohlcv = computed(() => {
+    if (!props.values || !props.values.ohlcv) {
+        return Array(6).fill('n/a')
+    }
+    let prec = layout.value.prec
+
+    // TODO: make the main legend more customizable
+    let id = main_type.value + '_0'
+    let meta = props.meta_props[id] || {}
+    if (meta.legend) {
+        return (meta.legend() || []).map(x => x.value)
+    }
+
+    return [
+        props.values.ohlcv[1].toFixed(prec),
+        props.values.ohlcv[2].toFixed(prec),
+        props.values.ohlcv[3].toFixed(prec),
+        props.values.ohlcv[4].toFixed(prec),
+        props.values.ohlcv[5] ? props.values.ohlcv[5].toFixed(2):'n/a'
+    ]
+})
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                   methods                                  */
+/* -------------------------------------------------------------------------- */
+const button_click = (event) => emit('legend-button-click', event)
+
+const n_a = (len) => Array(len).fill({ value: '∅' })
+
+const format = (id, values) => {
+    let meta = props.meta_props[id] || {}
+    // Matches Overlay.data_colors with the data values
+    // (see Spline.vue)
+    if (!values[id]) return n_a(1)
+
+    // Custom formatter
+    if (meta.legend) return meta.legend(values[id])
+
+    return values[id].slice(1).map((x, i) => {
+        const cs = meta.data_colors ? meta.data_colors() : []
+        if (typeof x == 'number') {
+            // TODO: make the formatting more customizable, e.g. allow passing a custom formatter function in meta.legend or meta.format
+            // i.e. shib or doge price
+            x = x.toFixed(Math.abs(x) > 0.001 ? 4 : 8)
+        }
+        return {
+            value: x,
+            color: cs ? cs[i % cs.length] : undefined
+        }
+    })
 }
+
+// export default {name: 'ChartLegend'}
 </script>
+
 <style>
 .trading-vue-legend {
     position: relative;

@@ -1,6 +1,6 @@
 
 // Annimation frame with a fallback for
-// slower devices
+// slower RAM processing devices
 
 import Utils from './utils.js'
 
