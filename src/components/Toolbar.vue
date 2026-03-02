@@ -1,17 +1,17 @@
 
 <template>
     <div class="trading-vue-toolbar" :style="styles" :key="state.tool_count">
-        <toolbar-item v-for="(tool, i) in toolGroups"
-            v-if="tool.icon && !tool.hidden"
-            @item-selected="selected"
-            :key="i"
-            :data="tool"
-            :subs="state.sub_map"
-            :dc="props.data"
-            :config="props.config"
-            :colors="props.colors"
-            :selected="is_selected(tool)">
-        </toolbar-item>
+        <template v-for="(tool, i) in toolGroups" :key="i">
+            <toolbar-item v-if="tool.icon && !tool.hidden"
+                @item-selected="selected"
+                :data="tool"
+                :subs="state.sub_map"
+                :dc="props.data"
+                :config="props.config"
+                :colors="props.colors"
+                :selected="is_selected(tool)">
+            </toolbar-item>
+        </template>
     </div>
 </template>
 
@@ -19,16 +19,15 @@
 import ToolbarItem from '@components/ToolbarItem.vue'
 import {reactive, onMounted, computed} from 'vue'
 
-/**
- * @constant state-var
- */
+/* -------------------------------------------------------------------------- */
+/*                                  Constants                                 */
+/* -------------------------------------------------------------------------- */
+/* -------------------------------- state-var ------------------------------- */
 // see if tools count change and have to force re-render
 const initState = { tool_count: 0, sub_map: {} }; 
 const state = reactive(initState);
 
-/**
- * @constant props
- */
+/* ---------------------------------- props --------------------------------- */
 const props = defineProps({
     data:Object, // tool data from datacube
     height:Number, 
@@ -37,16 +36,12 @@ const props = defineProps({
     config:Object
 })
 
-/**
- * @event custom-event
- */
+/* --------------------------------- emitter -------------------------------- */
 const emit = defineEmits(['custom-event'])
 
-// methods
-/**
- * @function selected
- * @event custom-event#tool-selected
- */
+/* -------------------------------------------------------------------------- */
+/*                                   methods                                  */
+/* -------------------------------------------------------------------------- */
 const selected = (tool) => {
             emit('custom-event', {
                 event:'tool-selected', args: [tool.type]
@@ -57,9 +52,6 @@ const selected = (tool) => {
             }
         }
 
-/**
- * @function is_selected
- */
 const is_selected = (tool) => {
             if (tool.group) {
                 return !!tool.items.find(
@@ -68,11 +60,9 @@ const is_selected = (tool) => {
             return tool.type === props.data.tool
         }
 
-//computed
-/**
- * @function styles
- * @desc add style to tool bar group
- */
+/* -------------------------------------------------------------------------- */
+/*                                  computed                                  */
+/* -------------------------------------------------------------------------- */
 const styles = computed(() => {
             let b = props.config.TB_BORDER
             let w = props.config.TOOLBAR - b
@@ -87,11 +77,7 @@ const styles = computed(() => {
                 'border-right': `${b}px ${st} ${brd}`
             }
         })
-
-/**
- * @function toolGroups
- * @desc create tool group for tool bar
- */       
+     
 const toolGroups = computed(() => {
             let arr = []
             for (let tool of props.data.tools || []) {
@@ -103,7 +89,7 @@ const toolGroups = computed(() => {
                 if (!g) {
                     arr.push({
                         group: tool.group,
-                        icon: tool.icon,
+                        icon: tool.icon || '',
                         items: [tool]
                     })
                 } else {
@@ -113,10 +99,9 @@ const toolGroups = computed(() => {
             return arr
         })
 
-// life-cycle hook
-/**
- * @name onMounted
- */
+/* -------------------------------------------------------------------------- */
+/*                                  onMounted                                 */
+/* -------------------------------------------------------------------------- */
 // onMounted(()=>{
     // console.log("tool init")
     // console.log(props.data) // got injected from grid.vue emitted event

@@ -59,7 +59,7 @@ import Keyboard from './Keyboard.vue' // V3
 
 //analyse the logic difference between @src/components/Chart.vue and @src/components/Chart_legacy.vue  on how they update their binded section_props property
 
-import { ref, reactive, onMounted, computed, watch, shallowRef, markRaw} from 'vue';
+import { ref, reactive, onMounted, computed, watch, shallowRef, markRaw, toRef} from 'vue';
 
 /* -------------------------------------------------------------------------- */
 /*                                  constants                                 */
@@ -640,6 +640,21 @@ onMounted(() => {
 
     update_last_values()
     init_shaders(props.skin)
+})
+
+// <script setup> components are closed by default — nothing is accessible from parent template refs.
+// TradingVue.vue reads chartRef.value.{ti_map, ohlcv, range, cursor, activated, interval, interval_ms}
+// and calls chartRef.value.goto() / setRange(), so we must explicitly expose them.
+defineExpose({
+    ti_map:      TImapRef,                        // shallowRef; proxyRefs unwraps → TImapRef.value
+    ohlcv,                                        // computed ref; proxyRefs unwraps → ohlcv.value
+    range:       toRef(state, 'range'),
+    cursor:      toRef(state, 'cursor'),
+    activated:   toRef(state, 'activated'),       // writable — TradingVue sets this on mouse events
+    interval:    toRef(state, 'interval'),
+    interval_ms: toRef(state, 'interval_ms'),
+    goto:        jumpToTime,
+    setRange,
 })
 
 // export default {name: 'Chart',}

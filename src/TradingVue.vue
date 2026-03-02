@@ -33,14 +33,16 @@
             v-on:range-changed="range_changed"
             v-on:legend-button-click="legend_button">
         </chart>
-        <transition name="tvjs-drift">
-            <the-tip :data="tip" v-if="false"
-                @remove-me="tip = null"/>
-        </transition>
+        
     </div>
 </template>
 
 <script setup>
+/** TheTip.Vue
+ * <transition name="tvjs-drift">
+        <the-tip :data="tip" v-if="false" @remove-me="tip = null"/>
+    </transition>
+ */
 
 import Const from './stuff/constants.js'
 import Dataset from './helpers/dataset.js'
@@ -114,6 +116,19 @@ const emit = defineEmits([
     'chart-reset',
     'legend-button-click',
     'range-changed',
+    'data-len-changed',
+    'remove-layer-meta',
+    'remove-shaders',
+    'grid-mousedown',
+    'register-tools', // tools
+    'tool-selected', 
+    'scroll-lock',
+    'drawing-mode-off',
+    'change-settings',
+    'object-selected',
+    'remove-tool'
+
+
 ])
 
 /* -------------------------------------------------------------------------- */

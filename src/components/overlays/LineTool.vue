@@ -1,3 +1,4 @@
+
 <script>
 // Line drawing tool
 // TODO: make an 45deg-snap when "Shift" is pressed
@@ -52,7 +53,7 @@ export default {
                 // Call when current tool drawing is finished
                 // (Optionally) reset the mode back to 'Cursor'
                 this.set_state('finished')
-                this.$emit('drawing-mode-off')
+                this.bus_emit('drawing-mode-off')
             })
         },
         draw(ctx) {

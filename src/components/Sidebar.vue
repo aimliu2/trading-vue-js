@@ -113,6 +113,12 @@ watch([()=>props.range, ()=>props.cursor],([nr, nc], [or, oc]) => {
 
 
 
+// <script setup> components are closed by default.
+// Section.vue accesses sidebarRef.value.renderer to call rezoom_range() on it.
+defineExpose({
+    renderer: sidebarPixel,  // shallowRef; proxyRefs unwraps → the Sidebar class instance
+})
+
 // export default {name: 'Sidebar',}
 
 </script>

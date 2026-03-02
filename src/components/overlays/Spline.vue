@@ -1,3 +1,4 @@
+
 <script setup>
 // Spline renderer. (SMAs, EMAs, TEMAs, etc.)
 

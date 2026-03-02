@@ -1,3 +1,4 @@
+
 <script>
 // Price/Time measurment tool
 
@@ -59,11 +60,9 @@ export default {
                 // Call when current tool drawing is finished
                 // (Optionally) reset the mode back to 'Cursor'
                 this.set_state('finished')
-                this.$emit('drawing-mode-off')
+                this.bus_emit('drawing-mode-off')
                 // Deselect the tool in shiftMode
-                if (this.shift) this._$emit('custom-event', {
-                    event: 'object-selected', args: []
-                })
+                if (this.shift) this.bus_emit('object-selected')
             })
         },
         draw(ctx) {

@@ -26,13 +26,15 @@ const props = defineProps({
     config: Object
 })
 
+const emit = defineEmits(['custom-event'])
+
 /**
  * @name methods
  * @function on_custom_event
  * @desc Handles custom events emitted by the UxWrapper components. When a custom event is received, it emits the event to the parent component.
- * @param event 
+ * @param event
  */
-const on_custom_event = (event) => this.$emit('custom-event', event)
+const on_custom_event = (event) => emit('custom-event', event)
 
 /**
  * @name computed

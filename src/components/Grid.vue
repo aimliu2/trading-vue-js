@@ -43,6 +43,7 @@
 // automatically set up all layers/overlays for the grid with 'grid_id'
 
 import Grid from '@composables/cGrid.js'
+import mitt from 'mitt'
 
 import Crosshair from './Crosshair.vue' //V3
 import UxLayer from './UxLayer.vue' //V3
@@ -89,6 +90,12 @@ const layer_events = ref()
 const keyboard_events = ref()
 const uxs =  ref([])
 const overlayRefs = ref([]);
+
+/* ---- per-grid event bus: tool/pin events route here instead of $emit proxy ---- */
+const layerBus = mitt()
+layerBus.on('*', (event, args) => {
+    emit('custom-event', { event, args })
+})
 
 /* ---------- layer_events: MUST be set before onMounted so child overlays can emit into it ---------- */
 layer_events.value = {
@@ -217,6 +224,7 @@ const common_props = () => {
         sub: props.sub,
         font: props.font,
         config: props.config,
+        bus: layerBus,
     }
 }
 
@@ -482,6 +490,7 @@ onMounted(()=>{
     // clean up on unmount
     addCleanup(() => {
         gridPixel.value.removeListener()
+        layerBus.all.clear()
         // keyboard_events.value = null
         layer_events.value = null
         document.removeEventListener('keydown', _onKeydown)

@@ -1,3 +1,4 @@
+
 <script>
 // Channel renderer. (Keltner, Bollinger)
 // TODO: allow color transparency

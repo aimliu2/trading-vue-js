@@ -1,26 +1,45 @@
 {
+  // Root tsconfig acts as a project-references compositor for IDE / vue-tsc.
+  // Compilation settings for each environment live in the referenced configs:
+  //   tsconfig.app.json    — src/ (Vue + DOM, used by Vite)
+  //   tsconfig.node.json   — vite.config.ts / vitest.config.ts (Node ESM)
+  //   tsconfig.vitest.json — test files
+  //
+  // Legacy webpack settings kept below for reference / webpack ts-loader:
   "compilerOptions": {
-    "outDir": "./dist/",      // Output directory for compiled files
-    "noImplicitAny": true,    // Enable stricter type checking
-    "module": "ES6",          // Specify module code generation (e.g., CommonJS or ES6)
-    "target": "ES2020",          // Specify ECMAScript target version
-    "jsx": "react",           // Support JSX in .tsx files
-    "allowJs": true,          // Allow JavaScript files to be included in compilation
-    "checkJs": false,         // don't have to check normal .js file
-    "moduleResolution": "node", // Resolve modules using Node.js style (essential for Webpack)
-    "sourceMap": true,         // Generate source map files for debugging
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "ES6",          // webpack ts-loader expects ES6 modules
+    "target": "ES2020",
+    "jsx": "react",
+    "allowJs": true,
+    "checkJs": false,
+    "moduleResolution": "node", // webpack-style resolution
+    "sourceMap": true,
     "lib": ["ES2020", "DOM"],
     "skipLibCheck": true,
   },
   "include": [
-    "src/**/*",               // Include all files in the 'src' directory
+    "src/**/*",
     "data/**/*"
   ],
   "exclude": [
-    "node_modules"            // Exclude node_modules
+    "node_modules"
   ],
   "typedocOptions": {
       "entryPoints": ["./data"],
       "out": "./docs/typedocs"
+    },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.vitest.json"
     }
+  ]
 }

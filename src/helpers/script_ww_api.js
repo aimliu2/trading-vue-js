@@ -5,7 +5,11 @@
 import worker_data from './tmp/ww$$$.json'
 import Utils from '../stuff/utils.js'
 import lz from 'lz-string'
-import {} from './script_ww.js' // For webworker-loader to find the ww
+// NOTE: webpack-only — worker-loader used this import to discover and bundle script_ww.js.
+// In Vite this import is unnecessary (and harmful: it would bundle script_ww.js into the
+// main thread, overriding window.onmessage). The worker is now compiled by the viteWWPlugin
+// in vite.config.ts which writes the compressed output to tmp/ww$$$.json directly.
+// import {} from './script_ww.js'
 
 class WebWork {
 

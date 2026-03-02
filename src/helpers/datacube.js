@@ -124,8 +124,11 @@ export default class DataCube extends DCCore {
                 obj.i : obj.p.indexOf(obj.v)
 
             if (i !== -1) {
-                obj.p[i] = null
-                // this.tv.$delete(obj.p, i)
+                if (typeof i === 'number') {
+                    obj.p.splice(i, 1) // replaces Vue2 $delete — removes cleanly, no null slots
+                } else {
+                    obj.p[i] = null // field deletion (e.g. overlay property), null is fine here
+                }
             }
 
         }

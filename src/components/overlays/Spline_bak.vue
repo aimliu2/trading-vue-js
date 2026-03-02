@@ -1,3 +1,4 @@
+
 <script>
 // Spline renderer. (SMAs, EMAs, TEMAs, etc.)
 

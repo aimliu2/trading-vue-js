@@ -72,6 +72,10 @@ onMounted(()=>{
     addCleanup(()=>window.removeEventListener('keypress', keypress))
 })
 
+// <script setup> components are closed by default.
+// Chart.vue calls keyboardRef.value.register(event) and .remove(event) to manage keyboard listeners.
+defineExpose({ register, remove })
+
 // export default {name: 'Keyboard',}
 
 </script>

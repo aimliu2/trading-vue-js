@@ -1,3 +1,4 @@
+
 <script>
 // Channel renderer. (Keltner, Bollinger)
 // use in test case

@@ -49,10 +49,12 @@ onMounted(() => {
   window.tv = tvjs
   window.dc = chart.value
   onResize() // init
-  window.addEventListener('resize', () => debouncedOnResize(0, 0))
+  // store reference so the same fn can be passed to both add and removeEventListener
+  const resizeHandler = () => debouncedOnResize(0, 0)
+  window.addEventListener('resize', resizeHandler)
 
-  // clean up on unmount
-  addCleanup(window.removeEventListener('resize', () => debouncedOnResize(0, 0)))
+  // clean up on unmount — wrap in arrow fn so addCleanup receives a function, not undefined
+  addCleanup(() => window.removeEventListener('resize', resizeHandler))
 })
 
 </script>
