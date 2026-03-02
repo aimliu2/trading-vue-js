@@ -46,8 +46,7 @@ const debouncedOnResize = debounce(onResize,100);
 /*                                  onMounted                                 */
 /* -------------------------------------------------------------------------- */
 onMounted(() => {
-  window.tv = tvjs
-  window.dc = chart.value
+
   onResize() // init
   // store reference so the same fn can be passed to both add and removeEventListener
   const resizeHandler = () => debouncedOnResize(0, 0)
